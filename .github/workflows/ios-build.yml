@@ -17,11 +17,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: |
-          ls /Applications | grep Xcode
-          sudo xcode-select -s /Applications/Xcode_16.4.app
-          xcodebuild -version
+      - name: Show Xcode Version
+        run: xcodebuild -version
 
       - name: Set up JDK
         uses: actions/setup-java@v4
