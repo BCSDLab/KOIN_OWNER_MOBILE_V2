@@ -38,9 +38,6 @@ jobs:
           key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: konan-${{ runner.os }}-
 
-      - name: Build Shared Frameworks
-        run: ./gradlew :shared:build --stacktrace
-
       - name: Build iOS App (Simulator)
         run: |
           xcodebuild -project iosApp/iosApp.xcodeproj \
