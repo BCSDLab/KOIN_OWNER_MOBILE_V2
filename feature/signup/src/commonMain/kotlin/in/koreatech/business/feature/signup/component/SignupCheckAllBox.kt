@@ -17,7 +17,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_checkbox_checked
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_checkbox_unchecked
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun SignupCheckAllBox(
@@ -34,7 +34,7 @@ fun SignupCheckAllBox(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painterResource(
+            vectorResource(
                 if (checked) Res.drawable.ic_checkbox_checked else Res.drawable.ic_checkbox_unchecked
             ),
             text,

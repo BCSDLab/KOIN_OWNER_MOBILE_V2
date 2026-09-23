@@ -51,7 +51,7 @@ import `in`.koreatech.business.core.navigation.Screen
 import `in`.koreatech.business.core.navigation.screenSavedStateConfiguration
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.resources.stringResource
 
 private data class MainTabItem(
@@ -113,7 +113,7 @@ private fun MainNavigationBar(
                 onClick = { onTabClick(tab) },
                 icon = {
                     Image(
-                        painter = painterResource(tab.icon),
+                        imageVector = vectorResource(tab.icon),
                         contentDescription = stringResource(tab.label),
                         colorFilter = ColorFilter.tint(
                             if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral500

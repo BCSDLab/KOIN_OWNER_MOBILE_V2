@@ -17,7 +17,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_password_hidden
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_password_visible
 import `in`.koreatech.business.core.designsystem.noRippleClickable
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun KoinPasswordTextField(
@@ -38,7 +38,7 @@ fun KoinPasswordTextField(
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(mask = '●'),
         suffix = {
             Image(
-                painter = painterResource(if (passwordVisible) Res.drawable.ic_password_visible else Res.drawable.ic_password_hidden),
+                imageVector = vectorResource(if (passwordVisible) Res.drawable.ic_password_visible else Res.drawable.ic_password_hidden),
                 contentDescription = null,
                 modifier = Modifier.noRippleClickable { passwordVisible = !passwordVisible }
             )

@@ -46,7 +46,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_sig
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_submit
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -109,13 +109,13 @@ fun SignInScreenImpl(
             Column {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(
-                        painterResource(Res.drawable.ic_bcsd_symbol),
+                        vectorResource(Res.drawable.ic_bcsd_symbol),
                         contentDescription = stringResource(Res.string.common_koin_logo),
                         modifier = Modifier.width(80.dp).height(60.dp)
                     )
                     Spacer(Modifier.height(4.dp))
                     Image(
-                        painterResource(Res.drawable.ic_koin_text),
+                        vectorResource(Res.drawable.ic_koin_text),
                         contentDescription = stringResource(Res.string.common_koin),
                         modifier = Modifier.width(100.dp).height(30.dp)
                     )

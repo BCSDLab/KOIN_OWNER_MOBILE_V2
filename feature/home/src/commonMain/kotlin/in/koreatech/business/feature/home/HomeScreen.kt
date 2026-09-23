@@ -57,7 +57,7 @@ import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.feature.home.component.ManagedShopCard
 import `in`.koreatech.business.feature.home.component.ManagedShopCardSkeleton
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -154,18 +154,18 @@ private fun HomeTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(Res.drawable.ic_bcsd_symbol),
+            imageVector = vectorResource(Res.drawable.ic_bcsd_symbol),
             contentDescription = null,
             modifier = Modifier.width(47.dp).height(37.dp)
         )
         Image(
-            painter = painterResource(Res.drawable.ic_koin_text),
+            imageVector = vectorResource(Res.drawable.ic_koin_text),
             contentDescription = stringResource(Res.string.common_koin),
             modifier = Modifier.width(63.dp).height(21.dp)
         )
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = painterResource(Res.drawable.ic_rebrand_notification),
+            imageVector = vectorResource(Res.drawable.ic_rebrand_notification),
             contentDescription = stringResource(Res.string.home_notification),
             modifier = Modifier.size(24.dp).noRippleClickable(onClick = onNotificationClick)
         )

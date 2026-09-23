@@ -15,7 +15,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_checkbox_checked
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_checkbox_unchecked
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun KoinCheckBox(
@@ -26,7 +26,7 @@ fun KoinCheckBox(
 ) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Image(
-            painterResource(if (checked) Res.drawable.ic_checkbox_checked else Res.drawable.ic_checkbox_unchecked),
+            vectorResource(if (checked) Res.drawable.ic_checkbox_checked else Res.drawable.ic_checkbox_unchecked),
             text,
             modifier = Modifier.clickable { onCheckedChange(!checked) }
         )
