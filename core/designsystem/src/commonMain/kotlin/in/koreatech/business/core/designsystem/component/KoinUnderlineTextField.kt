@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,44 +12,49 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
 @Composable
 fun KoinUnderlineTextField(
-    title: String,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String = "",
-    keyboardType: KeyboardType = KeyboardType.Text,
+    hint: String? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    textStyle: TextStyle = KoinTheme.typography.regular14,
     singleLine: Boolean = true,
-    suffix: String? = null
+    maxLines: Int = if (singleLine) 1 else 4,
+    title: (@Composable () -> Unit)? = null,
+    suffix: (@Composable RowScope.() -> Unit)? = null
 ) {
     Column(modifier = modifier) {
-        if (title.isNotEmpty()) {
-            Text(title, style = KoinTheme.typography.medium15, color = KoinTheme.colors.neutral800)
+        title?.let {
+            it()
             Spacer(Modifier.height(8.dp))
         }
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
-            textStyle =
-            KoinTheme.typography.regular14.copy(
-                color = KoinTheme.colors.neutral800,
-                lineHeightStyle = null
-            ),
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            textStyle = textStyle.copy(color = KoinTheme.colors.neutral800),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             singleLine = singleLine,
-            maxLines = if (singleLine) 1 else 4,
+            visualTransformation = visualTransformation,
+            maxLines = maxLines,
             decorationBox = { innerTextField ->
                 Column(modifier = Modifier.width(IntrinsicSize.Min)) {
                     Row(
@@ -62,16 +68,14 @@ fun KoinUnderlineTextField(
                         Box(modifier = Modifier.weight(1f)) {
                             if (value.isEmpty()) {
                                 Text(
-                                    placeholder,
-                                    style = KoinTheme.typography.regular14.copy(lineHeightStyle = null),
+                                    hint ?: placeholder,
+                                    style = textStyle,
                                     color = KoinTheme.colors.neutral400
                                 )
                             }
                             innerTextField()
                         }
-                        suffix?.let {
-                            Text(it, style = KoinTheme.typography.regular14, color = KoinTheme.colors.neutral600)
-                        }
+                        suffix?.invoke(this)
                     }
                     HorizontalDivider(color = KoinTheme.colors.neutral400)
                 }

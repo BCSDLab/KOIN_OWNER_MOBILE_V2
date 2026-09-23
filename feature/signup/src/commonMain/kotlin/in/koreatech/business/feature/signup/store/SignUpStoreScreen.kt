@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
@@ -74,7 +74,11 @@ internal fun SignUpStoreScreen(
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(text = stringResource(Res.string.sign_up_store_input), style = KoinTheme.typography.medium16)
                 Spacer(modifier = Modifier.height(16.dp))
-                KoinUserBasicTextField(state.storeName, onStoreNameChange, hint = stringResource(Res.string.sign_up_store_name_hint))
+                KoinUnderlineTextField(
+                    value = state.storeName,
+                    onValueChange = onStoreNameChange,
+                    hint = stringResource(Res.string.sign_up_store_name_hint)
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -89,7 +93,7 @@ internal fun SignUpStoreScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                KoinUserBasicTextField(
+                KoinUnderlineTextField(
                     value = state.storePhoneNumber,
                     onValueChange = onStorePhoneNumberChange,
                     hint = stringResource(Res.string.sign_up_store_phone_hint),

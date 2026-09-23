@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
@@ -44,7 +45,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_sig
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_submit
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
-import `in`.koreatech.business.feature.signin.component.SignInTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -123,7 +124,7 @@ fun SignInScreenImpl(
 
                 Spacer(Modifier.height(50.dp))
 
-                SignInTextField(
+                KoinUnderlineTextField(
                     value = loginId,
                     onValueChange = setLoginId,
                     hint = stringResource(Res.string.sign_in_id_hint),
@@ -132,17 +133,43 @@ fun SignInScreenImpl(
                         keyboardType = if (loginId.all(Char::isDigit)) KeyboardType.Phone else KeyboardType.Text
                     ),
                     visualTransformation = KRPhoneNumberVisualTransformation(),
+                    suffix =
+                    if (loginId.isNotEmpty()) {
+                        {
+                            Text(
+                                text = "×",
+                                style = KoinTheme.typography.regular16,
+                                color = KoinTheme.colors.neutral600,
+                                modifier = Modifier.clickable { setLoginId("") }
+                            )
+                        }
+                    } else {
+                        null
+                    },
                     modifier = Modifier.fillMaxWidth().padding(top = 32.dp)
                 )
 
                 Spacer(Modifier.height(24.dp))
 
-                SignInTextField(
+                KoinUnderlineTextField(
                     value = password,
                     onValueChange = setPassword,
                     hint = stringResource(Res.string.sign_in_password_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    isPassword = true,
+                    visualTransformation = PasswordVisualTransformation(mask = '●'),
+                    suffix =
+                    if (password.isNotEmpty()) {
+                        {
+                            Text(
+                                text = "◉",
+                                style = KoinTheme.typography.regular16,
+                                color = KoinTheme.colors.neutral600,
+                                modifier = Modifier.clickable { setPassword("") }
+                            )
+                        }
+                    } else {
+                        null
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
 

@@ -157,13 +157,13 @@ fun EventFormScreenImpl(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         KoinUnderlineTextField(
-            title = stringResource(Res.string.event_title_input),
+            title = { Text(stringResource(Res.string.event_title_input), style = KoinTheme.typography.medium15) },
             value = state.title,
             onValueChange = onTitleChange,
             placeholder = stringResource(Res.string.event_title_input_hint)
         )
         KoinUnderlineTextField(
-            title = stringResource(Res.string.event_content),
+            title = { Text(stringResource(Res.string.event_content), style = KoinTheme.typography.medium15) },
             value = state.content,
             onValueChange = onContentChange,
             placeholder = stringResource(Res.string.event_content_hint),

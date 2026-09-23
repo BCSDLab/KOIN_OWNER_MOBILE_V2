@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
@@ -81,7 +81,7 @@ internal fun SignUpStoreSearchScreen(
                 .padding(bottom = 24.dp)
         ) {
             Spacer(modifier = Modifier.height(24.dp))
-            KoinUserBasicTextField(
+            KoinUnderlineTextField(
                 value = state.storeSearchQuery,
                 onValueChange = onQueryChange,
                 hint = stringResource(Res.string.sign_up_store_search_hint)

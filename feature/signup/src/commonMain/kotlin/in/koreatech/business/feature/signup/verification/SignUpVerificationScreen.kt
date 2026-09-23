@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
@@ -101,7 +101,7 @@ internal fun SignUpVerificationScreen(
                     style = KoinTheme.typography.medium16
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                KoinUserBasicTextField(
+                KoinUnderlineTextField(
                     value = state.name,
                     onValueChange = onNameChange,
                     hint = stringResource(Res.string.sign_up_name_hint),

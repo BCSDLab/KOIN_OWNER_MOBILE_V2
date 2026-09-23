@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
 @Composable
@@ -36,7 +37,7 @@ fun KoinUserWithButtonItem(
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically) {
-        KoinUserBasicTextField(
+        KoinUnderlineTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.weight(1f),

@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
@@ -161,7 +162,7 @@ fun MenuFormScreenImpl(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         KoinUnderlineTextField(
-            title = stringResource(Res.string.menu_name),
+            title = { Text(stringResource(Res.string.menu_name), style = KoinTheme.typography.medium15) },
             value = state.name,
             onValueChange = onNameChange,
             placeholder = stringResource(Res.string.menu_name_hint)
@@ -187,12 +188,17 @@ fun MenuFormScreenImpl(
             }
             if (state.isSinglePrice) {
                 KoinUnderlineTextField(
-                    title = "",
                     value = state.singlePrice,
                     onValueChange = onPriceChange,
                     placeholder = stringResource(Res.string.menu_price_hint),
-                    keyboardType = KeyboardType.Number,
-                    suffix = stringResource(Res.string.common_won)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    suffix = {
+                        Text(
+                            text = stringResource(Res.string.common_won),
+                            style = KoinTheme.typography.regular14,
+                            color = KoinTheme.colors.neutral600
+                        )
+                    }
                 )
             } else {
                 state.optionPrices.forEachIndexed { index, price ->
@@ -213,7 +219,7 @@ fun MenuFormScreenImpl(
             }
         }
         KoinUnderlineTextField(
-            title = stringResource(Res.string.menu_description),
+            title = { Text(stringResource(Res.string.menu_description), style = KoinTheme.typography.medium15) },
             value = state.description,
             onValueChange = onDescriptionChange,
             placeholder = stringResource(Res.string.menu_description_hint),

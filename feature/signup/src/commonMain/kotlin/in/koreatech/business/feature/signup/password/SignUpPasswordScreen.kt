@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
@@ -79,7 +79,7 @@ internal fun SignUpPasswordScreen(
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(text = stringResource(Res.string.sign_up_password_input), style = KoinTheme.typography.medium16)
                 Spacer(modifier = Modifier.height(16.dp))
-                KoinUserBasicTextField(
+                KoinUnderlineTextField(
                     value = state.password,
                     onValueChange = onPasswordChange,
                     hint = stringResource(Res.string.sign_up_password_hint),
@@ -91,7 +91,7 @@ internal fun SignUpPasswordScreen(
                 }
                 if (isPasswordValid) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    KoinUserBasicTextField(
+                    KoinUnderlineTextField(
                         value = state.passwordConfirmation,
                         onValueChange = onPasswordConfirmChange,
                         hint = stringResource(Res.string.sign_up_password_confirm_hint),

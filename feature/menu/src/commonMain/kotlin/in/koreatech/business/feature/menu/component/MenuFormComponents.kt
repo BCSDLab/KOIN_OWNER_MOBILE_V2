@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
@@ -108,19 +109,23 @@ internal fun MenuOptionPriceRow(
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             KoinUnderlineTextField(
-                title = "",
                 value = value.option,
                 onValueChange = onOptionChange,
                 placeholder = stringResource(Res.string.menu_option_name_hint),
                 modifier = Modifier.weight(1f)
             )
             KoinUnderlineTextField(
-                title = "",
                 value = value.price,
                 onValueChange = onPriceChange,
                 placeholder = stringResource(Res.string.menu_price),
-                keyboardType = KeyboardType.Number,
-                suffix = stringResource(Res.string.common_won),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                suffix = {
+                    Text(
+                        text = stringResource(Res.string.common_won),
+                        style = KoinTheme.typography.regular14,
+                        color = KoinTheme.colors.neutral600
+                    )
+                },
                 modifier = Modifier.weight(1f)
             )
         }

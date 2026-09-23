@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.SignupCheckBox
@@ -260,14 +260,14 @@ internal fun RegisterStoreDetailInfoScreen(
                     }
                     if (selectedDays.isNotEmpty() && !is24Hours) {
                         Text(stringResource(Res.string.register_store_start_time), style = KoinTheme.typography.medium14)
-                        KoinUserBasicTextField(
+                        KoinUnderlineTextField(
                             value = openingTimeInput,
                             onValueChange = { openingTimeInput = it.filter(Char::isDigit).take(4) },
                             hint = stringResource(Res.string.common_opening_time_hint),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                         Text(stringResource(Res.string.register_store_end_time), style = KoinTheme.typography.medium14)
-                        KoinUserBasicTextField(
+                        KoinUnderlineTextField(
                             value = closingTimeInput,
                             onValueChange = { closingTimeInput = it.filter(Char::isDigit).take(4) },
                             hint = stringResource(Res.string.common_closing_time_hint),
@@ -489,7 +489,7 @@ private fun RegisterStoreField(
 ) {
     Text(title, style = KoinTheme.typography.medium16)
     Spacer(Modifier.height(8.dp))
-    KoinUserBasicTextField(
+    KoinUnderlineTextField(
         value = value,
         onValueChange = onValueChange,
         hint = hint,

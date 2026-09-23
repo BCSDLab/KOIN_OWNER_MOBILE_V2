@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
@@ -70,7 +70,7 @@ internal fun SignUpBusinessNumberScreen(
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(text = stringResource(Res.string.sign_up_business_input), style = KoinTheme.typography.medium16)
                 Spacer(modifier = Modifier.height(16.dp))
-                KoinUserBasicTextField(
+                KoinUnderlineTextField(
                     value = state.businessNumber,
                     onValueChange = onBusinessNumberChange,
                     hint = stringResource(Res.string.sign_up_business_hint),

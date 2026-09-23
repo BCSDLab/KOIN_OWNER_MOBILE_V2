@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserWithButtonItem
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
@@ -207,7 +207,7 @@ private fun PasswordResetPasswordContent(
             color = KoinTheme.colors.neutral600
         )
         Spacer(modifier = Modifier.height(32.dp))
-        KoinUserBasicTextField(
+        KoinUnderlineTextField(
             value = state.password,
             onValueChange = onPasswordChange,
             hint = stringResource(Res.string.sign_up_password_hint),
@@ -219,7 +219,7 @@ private fun PasswordResetPasswordContent(
             visualTransformation = PasswordVisualTransformation(mask = '●')
         )
         Spacer(modifier = Modifier.height(24.dp))
-        KoinUserBasicTextField(
+        KoinUnderlineTextField(
             value = state.passwordConfirmation,
             onValueChange = onPasswordConfirmationChange,
             hint = stringResource(Res.string.sign_up_password_confirm_hint),
