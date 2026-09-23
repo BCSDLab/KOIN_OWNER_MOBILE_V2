@@ -27,7 +27,8 @@ fun SignInTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     modifier: Modifier = Modifier,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     BasicTextField(
         value = value,
@@ -35,7 +36,7 @@ fun SignInTextField(
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        visualTransformation = if (isPassword) PasswordVisualTransformation(mask = '●') else VisualTransformation.None,
+        visualTransformation = if (isPassword) PasswordVisualTransformation(mask = '●') else visualTransformation,
         textStyle = KoinTheme.typography.regular14,
         decorationBox = { innerTextField ->
             Column {

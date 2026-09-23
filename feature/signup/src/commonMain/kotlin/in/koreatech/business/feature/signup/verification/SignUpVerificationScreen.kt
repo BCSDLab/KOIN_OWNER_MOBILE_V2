@@ -46,6 +46,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_ver
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_verification_sent
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_verification_step
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
 import `in`.koreatech.business.feature.signup.SignupState
 import org.jetbrains.compose.resources.stringResource
 
@@ -127,7 +128,8 @@ internal fun SignUpVerificationScreen(
                     buttonEnabled =
                     state.phoneNumber.isNotBlank() &&
                         state.verificationCodeState !is VerificationCodeState.Valid &&
-                        !state.isLoading
+                        !state.isLoading,
+                    visualTransformation = KRPhoneNumberVisualTransformation()
                 )
                 when (val phoneNumberState = state.phoneNumberVerificationState) {
                     PhoneNumberVerificationState.AlreadySignedUp ->

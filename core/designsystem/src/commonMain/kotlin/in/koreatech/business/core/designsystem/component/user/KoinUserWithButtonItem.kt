@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
@@ -31,7 +32,8 @@ fun KoinUserWithButtonItem(
     keyboardType: KeyboardType,
     onValueChange: (String) -> Unit,
     onButtonClick: () -> Unit,
-    buttonEnabled: Boolean
+    buttonEnabled: Boolean,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically) {
         KoinUserBasicTextField(
@@ -39,7 +41,8 @@ fun KoinUserWithButtonItem(
             onValueChange = onValueChange,
             modifier = Modifier.weight(1f),
             hint = hint,
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = ImeAction.Done)
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = ImeAction.Done),
+            visualTransformation = visualTransformation
         )
         Spacer(modifier = Modifier.width(16.dp))
         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {

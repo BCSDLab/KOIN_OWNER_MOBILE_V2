@@ -33,6 +33,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_sto
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_store_step
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_title
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
 import `in`.koreatech.business.feature.signup.SignupState
 import org.jetbrains.compose.resources.stringResource
 
@@ -92,7 +93,8 @@ internal fun SignUpStoreScreen(
                     value = state.storePhoneNumber,
                     onValueChange = onStorePhoneNumberChange,
                     hint = stringResource(Res.string.sign_up_store_phone_hint),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    visualTransformation = KRPhoneNumberVisualTransformation()
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))

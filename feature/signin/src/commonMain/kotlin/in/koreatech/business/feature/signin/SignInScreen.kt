@@ -43,6 +43,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_pas
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_sign_up
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_submit
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
 import `in`.koreatech.business.feature.signin.component.SignInTextField
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -130,6 +131,7 @@ fun SignInScreenImpl(
                     KeyboardOptions(
                         keyboardType = if (loginId.all(Char::isDigit)) KeyboardType.Phone else KeyboardType.Text
                     ),
+                    visualTransformation = KRPhoneNumberVisualTransformation(),
                     modifier = Modifier.fillMaxWidth().padding(top = 32.dp)
                 )
 

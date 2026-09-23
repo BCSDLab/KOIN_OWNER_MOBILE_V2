@@ -20,6 +20,7 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         implementation(libs.metrox.viewmodel.compose)
+        implementation(project(":core:common"))
         implementation(project(":core:di"))
         implementation(project(":core:designsystem"))
         implementation(project(":core:navigation"))
