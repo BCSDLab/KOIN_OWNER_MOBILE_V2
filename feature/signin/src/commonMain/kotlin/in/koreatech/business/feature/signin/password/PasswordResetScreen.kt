@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
@@ -168,7 +169,8 @@ private fun PasswordResetVerificationContent(
             keyboardType = KeyboardType.Phone,
             onValueChange = onPhoneNumberChange,
             onButtonClick = onSendCode,
-            buttonEnabled = !state.isLoading && state.phoneNumber.isNotBlank()
+            buttonEnabled = !state.isLoading && state.phoneNumber.isNotBlank(),
+            visualTransformation = KRPhoneNumberVisualTransformation()
         )
         KoinTextFieldWithButton(
             value = state.code,

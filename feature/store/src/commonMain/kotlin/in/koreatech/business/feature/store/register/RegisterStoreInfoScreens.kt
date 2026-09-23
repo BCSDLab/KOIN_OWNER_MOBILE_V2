@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
@@ -43,6 +44,7 @@ import `in`.koreatech.business.core.designsystem.component.progress.KoinProgress
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
 import `in`.koreatech.business.core.designsystem.noRippleClickable
+import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
@@ -360,10 +362,12 @@ internal fun RegisterStoreDetailInfoScreen(
             Spacer(Modifier.height(48.dp))
             RegisterStoreField(
                 stringResource(Res.string.register_store_phone),
-                state.phoneNumber,
-                stringResource(Res.string.register_store_phone_hint),
-                KeyboardType.Phone
-            ) { onPhoneNumberChange(it) }
+            state.phoneNumber,
+            stringResource(Res.string.register_store_phone_hint),
+            KeyboardType.Phone,
+            onValueChange = { onPhoneNumberChange(it) },
+            visualTransformation = KRPhoneNumberVisualTransformation()
+        )
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
                 stringResource(Res.string.register_store_delivery_fee),
@@ -491,6 +495,7 @@ private fun RegisterStoreField(
     value: String,
     hint: String,
     keyboardType: KeyboardType = KeyboardType.Text,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChange: (String) -> Unit
 ) {
     Text(title, style = KoinTheme.typography.medium16)
@@ -499,6 +504,7 @@ private fun RegisterStoreField(
         value = value,
         onValueChange = onValueChange,
         hint = hint,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        visualTransformation = visualTransformation
     )
 }
