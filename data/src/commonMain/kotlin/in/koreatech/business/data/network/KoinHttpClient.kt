@@ -1,11 +1,14 @@
 package `in`.koreatech.business.data.network
 
 import `in`.koreatech.business.data.mapper.toApiException
+import `in`.koreatech.business.data.request.auth.RefreshTokenRequest
 import `in`.koreatech.business.data.response.ErrorResponse
+import `in`.koreatech.business.data.response.auth.OwnerLoginResponse
 import `in`.koreatech.business.data.source.local.TokenLocalDataSource
 import `in`.koreatech.business.domain.error.ApiException
 import `in`.koreatech.business.domain.error.NetworkException
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.ResponseException
@@ -17,6 +20,8 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -84,6 +89,16 @@ internal fun createKoinHttpClient(tokenLocalDataSource: TokenLocalDataSource) = 
             sendWithoutRequest { request ->
                 request.url.host == baseUrl.host &&
                     request.headers[HttpHeaders.Authorization] == null
+            }
+            refreshTokens {
+                val refreshToken = tokenLocalDataSource.getRefreshToken() ?: return@refreshTokens null
+                val newToken = client.post("user/refresh") {
+                    markAsRefreshTokenRequest()
+                    setBody(RefreshTokenRequest(refreshToken))
+                }.body<OwnerLoginResponse>()
+                tokenLocalDataSource.saveTokens(newToken.accessToken, newToken.refreshToken)
+
+                BearerTokens(newToken.accessToken, newToken.refreshToken)
             }
         }
     }
