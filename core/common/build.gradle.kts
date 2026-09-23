@@ -19,6 +19,7 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         implementation(libs.compose.runtime)
+        implementation(libs.compose.ui)
         implementation(libs.androidx.lifecycle.viewmodelCompose)
         implementation(libs.filekit.dialogs)
         implementation(libs.kotlinx.coroutines.core)
