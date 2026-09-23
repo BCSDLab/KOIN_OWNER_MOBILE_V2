@@ -7,7 +7,6 @@ import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import `in`.koreatech.business.core.di.AppScope
 import `in`.koreatech.business.domain.usecase.auth.SignInUseCase
-import `in`.koreatech.business.domain.usecase.token.SaveTokensUseCase
 import org.orbitmvi.orbit.OrbitContainerHost
 import org.orbitmvi.orbit.blockingIntent
 import org.orbitmvi.orbit.viewmodel.orbitContainer
@@ -16,8 +15,7 @@ import org.orbitmvi.orbit.viewmodel.orbitContainer
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
 class SignInViewModel(
-    private val signInUseCase: SignInUseCase,
-    private val saveTokensUseCase: SaveTokensUseCase
+    private val signInUseCase: SignInUseCase
 ) : ViewModel(), OrbitContainerHost<SignInState, SignInState, SignInSideEffect> {
     override val container = orbitContainer<SignInState, SignInSideEffect>(SignInState())
 
@@ -37,8 +35,7 @@ class SignInViewModel(
         }
         reduce { state.copy(isLoading = true, error = null) }
         signInUseCase(state.phoneNumber, state.password)
-            .onSuccess { tokens ->
-                saveTokensUseCase(tokens.accessToken, tokens.refreshToken)
+            .onSuccess {
                 reduce { state.copy(isLoading = false) }
                 postSideEffect(SignInSideEffect.SignInSuccess)
             }.onFailure {
