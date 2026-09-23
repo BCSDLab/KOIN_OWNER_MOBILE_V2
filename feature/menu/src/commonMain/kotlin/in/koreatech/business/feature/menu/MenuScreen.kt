@@ -399,24 +399,24 @@ private fun MenuLoadingContent() {
                     Box(modifier = Modifier.width(28.dp).height(16.dp).skeleton())
                 }
                 repeat(2) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(12.dp))
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                Box(modifier = Modifier.size(88.dp).skeleton(shape = RoundedCornerShape(8.dp)))
-                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Box(modifier = Modifier.fillMaxWidth(0.65f).height(20.dp).skeleton())
-                    Box(modifier = Modifier.fillMaxWidth().height(14.dp).skeleton())
-                    Box(modifier = Modifier.fillMaxWidth(0.45f).height(14.dp).skeleton())
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White, RoundedCornerShape(12.dp))
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Box(modifier = Modifier.size(88.dp).skeleton(shape = RoundedCornerShape(8.dp)))
+                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Box(modifier = Modifier.fillMaxWidth(0.65f).height(20.dp).skeleton())
+                            Box(modifier = Modifier.fillMaxWidth().height(14.dp).skeleton())
+                            Box(modifier = Modifier.fillMaxWidth(0.45f).height(14.dp).skeleton())
+                        }
+                    }
                 }
             }
         }
-        }
     }
-}
 }
 
 @Composable

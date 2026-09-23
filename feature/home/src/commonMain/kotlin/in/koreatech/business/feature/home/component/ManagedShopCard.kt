@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_forward_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_none
@@ -47,7 +48,6 @@ import `in`.koreatech.business.core.designsystem.generated.resources.weekday_thu
 import `in`.koreatech.business.core.designsystem.generated.resources.weekday_tuesday
 import `in`.koreatech.business.core.designsystem.generated.resources.weekday_wednesday
 import `in`.koreatech.business.core.designsystem.noRippleClickable
-import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.domain.model.store.OwnerShop
 import `in`.koreatech.business.feature.home.util.toDisplayText

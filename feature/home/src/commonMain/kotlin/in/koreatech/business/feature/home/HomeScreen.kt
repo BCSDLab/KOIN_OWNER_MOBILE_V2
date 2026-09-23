@@ -57,8 +57,8 @@ import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.feature.home.component.ManagedShopCard
 import `in`.koreatech.business.feature.home.component.ManagedShopCardSkeleton
-import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

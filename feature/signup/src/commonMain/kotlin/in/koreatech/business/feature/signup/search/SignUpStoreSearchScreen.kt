@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
@@ -37,7 +38,6 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_sto
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_store_search_hint
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.domain.model.store.StoreSearchResult
 import `in`.koreatech.business.feature.signup.SignupError
 import `in`.koreatech.business.feature.signup.SignupState

@@ -363,12 +363,12 @@ internal fun RegisterStoreDetailInfoScreen(
             Spacer(Modifier.height(48.dp))
             RegisterStoreField(
                 stringResource(Res.string.register_store_phone),
-            state.phoneNumber,
-            stringResource(Res.string.register_store_phone_hint),
-            KeyboardType.Phone,
-            onValueChange = { onPhoneNumberChange(it) },
-            visualTransformation = KRPhoneNumberVisualTransformation()
-        )
+                state.phoneNumber,
+                stringResource(Res.string.register_store_phone_hint),
+                KeyboardType.Phone,
+                onValueChange = { onPhoneNumberChange(it) },
+                visualTransformation = KRPhoneNumberVisualTransformation()
+            )
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
                 stringResource(Res.string.register_store_delivery_fee),

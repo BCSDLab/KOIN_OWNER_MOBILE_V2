@@ -30,8 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
-import `in`.koreatech.business.core.designsystem.component.textfield.KoinPasswordTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinPasswordTextField
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_koin
 import `in`.koreatech.business.core.designsystem.generated.resources.common_koin_logo
@@ -46,8 +46,8 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_sig
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_submit
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
-import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
