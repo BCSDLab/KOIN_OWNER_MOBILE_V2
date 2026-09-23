@@ -17,9 +17,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,20 +39,15 @@ import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
-import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
-import `in`.koreatech.business.core.designsystem.noRippleClickable
-import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
-import `in`.koreatech.business.core.util.CurrencyVisualTransformation
+import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
-import `in`.koreatech.business.core.designsystem.generated.resources.common_closing_time_hint
 import `in`.koreatech.business.core.designsystem.generated.resources.common_edit
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
-import `in`.koreatech.business.core.designsystem.generated.resources.common_opening_time_hint
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_hint
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_apply
@@ -90,6 +85,8 @@ import `in`.koreatech.business.core.designsystem.generated.resources.weekday_wed
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.file.rememberImageFilePicker
+import `in`.koreatech.business.core.util.CurrencyVisualTransformation
+import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
 import `in`.koreatech.business.feature.store.register.util.isValidTimeInput
 import `in`.koreatech.business.feature.store.register.util.toTimeText
 import kotlinx.collections.immutable.ImmutableList
@@ -234,11 +231,14 @@ internal fun RegisterStoreDetailInfoScreen(
         AlertDialog(
             onDismissRequest = { pickingOpeningTime = null },
             text = { TimePicker(state = timePickerState) },
-            confirmButton = { TextButton(onClick = {
-                val selectedTime = "%02d%02d".format(timePickerState.hour, timePickerState.minute)
-                if (isOpeningTime) openingTimeInput = selectedTime else closingTimeInput = selectedTime
-                pickingOpeningTime = null
-            }) { Text(stringResource(Res.string.register_store_apply)) } },
+            confirmButton = {
+                TextButton(onClick = {
+                    val selectedTime = timePickerState.hour.toString().padStart(2, '0') +
+                        timePickerState.minute.toString().padStart(2, '0')
+                    if (isOpeningTime) openingTimeInput = selectedTime else closingTimeInput = selectedTime
+                    pickingOpeningTime = null
+                }) { Text(stringResource(Res.string.register_store_apply)) }
+            },
             dismissButton = { TextButton(onClick = { pickingOpeningTime = null }) { Text(stringResource(Res.string.common_cancel)) } }
         )
     }
