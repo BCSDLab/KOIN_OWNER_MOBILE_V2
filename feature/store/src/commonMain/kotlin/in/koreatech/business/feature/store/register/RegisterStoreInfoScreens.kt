@@ -17,11 +17,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +42,7 @@ import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
+import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
@@ -188,6 +192,7 @@ internal fun RegisterStoreBasicInfoScreen(
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 internal fun RegisterStoreDetailInfoScreen(
     title: String,
     state: RegisterStoreState,
@@ -218,6 +223,22 @@ internal fun RegisterStoreDetailInfoScreen(
     var closingTimeInput by remember { mutableStateOf(DEFAULT_CLOSING_TIME.filter(Char::isDigit)) }
     var selectedDays by remember { mutableStateOf(emptySet<RegisterStoreDay>().toImmutableSet()) }
     var is24Hours by remember { mutableStateOf(false) }
+    var pickingOpeningTime by remember { mutableStateOf<Boolean?>(null) }
+
+    pickingOpeningTime?.let { isOpeningTime ->
+        val timeInput = if (isOpeningTime) openingTimeInput else closingTimeInput
+        val timePickerState = rememberTimePickerState(timeInput.take(2).toIntOrNull() ?: 9, timeInput.drop(2).take(2).toIntOrNull() ?: 0)
+        AlertDialog(
+            onDismissRequest = { pickingOpeningTime = null },
+            text = { TimePicker(state = timePickerState) },
+            confirmButton = { TextButton(onClick = {
+                val selectedTime = "%02d%02d".format(timePickerState.hour, timePickerState.minute)
+                if (isOpeningTime) openingTimeInput = selectedTime else closingTimeInput = selectedTime
+                pickingOpeningTime = null
+            }) { Text(stringResource(Res.string.register_store_apply)) } },
+            dismissButton = { TextButton(onClick = { pickingOpeningTime = null }) { Text(stringResource(Res.string.common_cancel)) } }
+        )
+    }
 
     if (showOperatingTimeDialog) {
         AlertDialog(
@@ -254,18 +275,16 @@ internal fun RegisterStoreDetailInfoScreen(
                     }
                     if (selectedDays.isNotEmpty() && !is24Hours) {
                         Text(stringResource(Res.string.register_store_start_time), style = KoinTheme.typography.medium14)
-                        KoinUnderlineTextField(
-                            value = openingTimeInput,
-                            onValueChange = { openingTimeInput = it.filter(Char::isDigit).take(4) },
-                            hint = stringResource(Res.string.common_opening_time_hint),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        Text(
+                            text = openingTimeInput.toTimeText(),
+                            modifier = Modifier.fillMaxWidth().noRippleClickable { pickingOpeningTime = true }.padding(12.dp),
+                            style = KoinTheme.typography.regular14
                         )
                         Text(stringResource(Res.string.register_store_end_time), style = KoinTheme.typography.medium14)
-                        KoinUnderlineTextField(
-                            value = closingTimeInput,
-                            onValueChange = { closingTimeInput = it.filter(Char::isDigit).take(4) },
-                            hint = stringResource(Res.string.common_closing_time_hint),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        Text(
+                            text = closingTimeInput.toTimeText(),
+                            modifier = Modifier.fillMaxWidth().noRippleClickable { pickingOpeningTime = false }.padding(12.dp),
+                            style = KoinTheme.typography.regular14
                         )
                     }
                     KoinCheckBox(
