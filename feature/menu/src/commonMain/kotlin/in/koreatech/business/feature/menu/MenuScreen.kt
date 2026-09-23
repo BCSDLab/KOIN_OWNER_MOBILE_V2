@@ -204,8 +204,6 @@ fun MenuScreen(
             onDeleteCategory = viewModel::requestDeleteCategory,
             onEditMenu = viewModel::editMenu,
             onDeleteMenu = viewModel::requestDelete,
-            onConfirmDelete = viewModel::deleteMenu,
-            onDismissDelete = viewModel::dismissDelete,
             onRefresh = viewModel::refresh,
             contentPadding = paddingValues,
             modifier = Modifier.fillMaxSize()
@@ -219,6 +217,11 @@ fun MenuScreen(
             onDismissDelete = viewModel::dismissDeleteCategory
         )
     }
+    MenuDeleteDialog(
+        state = state,
+        onConfirm = viewModel::deleteMenu,
+        onDismiss = viewModel::dismissDelete
+    )
 }
 
 @Composable
@@ -228,8 +231,6 @@ fun MenuScreenImpl(
     onDeleteCategory: (Int, String) -> Unit,
     onEditMenu: (Int) -> Unit,
     onDeleteMenu: (Int, String) -> Unit,
-    onConfirmDelete: () -> Unit,
-    onDismissDelete: () -> Unit,
     onRefresh: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
@@ -336,9 +337,17 @@ fun MenuScreenImpl(
                 }
         }
     }
+}
+
+@Composable
+private fun MenuDeleteDialog(
+    state: MenuState,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
     if (state.deleteMenuId != null) {
         AlertDialog(
-            onDismissRequest = onDismissDelete,
+            onDismissRequest = onDismiss,
             title = {
                 Text(
                     text = stringResource(Res.string.menu_delete_title),
@@ -355,7 +364,7 @@ fun MenuScreenImpl(
                 )
             },
             confirmButton = {
-                TextButton(enabled = !state.isDeleting, onClick = onConfirmDelete) {
+                TextButton(enabled = !state.isDeleting, onClick = onConfirm) {
                     Text(
                         text = stringResource(
                             if (state.isDeleting) Res.string.menu_deleting else Res.string.common_delete
@@ -365,7 +374,7 @@ fun MenuScreenImpl(
                 }
             },
             dismissButton = {
-                TextButton(enabled = !state.isDeleting, onClick = onDismissDelete) {
+                TextButton(enabled = !state.isDeleting, onClick = onDismiss) {
                     Text(stringResource(Res.string.common_cancel))
                 }
             }
@@ -605,8 +614,6 @@ private fun MenuScreenPreview() {
             onDeleteCategory = { _, _ -> },
             onEditMenu = {},
             onDeleteMenu = { _, _ -> },
-            onConfirmDelete = {},
-            onDismissDelete = {},
             onRefresh = {},
             contentPadding = PaddingValues()
         )

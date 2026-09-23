@@ -48,6 +48,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.common_add_
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
 import `in`.koreatech.business.core.designsystem.generated.resources.common_edit
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
+import `in`.koreatech.business.core.designsystem.generated.resources.common_won
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_hint
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_apply
@@ -223,23 +224,16 @@ internal fun RegisterStoreDetailInfoScreen(
     var closingTimeInput by remember { mutableStateOf(DEFAULT_CLOSING_TIME.filter(Char::isDigit)) }
     var selectedDays by remember { mutableStateOf(emptySet<RegisterStoreDay>().toImmutableSet()) }
     var is24Hours by remember { mutableStateOf(false) }
-    var pickingOpeningTime by remember { mutableStateOf<Boolean?>(null) }
+    var pickingTime by remember { mutableStateOf<OperatingTimeField?>(null) }
 
-    pickingOpeningTime?.let { isOpeningTime ->
-        val timeInput = if (isOpeningTime) openingTimeInput else closingTimeInput
-        val timePickerState = rememberTimePickerState(timeInput.take(2).toIntOrNull() ?: 9, timeInput.drop(2).take(2).toIntOrNull() ?: 0)
-        AlertDialog(
-            onDismissRequest = { pickingOpeningTime = null },
-            text = { TimePicker(state = timePickerState) },
-            confirmButton = {
-                TextButton(onClick = {
-                    val selectedTime = timePickerState.hour.toString().padStart(2, '0') +
-                        timePickerState.minute.toString().padStart(2, '0')
-                    if (isOpeningTime) openingTimeInput = selectedTime else closingTimeInput = selectedTime
-                    pickingOpeningTime = null
-                }) { Text(stringResource(Res.string.register_store_apply)) }
-            },
-            dismissButton = { TextButton(onClick = { pickingOpeningTime = null }) { Text(stringResource(Res.string.common_cancel)) } }
+    pickingTime?.let { field ->
+        RegisterStoreTimePickerDialog(
+            initialTime = if (field == OperatingTimeField.Opening) openingTimeInput else closingTimeInput,
+            onDismiss = { pickingTime = null },
+            onConfirm = { selectedTime ->
+                if (field == OperatingTimeField.Opening) openingTimeInput = selectedTime else closingTimeInput = selectedTime
+                pickingTime = null
+            }
         )
     }
 
@@ -280,13 +274,13 @@ internal fun RegisterStoreDetailInfoScreen(
                         Text(stringResource(Res.string.register_store_start_time), style = KoinTheme.typography.medium14)
                         Text(
                             text = openingTimeInput.toTimeText(),
-                            modifier = Modifier.fillMaxWidth().noRippleClickable { pickingOpeningTime = true }.padding(12.dp),
+                            modifier = Modifier.fillMaxWidth().noRippleClickable { pickingTime = OperatingTimeField.Opening }.padding(12.dp),
                             style = KoinTheme.typography.regular14
                         )
                         Text(stringResource(Res.string.register_store_end_time), style = KoinTheme.typography.medium14)
                         Text(
                             text = closingTimeInput.toTimeText(),
-                            modifier = Modifier.fillMaxWidth().noRippleClickable { pickingOpeningTime = false }.padding(12.dp),
+                            modifier = Modifier.fillMaxWidth().noRippleClickable { pickingTime = OperatingTimeField.Closing }.padding(12.dp),
                             style = KoinTheme.typography.regular14
                         )
                     }
@@ -376,7 +370,13 @@ internal fun RegisterStoreDetailInfoScreen(
                 stringResource(Res.string.register_store_delivery_fee_hint),
                 KeyboardType.Number,
                 visualTransformation = CurrencyVisualTransformation(),
-                suffix = { Text("원", style = KoinTheme.typography.regular14, color = KoinTheme.colors.neutral600) }
+                suffix = {
+                    Text(
+                        text = stringResource(Res.string.common_won),
+                        style = KoinTheme.typography.regular14,
+                        color = KoinTheme.colors.neutral600
+                    )
+                }
             ) { onDeliveryFeeChange(it) }
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
@@ -491,6 +491,37 @@ internal fun RegisterStoreDetailInfoScreen(
 
 private const val DEFAULT_OPENING_TIME = "09:00"
 private const val DEFAULT_CLOSING_TIME = "22:00"
+
+private enum class OperatingTimeField { Opening, Closing }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RegisterStoreTimePickerDialog(
+    initialTime: String,
+    onDismiss: () -> Unit,
+    onConfirm: (String) -> Unit
+) {
+    val timePickerState = rememberTimePickerState(
+        initialHour = initialTime.take(2).toIntOrNull() ?: 9,
+        initialMinute = initialTime.drop(2).take(2).toIntOrNull() ?: 0
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        text = { TimePicker(state = timePickerState) },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirm(timePickerState.hour.toTwoDigitString() + timePickerState.minute.toTwoDigitString())
+                }
+            ) { Text(stringResource(Res.string.register_store_apply)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(Res.string.common_cancel)) }
+        }
+    )
+}
+
+private fun Int.toTwoDigitString(): String = toString().padStart(2, '0')
 
 @Composable
 private fun RegisterStoreField(

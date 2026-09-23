@@ -69,9 +69,24 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxSize().padding(paddingValues)
         )
     }
-    if (state.isDeleteOwnerDialogVisible) {
+    DeleteOwnerDialog(
+        isVisible = state.isDeleteOwnerDialogVisible,
+        isDeleting = state.isDeletingOwner,
+        onConfirm = viewModel::deleteOwner,
+        onDismiss = viewModel::dismissDeleteOwnerDialog
+    )
+}
+
+@Composable
+private fun DeleteOwnerDialog(
+    isVisible: Boolean,
+    isDeleting: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    if (isVisible) {
         AlertDialog(
-            onDismissRequest = viewModel::dismissDeleteOwnerDialog,
+            onDismissRequest = onDismiss,
             title = {
                 Text(
                     text = stringResource(Res.string.settings_delete_owner_title),
@@ -86,8 +101,8 @@ fun SettingsScreen(
             },
             confirmButton = {
                 TextButton(
-                    enabled = !state.isDeletingOwner,
-                    onClick = viewModel::deleteOwner
+                    enabled = !isDeleting,
+                    onClick = onConfirm
                 ) {
                     Text(
                         text = stringResource(Res.string.common_delete),
@@ -97,8 +112,8 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(
-                    enabled = !state.isDeletingOwner,
-                    onClick = viewModel::dismissDeleteOwnerDialog
+                    enabled = !isDeleting,
+                    onClick = onDismiss
                 ) {
                     Text(stringResource(Res.string.common_cancel))
                 }

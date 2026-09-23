@@ -142,13 +142,16 @@ fun EventScreen(
             state = state,
             onEditEvent = viewModel::editEvent,
             onDeleteEvent = viewModel::requestDelete,
-            onConfirmDelete = viewModel::deleteEvent,
-            onDismissDelete = viewModel::dismissDelete,
             onRefresh = viewModel::refresh,
             contentPadding = paddingValues,
             modifier = Modifier.fillMaxSize()
         )
     }
+    EventDeleteDialog(
+        state = state,
+        onConfirm = viewModel::deleteEvent,
+        onDismiss = viewModel::dismissDelete
+    )
 }
 
 @Composable
@@ -156,8 +159,6 @@ fun EventScreenImpl(
     state: EventState,
     onEditEvent: (Int) -> Unit,
     onDeleteEvent: (Int, String) -> Unit,
-    onConfirmDelete: () -> Unit,
-    onDismissDelete: () -> Unit,
     onRefresh: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
@@ -197,9 +198,17 @@ fun EventScreenImpl(
                 }
         }
     }
+}
+
+@Composable
+private fun EventDeleteDialog(
+    state: EventState,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
     if (state.deleteEventId != null) {
         AlertDialog(
-            onDismissRequest = onDismissDelete,
+            onDismissRequest = onDismiss,
             title = {
                 Text(
                     text = stringResource(Res.string.event_delete_title),
@@ -218,7 +227,7 @@ fun EventScreenImpl(
             confirmButton = {
                 TextButton(
                     enabled = !state.isDeleting,
-                    onClick = onConfirmDelete
+                    onClick = onConfirm
                 ) {
                     Text(
                         text = stringResource(
@@ -235,7 +244,7 @@ fun EventScreenImpl(
             dismissButton = {
                 TextButton(
                     enabled = !state.isDeleting,
-                    onClick = onDismissDelete
+                    onClick = onDismiss
                 ) {
                     Text(text = stringResource(Res.string.common_cancel))
                 }
@@ -345,8 +354,6 @@ private fun EventScreenPreview() {
             state = EventState(),
             onEditEvent = {},
             onDeleteEvent = { _, _ -> },
-            onConfirmDelete = {},
-            onDismissDelete = {},
             onRefresh = {},
             contentPadding = PaddingValues()
         )
