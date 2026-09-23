@@ -5,13 +5,12 @@ platform :android do
   lane :release do |options|
     version_name = options[:version_name] || release_version
     version_code = options[:version_code] || base_version_code(version_name)
+    set_android_version(version_name, version_code)
     gradle(
       task: ":androidApp:bundleRelease",
       project_dir: ".",
       print_command: false,
       properties: {
-        "android.injected.version.name" => version_name,
-        "android.injected.version.code" => version_code,
         "android.injected.signing.store.file" => required_env("ANDROID_KEYSTORE_PATH"),
         "android.injected.signing.store.password" => required_env("ANDROID_KEYSTORE_PASSWORD"),
         "android.injected.signing.key.alias" => required_env("ANDROID_KEY_ALIAS"),
@@ -48,17 +47,28 @@ platform :ios do
     version_name = options[:version_name] || release_version
     version_code = options[:version_code] || base_version_code(version_name)
     team_id = ios_config("TEAM_ID")
+    app_identifier = ios_config("PRODUCT_BUNDLE_IDENTIFIER")
+    provisioning_profile = required_env("IOS_PROVISIONING_PROFILE_NAME")
     build_app(
       project: "iosApp/iosApp.xcodeproj",
       scheme: "iosApp",
       configuration: "Release",
-      export_method: "app-store",
+      export_method: "app-store-connect",
       export_team_id: team_id,
+      codesigning_identity: "Apple Distribution",
+      export_options: {
+        signingStyle: "manual",
+        provisioningProfiles: {
+          app_identifier => provisioning_profile
+        }
+      },
       xcargs: [
         "TEAM_ID=#{team_id}",
-        "PRODUCT_BUNDLE_IDENTIFIER=#{ios_config('PRODUCT_BUNDLE_IDENTIFIER')}",
+        "PRODUCT_BUNDLE_IDENTIFIER=#{app_identifier}",
         "MARKETING_VERSION=#{version_name}",
-        "CURRENT_PROJECT_VERSION=#{version_code}"
+        "CURRENT_PROJECT_VERSION=#{version_code}",
+        "CODE_SIGN_STYLE=Manual",
+        "PROVISIONING_PROFILE_SPECIFIER='#{provisioning_profile}'"
       ].join(" ")
     )
   end
@@ -122,6 +132,21 @@ end
 def base_version_code(version)
   major, minor, patch = version.split(".").map(&:to_i)
   major * 1_000_000 + minor * 10_000 + patch * 100
+end
+
+def set_android_version(version_name, version_code)
+  build_file = File.expand_path("../androidApp/build.gradle.kts", __dir__)
+  content = File.read(build_file)
+  version_code_pattern = /^\s*versionCode\s*=\s*\d+\s*$/
+  version_name_pattern = /^\s*versionName\s*=\s*"[^"]*"\s*$/
+
+  UI.user_error!("Expected one versionCode in androidApp/build.gradle.kts") unless content.scan(version_code_pattern).one?
+  UI.user_error!("Expected one versionName in androidApp/build.gradle.kts") unless content.scan(version_name_pattern).one?
+
+  content.sub!(version_code_pattern, "        versionCode = #{version_code}")
+  content.sub!(version_name_pattern, "        versionName = \"#{version_name}\"")
+  File.write(build_file, content)
+  UI.message("Building Android #{version_name} (#{version_code})")
 end
 
 def next_android_version_code(version, existing_codes)
