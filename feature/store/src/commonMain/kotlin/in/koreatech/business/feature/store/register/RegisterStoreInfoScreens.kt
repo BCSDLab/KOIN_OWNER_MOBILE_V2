@@ -110,7 +110,7 @@ internal fun RegisterStoreBasicInfoScreen(
         )
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color(0xFFF8F8FA),
+        containerColor = KoinTheme.colors.neutral75,
         topBar = {
             KoinTopAppBar(
                 modifier = Modifier.fillMaxWidth().background(KoinTheme.colors.neutral0),
@@ -334,7 +334,7 @@ internal fun RegisterStoreDetailInfoScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color(0xFFF8F8FA),
+        containerColor = KoinTheme.colors.neutral75,
         topBar = {
             KoinTopAppBar(
                 modifier = Modifier.fillMaxWidth().background(KoinTheme.colors.neutral0),

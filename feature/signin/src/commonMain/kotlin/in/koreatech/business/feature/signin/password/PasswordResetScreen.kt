@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -104,7 +105,7 @@ private fun PasswordResetScreenImpl(
                 onNavigationIconClick = onBack
             )
         },
-        containerColor = KoinTheme.colors.neutral0
+        containerColor = KoinTheme.colors.neutral75
     ) { paddingValues ->
         when (state.step) {
             PasswordResetStep.Verification ->

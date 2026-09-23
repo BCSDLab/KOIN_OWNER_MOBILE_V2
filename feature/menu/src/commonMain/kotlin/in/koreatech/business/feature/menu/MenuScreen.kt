@@ -122,7 +122,7 @@ fun MenuScreen(
     }
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color(0xFFF8F8FA),
+        containerColor = KoinTheme.colors.neutral75,
         topBar = {
             Column {
                 KoinScreenTitle(
@@ -334,7 +334,7 @@ fun MenuScreenImpl(
                             }
                         }
                         item(key = "category-scroll-spacer") {
-                            Spacer(modifier = Modifier.fillParentMaxSize())
+                            Spacer(modifier = Modifier.fillParentMaxSize(0.7f))
                         }
                     }
                 }

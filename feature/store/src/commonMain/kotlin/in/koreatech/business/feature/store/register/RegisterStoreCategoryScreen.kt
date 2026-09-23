@@ -51,7 +51,7 @@ internal fun RegisterStoreCategoryScreen(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color(0xFFF8F8FA),
+        containerColor = KoinTheme.colors.neutral75,
         topBar = {
             KoinTopAppBar(
                 modifier = Modifier.fillMaxWidth().background(KoinTheme.colors.neutral0),

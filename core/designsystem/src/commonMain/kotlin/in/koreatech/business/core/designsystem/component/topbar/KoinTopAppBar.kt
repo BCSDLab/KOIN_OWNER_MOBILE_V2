@@ -65,7 +65,7 @@ fun KoinTopAppBar(
 object KoinTopAppBarDefaults {
     @Composable
     fun topAppBarColors(
-        containerColor: Color = KoinTheme.colors.neutral0,
+        containerColor: Color = KoinTheme.colors.neutral75,
         scrolledContainerColor: Color = Color.Unspecified,
         navigationIconContentColor: Color = KoinTheme.colors.neutral800,
         titleContentColor: Color = KoinTheme.colors.neutral800,

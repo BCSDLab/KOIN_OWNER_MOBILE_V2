@@ -87,7 +87,7 @@ fun EventFormScreen(
                 onNavigationIconClick = onBack
             )
         },
-        containerColor = KoinTheme.colors.neutral0
+        containerColor = KoinTheme.colors.neutral75
     ) { paddingValues ->
         EventFormScreenImpl(
             state = state,

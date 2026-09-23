@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.signupButtonColors
@@ -43,7 +44,7 @@ internal fun SignUpCompleteScreen(
                 onNavigationIconClick = onBack
             )
         },
-        containerColor = KoinTheme.colors.neutral0
+        containerColor = KoinTheme.colors.neutral75
     ) { contentPadding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(contentPadding).padding(horizontal = 24.dp),

@@ -15,7 +15,7 @@ fun GlobalLoadingScreen(modifier: Modifier = Modifier) {
         modifier =
         modifier
             .fillMaxSize()
-            .background(KoinTheme.colors.neutral0),
+            .background(KoinTheme.colors.neutral75),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(color = KoinTheme.colors.primary500)

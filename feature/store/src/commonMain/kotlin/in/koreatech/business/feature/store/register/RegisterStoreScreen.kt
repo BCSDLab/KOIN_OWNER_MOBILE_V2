@@ -284,10 +284,10 @@ private fun RegisterStoreStartScreen(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color(0xFFF8F8FA),
+        containerColor = KoinTheme.colors.neutral75,
         topBar = {
             KoinTopAppBar(
-                modifier = Modifier.fillMaxWidth().background(KoinTheme.colors.neutral0),
+                modifier = Modifier.fillMaxWidth(),
                 title = { Text(stringResource(Res.string.register_store_title), style = KoinTheme.typography.medium18) },
                 onNavigationIconClick = onBack
             )

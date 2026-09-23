@@ -87,7 +87,7 @@ internal fun RegisterStoreConfirmScreen(
         )
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color(0xFFF8F8FA),
+        containerColor = KoinTheme.colors.neutral75,
         topBar = {
             KoinTopAppBar(
                 modifier = Modifier.fillMaxWidth().background(KoinTheme.colors.neutral0),
@@ -205,7 +205,7 @@ internal fun RegisterStoreCompleteScreen(
     onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(modifier = modifier.fillMaxSize(), containerColor = Color(0xFFF8F8FA)) { paddingValues ->
+    Scaffold(modifier = modifier.fillMaxSize(), containerColor = KoinTheme.colors.neutral75) { paddingValues ->
         Column(
             modifier =
             Modifier

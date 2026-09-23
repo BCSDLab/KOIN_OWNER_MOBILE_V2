@@ -53,7 +53,7 @@ fun SettingsScreen(
     viewModel.collectSideEffect { snackbarHostState.showSnackbar(deleteOwnerError) }
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color(0xFFF8F8FA),
+        containerColor = KoinTheme.colors.neutral75,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             KoinScreenTitle(
@@ -118,7 +118,7 @@ fun SettingsScreenImpl(
     onDeleteOwner: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth().background(Color.White)) {
+    Column(modifier = modifier.fillMaxWidth()) {
         KoinSettingItem(stringResource(Res.string.settings_manage_shops), onManageShopsClick)
         HorizontalDivider(color = KoinTheme.colors.neutral200)
         KoinSettingItem(stringResource(Res.string.settings_terms), onTermsClick)

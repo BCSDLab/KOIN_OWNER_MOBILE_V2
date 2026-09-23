@@ -62,10 +62,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-private val HomeBackground = Color(0xFFF8F8FA)
-private val HomeBorder = Color(0xFFE6E6E6)
-private val HomeDescription = Color(0xFFA8A8A8)
-
 @Composable
 fun HomeScreen(
     onShopClick: (Int) -> Unit = {},
@@ -86,7 +82,7 @@ fun HomeScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = HomeBackground,
+        containerColor = KoinTheme.colors.neutral75,
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         HomeScreenImpl(
@@ -111,7 +107,7 @@ fun HomeScreenImpl(
     onEventClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.background(HomeBackground).verticalScroll(rememberScrollState())) {
+    Column(modifier = modifier.background(KoinTheme.colors.neutral75).verticalScroll(rememberScrollState())) {
         HomeTopBar(onNotificationClick = onNotificationClick)
         HomeGreeting()
         HomeSection(
@@ -236,7 +232,7 @@ private fun EmptyShopCard(
             Text(
                 stringResource(Res.string.home_register_shop_description),
                 style = KoinTheme.typography.regular13,
-                color = HomeDescription
+                color = KoinTheme.colors.neutral450
             )
         }
         HomeArrow()
@@ -255,14 +251,15 @@ private fun HomeFeatureCard(
         HomeBadge(badge)
         Spacer(modifier = Modifier.height(6.dp))
         Text(title, style = KoinTheme.typography.medium15, color = KoinTheme.colors.neutral800)
-        Text(description, style = KoinTheme.typography.regular12, color = HomeDescription)
+        Text(description, style = KoinTheme.typography.regular12, color = KoinTheme.colors.neutral450)
         Spacer(modifier = Modifier.height(6.dp))
         Text(stringResource(Res.string.home_shortcut), style = KoinTheme.typography.regular10, color = KoinTheme.colors.primary500)
     }
 }
 
+@Composable
 private fun Modifier.homeCard(): Modifier =
-    border(0.5.dp, HomeBorder, RoundedCornerShape(16.dp))
+    border(0.5.dp, KoinTheme.colors.neutral250, RoundedCornerShape(16.dp))
         .clip(RoundedCornerShape(16.dp))
         .background(Color.White)
 

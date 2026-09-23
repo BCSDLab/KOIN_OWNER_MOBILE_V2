@@ -52,9 +52,6 @@ import `in`.koreatech.business.domain.model.store.OwnerShop
 import `in`.koreatech.business.feature.home.util.toDisplayText
 import org.jetbrains.compose.resources.stringResource
 
-private val HomeBorder = Color(0xFFE6E6E6)
-private val HomeDescription = Color(0xFFA8A8A8)
-
 @Composable
 internal fun ManagedShopCard(
     shop: OwnerShop,
@@ -106,7 +103,7 @@ internal fun ManagedShopCard(
                 Text(
                     text = shop.categories.joinToString(" · ").ifBlank { categoryNotRegistered },
                     style = KoinTheme.typography.regular13,
-                    color = HomeDescription
+                    color = KoinTheme.colors.neutral450
                 )
             }
             HomeArrow()
@@ -228,9 +225,10 @@ private fun HomeArrow(modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
 private fun Modifier.managedShopCard(): Modifier =
     border(
         width = 0.5.dp,
-        color = HomeBorder,
+        color = KoinTheme.colors.neutral250,
         shape = RoundedCornerShape(16.dp)
     ).clip(RoundedCornerShape(16.dp)).background(Color.White)

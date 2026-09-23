@@ -93,7 +93,7 @@ fun MenuFormScreen(
                 onNavigationIconClick = onBack
             )
         },
-        containerColor = KoinTheme.colors.neutral0
+        containerColor = KoinTheme.colors.neutral75
     ) { paddingValues ->
         MenuFormScreenImpl(
             state = state,

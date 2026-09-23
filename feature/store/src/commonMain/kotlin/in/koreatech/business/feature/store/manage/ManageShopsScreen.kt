@@ -85,7 +85,7 @@ fun ManageShopsScreen(
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = Color(0xFFF8F8FA)
+        containerColor = KoinTheme.colors.neutral75
     ) { paddingValues ->
         ManageShopsScreenImpl(
             state = state,
