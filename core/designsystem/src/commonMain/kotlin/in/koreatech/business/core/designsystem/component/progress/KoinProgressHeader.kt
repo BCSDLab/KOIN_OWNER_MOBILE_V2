@@ -1,4 +1,4 @@
-package `in`.koreatech.business.core.designsystem.component.user
+package `in`.koreatech.business.core.designsystem.component.progress
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +13,7 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun KoinUserProgressHeader(
+fun KoinProgressHeader(
     text: String,
     currentStep: Int,
     maxStep: Int

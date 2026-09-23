@@ -22,8 +22,8 @@ import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextFiel
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.button.secondaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_store_input
@@ -66,9 +66,9 @@ internal fun SignUpStoreScreen(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(text = stringResource(Res.string.sign_up_store_step), currentStep = 5, maxStep = 6)
+            KoinProgressHeader(text = stringResource(Res.string.sign_up_store_step), currentStep = 5, maxStep = 6)
             Spacer(modifier = Modifier.height(8.dp))
-            KoinUserProgressIndicator(currentStep = 5, maxStep = 6)
+            KoinProgressIndicator(currentStep = 5, maxStep = 6)
             Spacer(modifier = Modifier.height(64.dp))
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(text = stringResource(Res.string.sign_up_store_input), style = KoinTheme.typography.medium16)

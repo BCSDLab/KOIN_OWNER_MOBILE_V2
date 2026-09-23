@@ -26,8 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_category_description
@@ -67,9 +67,9 @@ internal fun RegisterStoreCategoryScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp)
         ) {
-            KoinUserProgressHeader(stringResource(Res.string.register_store_category_step), 1, 4)
+            KoinProgressHeader(stringResource(Res.string.register_store_category_step), 1, 4)
             Spacer(Modifier.height(8.dp))
-            KoinUserProgressIndicator(1, 4)
+            KoinProgressIndicator(1, 4)
             Spacer(Modifier.height(48.dp))
             Text(stringResource(Res.string.register_store_category_input), style = KoinTheme.typography.medium18)
             Spacer(Modifier.height(8.dp))

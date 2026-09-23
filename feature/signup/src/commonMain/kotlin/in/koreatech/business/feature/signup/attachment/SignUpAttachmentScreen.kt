@@ -22,10 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
+import `in`.koreatech.business.core.designsystem.component.textfield.TextFieldAlertState
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldAlert
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_delete
 import `in`.koreatech.business.core.designsystem.generated.resources.error_business_number_check
@@ -81,9 +81,9 @@ internal fun SignUpAttachmentScreen(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(stringResource(Res.string.sign_up_attachment_step), 6, 6)
+            KoinProgressHeader(stringResource(Res.string.sign_up_attachment_step), 6, 6)
             Spacer(modifier = Modifier.height(8.dp))
-            KoinUserProgressIndicator(6, 6)
+            KoinProgressIndicator(6, 6)
             Spacer(modifier = Modifier.height(64.dp))
             Text(stringResource(Res.string.sign_up_attachment_input), style = KoinTheme.typography.medium16)
             Spacer(modifier = Modifier.height(8.dp))
@@ -128,7 +128,7 @@ internal fun SignUpAttachmentScreen(
             }
             state.error?.let { error ->
                 Spacer(modifier = Modifier.height(8.dp))
-                KoinUserTextFieldAlert(
+                KoinTextFieldAlert(
                     text = when (error) {
                         SignupError.PhoneVerificationRequired ->
                             stringResource(
@@ -143,7 +143,7 @@ internal fun SignUpAttachmentScreen(
                         SignupError.Submit -> stringResource(Res.string.error_sign_up_submit)
                         is SignupError.Dynamic -> error.message
                     },
-                    state = AlertState.Error
+                    state = TextFieldAlertState.Error
                 )
             }
             Spacer(modifier = Modifier.weight(1f))

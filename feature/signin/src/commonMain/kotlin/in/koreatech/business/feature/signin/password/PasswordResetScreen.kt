@@ -27,9 +27,9 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserWithButtonItem
+import `in`.koreatech.business.core.designsystem.component.textfield.TextFieldAlertState
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldAlert
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldWithButton
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_confirm
 import `in`.koreatech.business.core.designsystem.generated.resources.password_reset_complete
@@ -155,7 +155,7 @@ private fun PasswordResetVerificationContent(
             style = KoinTheme.typography.regular15,
             color = KoinTheme.colors.neutral600
         )
-        KoinUserWithButtonItem(
+        KoinTextFieldWithButton(
             value = state.phoneNumber,
             hint = stringResource(Res.string.sign_up_phone_hint),
             buttonText = stringResource(
@@ -170,7 +170,7 @@ private fun PasswordResetVerificationContent(
             onButtonClick = onSendCode,
             buttonEnabled = !state.isLoading && state.phoneNumber.isNotBlank()
         )
-        KoinUserWithButtonItem(
+        KoinTextFieldWithButton(
             value = state.code,
             hint = stringResource(Res.string.sign_up_verification_hint),
             buttonText = stringResource(Res.string.common_confirm),
@@ -278,7 +278,7 @@ private fun PasswordResetCompleteContent(
 
 @Composable
 private fun PasswordResetErrorText(error: PasswordResetError) {
-    KoinUserTextFieldAlert(
+    KoinTextFieldAlert(
         text = stringResource(
             when (error) {
                 PasswordResetError.InvalidPhone -> Res.string.password_reset_error_phone
@@ -288,6 +288,6 @@ private fun PasswordResetErrorText(error: PasswordResetError) {
                 PasswordResetError.Reset -> Res.string.password_reset_error_reset
             }
         ),
-        state = AlertState.Error
+        state = TextFieldAlertState.Error
     )
 }

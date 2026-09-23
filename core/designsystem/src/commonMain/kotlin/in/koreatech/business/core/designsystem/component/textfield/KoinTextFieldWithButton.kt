@@ -1,4 +1,4 @@
-package `in`.koreatech.business.core.designsystem.component.user
+package `in`.koreatech.business.core.designsystem.component.textfield
 
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,7 +26,7 @@ import `in`.koreatech.business.core.designsystem.component.button.primaryButtonC
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
 @Composable
-fun KoinUserWithButtonItem(
+fun KoinTextFieldWithButton(
     value: String,
     hint: String,
     buttonText: String,

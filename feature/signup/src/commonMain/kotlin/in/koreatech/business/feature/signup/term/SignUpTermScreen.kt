@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
-import `in`.koreatech.business.core.designsystem.component.user.SignupCheckBox
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_term_all
@@ -63,9 +63,9 @@ internal fun SignUpTermScreen(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(text = stringResource(Res.string.sign_up_term_step), currentStep = 1, maxStep = 6)
+            KoinProgressHeader(text = stringResource(Res.string.sign_up_term_step), currentStep = 1, maxStep = 6)
             Spacer(modifier = Modifier.height(8.dp))
-            KoinUserProgressIndicator(currentStep = 1, maxStep = 6)
+            KoinProgressIndicator(currentStep = 1, maxStep = 6)
             Spacer(modifier = Modifier.height(16.dp))
             SignupCheckAllBox(
                 checked = state.termsAgreed,
@@ -73,15 +73,15 @@ internal fun SignUpTermScreen(
                 onCheckedChange = onAllTermCheckChange
             )
             Spacer(modifier = Modifier.height(16.dp))
-            SignupCheckBox(state.agreedToPrivacy, stringResource(Res.string.sign_up_term_privacy), onPrivacyTermCheckChange)
+            KoinCheckBox(state.agreedToPrivacy, stringResource(Res.string.sign_up_term_privacy), onPrivacyTermCheckChange)
             Spacer(modifier = Modifier.height(16.dp))
             SignupTerm(state.privacyTerm)
             Spacer(modifier = Modifier.height(16.dp))
-            SignupCheckBox(state.agreedToService, stringResource(Res.string.sign_up_term_service), onKoinTermCheckChange)
+            KoinCheckBox(state.agreedToService, stringResource(Res.string.sign_up_term_service), onKoinTermCheckChange)
             Spacer(modifier = Modifier.height(16.dp))
             SignupTerm(state.koinTerm)
             Spacer(modifier = Modifier.height(16.dp))
-            SignupCheckBox(state.agreedToMarketing, stringResource(Res.string.sign_up_term_marketing), onMarketingTermCheckChange)
+            KoinCheckBox(state.agreedToMarketing, stringResource(Res.string.sign_up_term_marketing), onMarketingTermCheckChange)
             Spacer(modifier = Modifier.height(16.dp))
             SignupTerm(state.marketingTerm)
             Spacer(modifier = Modifier.height(16.dp))

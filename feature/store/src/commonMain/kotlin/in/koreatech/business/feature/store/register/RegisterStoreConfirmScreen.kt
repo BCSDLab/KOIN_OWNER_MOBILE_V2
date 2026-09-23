@@ -26,8 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_check_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_none
@@ -101,9 +101,9 @@ internal fun RegisterStoreConfirmScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(stringResource(Res.string.register_store_intro_confirm), 4, 4)
+            KoinProgressHeader(stringResource(Res.string.register_store_intro_confirm), 4, 4)
             Spacer(Modifier.height(8.dp))
-            KoinUserProgressIndicator(4, 4)
+            KoinProgressIndicator(4, 4)
             Spacer(Modifier.height(48.dp))
             Text(stringResource(Res.string.register_store_confirm_question), style = KoinTheme.typography.medium18)
             Spacer(Modifier.height(8.dp))

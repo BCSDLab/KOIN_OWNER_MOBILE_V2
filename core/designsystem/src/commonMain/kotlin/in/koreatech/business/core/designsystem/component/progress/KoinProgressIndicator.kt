@@ -1,4 +1,4 @@
-package `in`.koreatech.business.core.designsystem.component.user
+package `in`.koreatech.business.core.designsystem.component.progress
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Canvas
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
 @Composable
-fun KoinUserProgressIndicator(
+fun KoinProgressIndicator(
     currentStep: Int,
     maxStep: Int
 ) {

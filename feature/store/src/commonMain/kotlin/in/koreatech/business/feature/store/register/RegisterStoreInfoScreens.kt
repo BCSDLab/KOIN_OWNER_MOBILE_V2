@@ -36,9 +36,9 @@ import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
-import `in`.koreatech.business.core.designsystem.component.user.SignupCheckBox
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
@@ -125,9 +125,9 @@ internal fun RegisterStoreBasicInfoScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(stringResource(Res.string.register_store_basic_step), 2, 4)
+            KoinProgressHeader(stringResource(Res.string.register_store_basic_step), 2, 4)
             Spacer(Modifier.height(8.dp))
-            KoinUserProgressIndicator(2, 4)
+            KoinProgressIndicator(2, 4)
             Spacer(Modifier.height(48.dp))
             Text(stringResource(Res.string.register_store_image_input), style = KoinTheme.typography.medium16)
             Spacer(Modifier.height(12.dp))
@@ -268,7 +268,7 @@ internal fun RegisterStoreDetailInfoScreen(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                     }
-                    SignupCheckBox(
+                    KoinCheckBox(
                         checked = is24Hours,
                         text = stringResource(Res.string.register_store_open_24_hours),
                         onCheckedChange = {
@@ -335,9 +335,9 @@ internal fun RegisterStoreDetailInfoScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(stringResource(Res.string.register_store_operation_step), 3, 4)
+            KoinProgressHeader(stringResource(Res.string.register_store_operation_step), 3, 4)
             Spacer(Modifier.height(8.dp))
-            KoinUserProgressIndicator(3, 4)
+            KoinProgressIndicator(3, 4)
             Spacer(Modifier.height(48.dp))
             RegisterStoreField(
                 stringResource(Res.string.register_store_phone),
@@ -433,17 +433,17 @@ internal fun RegisterStoreDetailInfoScreen(
             Text(stringResource(Res.string.register_store_available_items), style = KoinTheme.typography.medium16)
             Spacer(Modifier.height(8.dp))
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                SignupCheckBox(
+                KoinCheckBox(
                     checked = state.isDeliveryAvailable,
                     text = stringResource(Res.string.register_store_delivery_available),
                     onCheckedChange = onDeliveryAvailabilityChange
                 )
-                SignupCheckBox(
+                KoinCheckBox(
                     checked = state.isCardAvailable,
                     text = stringResource(Res.string.register_store_card_available),
                     onCheckedChange = onCardAvailabilityChange
                 )
-                SignupCheckBox(
+                KoinCheckBox(
                     checked = state.isBankTransferAvailable,
                     text = stringResource(Res.string.register_store_bank_transfer_available),
                     onCheckedChange = onBankTransferAvailabilityChange

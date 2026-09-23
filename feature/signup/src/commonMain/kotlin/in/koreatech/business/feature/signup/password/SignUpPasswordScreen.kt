@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
+import `in`.koreatech.business.core.designsystem.component.textfield.TextFieldAlertState
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldAlert
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_password_confirm_hint
@@ -71,9 +71,9 @@ internal fun SignUpPasswordScreen(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(text = stringResource(Res.string.sign_up_password_step), currentStep = 3, maxStep = 6)
+            KoinProgressHeader(text = stringResource(Res.string.sign_up_password_step), currentStep = 3, maxStep = 6)
             Spacer(modifier = Modifier.height(8.dp))
-            KoinUserProgressIndicator(currentStep = 3, maxStep = 6)
+            KoinProgressIndicator(currentStep = 3, maxStep = 6)
             Spacer(modifier = Modifier.height(64.dp))
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(text = stringResource(Res.string.sign_up_password_input), style = KoinTheme.typography.medium16)
@@ -86,7 +86,7 @@ internal fun SignUpPasswordScreen(
                     visualTransformation = PasswordVisualTransformation(mask = '●')
                 )
                 if (state.password.isNotEmpty() && !isPasswordValid) {
-                    KoinUserTextFieldAlert(stringResource(Res.string.sign_up_password_rule), AlertState.Warning)
+                    KoinTextFieldAlert(stringResource(Res.string.sign_up_password_rule), TextFieldAlertState.Warning)
                 }
                 if (isPasswordValid) {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -99,11 +99,11 @@ internal fun SignUpPasswordScreen(
                     )
                 }
                 if (isPasswordValid && state.passwordConfirmation.isNotEmpty()) {
-                    KoinUserTextFieldAlert(
+                    KoinTextFieldAlert(
                         text = stringResource(
                             if (isPasswordEqual) Res.string.sign_up_password_match else Res.string.sign_up_password_mismatch
                         ),
-                        state = if (isPasswordEqual) AlertState.Success else AlertState.Warning
+                        state = if (isPasswordEqual) TextFieldAlertState.Success else TextFieldAlertState.Warning
                     )
                 }
             }

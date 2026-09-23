@@ -1,4 +1,4 @@
-package `in`.koreatech.business.core.designsystem.component.user
+package `in`.koreatech.business.core.designsystem.component.selection
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,7 +18,7 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun SignupCheckBox(
+fun KoinCheckBox(
     checked: Boolean,
     text: String,
     onCheckedChange: (Boolean) -> Unit,
@@ -26,13 +26,9 @@ fun SignupCheckBox(
 ) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Image(
-            painterResource(
-                if (checked) Res.drawable.ic_checkbox_checked else Res.drawable.ic_checkbox_unchecked
-            ),
+            painterResource(if (checked) Res.drawable.ic_checkbox_checked else Res.drawable.ic_checkbox_unchecked),
             text,
-            modifier = Modifier.clickable {
-                onCheckedChange(!checked)
-            }
+            modifier = Modifier.clickable { onCheckedChange(!checked) }
         )
         Spacer(Modifier.width(8.dp))
         Text(

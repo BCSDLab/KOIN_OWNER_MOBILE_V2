@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserWithButtonItem
+import `in`.koreatech.business.core.designsystem.component.textfield.TextFieldAlertState
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldAlert
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldWithButton
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_confirm
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
@@ -86,13 +86,13 @@ internal fun SignUpVerificationScreen(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(
+            KoinProgressHeader(
                 text = stringResource(Res.string.sign_up_verification_step),
                 currentStep = 2,
                 maxStep = 6
             )
             Spacer(modifier = Modifier.height(8.dp))
-            KoinUserProgressIndicator(currentStep = 2, maxStep = 6)
+            KoinProgressIndicator(currentStep = 2, maxStep = 6)
             Spacer(modifier = Modifier.height(64.dp))
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(
@@ -112,7 +112,7 @@ internal fun SignUpVerificationScreen(
                     style = KoinTheme.typography.medium16
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                KoinUserWithButtonItem(
+                KoinTextFieldWithButton(
                     value = state.phoneNumber,
                     hint = stringResource(Res.string.sign_up_phone_hint),
                     buttonText = if (state.isVerificationCodeSent) {
@@ -130,34 +130,34 @@ internal fun SignUpVerificationScreen(
                 )
                 when (val phoneNumberState = state.phoneNumberVerificationState) {
                     PhoneNumberVerificationState.AlreadySignedUp ->
-                        KoinUserTextFieldAlert(
+                        KoinTextFieldAlert(
                             stringResource(Res.string.sign_up_phone_exists),
-                            AlertState.Error
+                            TextFieldAlertState.Error
                         )
 
                     PhoneNumberVerificationState.WrongFormat ->
-                        KoinUserTextFieldAlert(
+                        KoinTextFieldAlert(
                             stringResource(Res.string.sign_up_phone_invalid),
-                            AlertState.Warning
+                            TextFieldAlertState.Warning
                         )
 
                     PhoneNumberVerificationState.Sent ->
-                        KoinUserTextFieldAlert(
+                        KoinTextFieldAlert(
                             stringResource(Res.string.sign_up_verification_sent),
-                            AlertState.Success
+                            TextFieldAlertState.Success
                         )
 
                     is PhoneNumberVerificationState.Failed ->
-                        KoinUserTextFieldAlert(
+                        KoinTextFieldAlert(
                             phoneNumberState.message
                                 ?: stringResource(Res.string.error_verification_send),
-                            AlertState.Error
+                            TextFieldAlertState.Error
                         )
 
                     PhoneNumberVerificationState.None -> Unit
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                KoinUserWithButtonItem(
+                KoinTextFieldWithButton(
                     value = state.verificationCode,
                     hint = stringResource(Res.string.sign_up_verification_hint),
                     buttonText = stringResource(Res.string.common_confirm),
@@ -171,15 +171,15 @@ internal fun SignUpVerificationScreen(
                 )
                 when (state.verificationCodeState) {
                     VerificationCodeState.Valid ->
-                        KoinUserTextFieldAlert(
+                        KoinTextFieldAlert(
                             stringResource(Res.string.sign_up_verification_confirmed),
-                            AlertState.Success
+                            TextFieldAlertState.Success
                         )
 
                     VerificationCodeState.NotValid ->
-                        KoinUserTextFieldAlert(
+                        KoinTextFieldAlert(
                             stringResource(Res.string.sign_up_verification_invalid),
-                            AlertState.Error
+                            TextFieldAlertState.Error
                         )
 
                     VerificationCodeState.None -> Unit

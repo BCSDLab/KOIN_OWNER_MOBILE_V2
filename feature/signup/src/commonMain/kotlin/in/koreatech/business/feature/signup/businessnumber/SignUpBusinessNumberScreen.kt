@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
-import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
+import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_business_hint
@@ -62,9 +62,9 @@ internal fun SignUpBusinessNumberScreen(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
         ) {
-            KoinUserProgressHeader(stringResource(Res.string.sign_up_business_step), 4, 6)
+            KoinProgressHeader(stringResource(Res.string.sign_up_business_step), 4, 6)
             Spacer(modifier = Modifier.height(8.dp))
-            KoinUserProgressIndicator(4, 6)
+            KoinProgressIndicator(4, 6)
             Spacer(modifier = Modifier.height(64.dp))
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(text = stringResource(Res.string.sign_up_business_input), style = KoinTheme.typography.medium16)
