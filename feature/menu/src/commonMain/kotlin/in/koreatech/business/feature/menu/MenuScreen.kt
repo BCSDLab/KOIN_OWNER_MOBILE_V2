@@ -3,6 +3,7 @@ package `in`.koreatech.business.feature.menu
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -44,11 +45,11 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinEmptyContent
 import `in`.koreatech.business.core.designsystem.component.KoinImageThumbnail
-import `in`.koreatech.business.core.designsystem.component.KoinLoadingContent
 import `in`.koreatech.business.core.designsystem.component.KoinScreenTitle
 import `in`.koreatech.business.core.designsystem.component.KoinSelectableChipGroup
 import `in`.koreatech.business.core.designsystem.component.KoinSelectableItem
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
@@ -257,7 +258,7 @@ fun MenuScreenImpl(
         modifier = modifier.padding(contentPadding)
     ) {
         when {
-            state.isLoading -> KoinLoadingContent(Modifier.fillMaxSize())
+            state.isLoading -> MenuLoadingContent()
             state.shop == null ->
                 KoinEmptyContent(
                     message = stringResource(Res.string.menu_shop_required),
@@ -369,6 +370,52 @@ fun MenuScreenImpl(
             }
         )
     }
+}
+
+@Composable
+private fun MenuLoadingContent() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Box(modifier = Modifier.width(72.dp).height(36.dp).skeleton(shape = RoundedCornerShape(20.dp)))
+            Box(modifier = Modifier.width(88.dp).height(36.dp).skeleton(shape = RoundedCornerShape(20.dp)))
+            Box(modifier = Modifier.width(64.dp).height(36.dp).skeleton(shape = RoundedCornerShape(20.dp)))
+        }
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            repeat(2) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(modifier = Modifier.weight(1f).height(24.dp).skeleton())
+                    Box(modifier = Modifier.width(28.dp).height(16.dp).skeleton())
+                    Box(modifier = Modifier.width(28.dp).height(16.dp).skeleton())
+                }
+                repeat(2) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, RoundedCornerShape(12.dp))
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Box(modifier = Modifier.size(88.dp).skeleton(shape = RoundedCornerShape(8.dp)))
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth(0.65f).height(20.dp).skeleton())
+                    Box(modifier = Modifier.fillMaxWidth().height(14.dp).skeleton())
+                    Box(modifier = Modifier.fillMaxWidth(0.45f).height(14.dp).skeleton())
+                }
+            }
+        }
+        }
+    }
+}
 }
 
 @Composable

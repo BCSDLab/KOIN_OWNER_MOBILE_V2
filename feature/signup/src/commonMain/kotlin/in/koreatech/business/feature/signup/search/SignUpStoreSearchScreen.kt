@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +37,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_sto
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_store_search_hint
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.domain.model.store.StoreSearchResult
 import `in`.koreatech.business.feature.signup.SignupError
 import `in`.koreatech.business.feature.signup.SignupState
@@ -91,7 +91,7 @@ internal fun SignUpStoreSearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 when {
-                    state.isSearchingStores -> CircularProgressIndicator(color = KoinTheme.colors.primary500)
+                    state.isSearchingStores -> StoreSearchLoadingContent()
                     state.error == SignupError.StoreSearch ->
                         Text(
                             text = stringResource(Res.string.sign_up_store_search_error),
@@ -180,6 +180,30 @@ private fun StoreSearchItem(
             text = stringResource(Res.string.home_bank_transfer),
             available = store.isBankTransferAvailable
         )
+    }
+}
+
+@Composable
+private fun StoreSearchLoadingContent() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        repeat(5) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, KoinTheme.colors.neutral300, RoundedCornerShape(6.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Box(modifier = Modifier.weight(1f).height(18.dp).skeleton())
+                repeat(3) {
+                    Box(modifier = Modifier.fillMaxWidth(0.1f).height(14.dp).skeleton())
+                }
+            }
+        }
     }
 }
 

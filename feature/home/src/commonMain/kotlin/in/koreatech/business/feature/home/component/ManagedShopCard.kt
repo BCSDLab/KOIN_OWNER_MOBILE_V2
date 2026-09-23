@@ -47,6 +47,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.weekday_thu
 import `in`.koreatech.business.core.designsystem.generated.resources.weekday_tuesday
 import `in`.koreatech.business.core.designsystem.generated.resources.weekday_wednesday
 import `in`.koreatech.business.core.designsystem.noRippleClickable
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.domain.model.store.OwnerShop
 import `in`.koreatech.business.feature.home.util.toDisplayText
@@ -147,6 +148,32 @@ internal fun ManagedShopCard(
                 label = stringResource(Res.string.home_shop_image),
                 value = stringResource(Res.string.home_image_count, shop.imageUrls.size)
             )
+        }
+    }
+}
+
+@Composable
+internal fun ManagedShopCardSkeleton(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .managedShopCard()
+            .padding(20.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier.size(40.dp).skeleton(shape = RoundedCornerShape(12.dp)))
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
+                Box(modifier = Modifier.fillMaxWidth(0.5f).height(20.dp).skeleton())
+                Box(modifier = Modifier.fillMaxWidth(0.35f).height(14.dp).skeleton())
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        repeat(4) {
+            Row(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
+                Box(modifier = Modifier.width(72.dp).height(14.dp).skeleton())
+                Box(modifier = Modifier.fillMaxWidth().height(14.dp).skeleton())
+            }
         }
     }
 }

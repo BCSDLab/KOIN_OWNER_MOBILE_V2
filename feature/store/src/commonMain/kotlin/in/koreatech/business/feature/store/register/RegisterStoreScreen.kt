@@ -1,5 +1,8 @@
 package `in`.koreatech.business.feature.store.register
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +36,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinErrorContent
-import `in`.koreatech.business.core.designsystem.component.KoinLoadingContent
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
@@ -132,7 +135,7 @@ fun RegisterStoreScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         when {
-            state.isLoading -> KoinLoadingContent()
+            state.isLoading -> RegisterStoreLoadingContent()
             state.error == RegisterStoreError.Load ->
                 KoinErrorContent(
                     message = stringResource(Res.string.error_shop_load),
@@ -177,6 +180,22 @@ private fun registerStoreViewModel(shopId: Int?): RegisterStoreViewModel {
         shopId?.let { putInt(RegisterStoreViewModel.SHOP_ID_KEY, it) }
     }
     return assistedMetroViewModel(extras = extras)
+}
+
+@Composable
+private fun RegisterStoreLoadingContent() {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        Box(modifier = Modifier.fillMaxWidth(0.45f).height(28.dp).skeleton())
+        repeat(3) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Box(modifier = Modifier.fillMaxWidth(0.3f).height(18.dp).skeleton())
+                Box(modifier = Modifier.fillMaxWidth().height(48.dp).skeleton())
+            }
+        }
+    }
 }
 
 @Composable
@@ -265,6 +284,18 @@ internal fun RegisterStoreScreenImpl(
             entry<RegisterStoreRoute.Complete> {
                 RegisterStoreCompleteScreen(isEditing = state.shopId != null, onComplete = onComplete)
             }
+        },
+        transitionSpec = {
+            slideInHorizontally(initialOffsetX = { it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { -it })
+        },
+        popTransitionSpec = {
+            slideInHorizontally(initialOffsetX = { -it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { it })
+        },
+        predictivePopTransitionSpec = {
+            slideInHorizontally(initialOffsetX = { -it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { it })
         }
     )
 }

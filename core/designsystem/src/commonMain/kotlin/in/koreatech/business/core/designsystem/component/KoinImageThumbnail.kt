@@ -37,7 +37,7 @@ fun KoinImageThumbnail(
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
-                loading = { KoinImageThumbnailPlaceholder() },
+                loading = { Box(modifier = Modifier.fillMaxSize().skeleton(shape = RoundedCornerShape(8.dp))) },
                 error = { KoinImageThumbnailPlaceholder() }
             )
         }

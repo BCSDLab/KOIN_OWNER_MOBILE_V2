@@ -1,18 +1,19 @@
 package `in`.koreatech.business.feature.event.form
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.button.secondaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
@@ -134,13 +136,7 @@ fun EventFormScreenImpl(
         onFailure = { onImageSelectionFailed() }
     )
     if (state.isLoading) {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            CircularProgressIndicator(color = KoinTheme.colors.primary500)
-        }
+        EventFormLoadingContent(modifier)
         return
     }
     Column(
@@ -263,5 +259,25 @@ fun EventFormScreenImpl(
                 color = Color.White
             )
         }
+    }
+}
+
+@Composable
+private fun EventFormLoadingContent(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        repeat(2) { index ->
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Box(modifier = Modifier.fillMaxWidth(0.3f).height(18.dp).skeleton())
+                Box(modifier = Modifier.fillMaxWidth().height(if (index == 0) 48.dp else 96.dp).skeleton())
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Box(modifier = Modifier.weight(1f).height(48.dp).skeleton())
+            Box(modifier = Modifier.weight(1f).height(48.dp).skeleton())
+        }
+        Box(modifier = Modifier.fillMaxWidth().height(120.dp).skeleton())
     }
 }

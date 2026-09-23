@@ -3,6 +3,7 @@ package `in`.koreatech.business.feature.event
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,8 +41,8 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinEmptyContent
 import `in`.koreatech.business.core.designsystem.component.KoinImageThumbnail
-import `in`.koreatech.business.core.designsystem.component.KoinLoadingContent
 import `in`.koreatech.business.core.designsystem.component.KoinScreenTitle
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
@@ -167,7 +168,7 @@ fun EventScreenImpl(
         modifier = modifier.padding(contentPadding)
     ) {
         when {
-            state.isLoading -> KoinLoadingContent(Modifier.fillMaxSize())
+            state.isLoading -> EventLoadingContent()
             state.shop == null ->
                 KoinEmptyContent(
                     message = stringResource(Res.string.event_shop_required),
@@ -240,6 +241,32 @@ fun EventScreenImpl(
                 }
             }
         )
+    }
+}
+
+@Composable
+private fun EventLoadingContent() {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        repeat(4) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, RoundedCornerShape(12.dp))
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Box(modifier = Modifier.size(88.dp).skeleton(shape = RoundedCornerShape(8.dp)))
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Box(modifier = Modifier.fillMaxWidth(0.7f).height(20.dp).skeleton())
+                    Box(modifier = Modifier.fillMaxWidth().height(14.dp).skeleton())
+                    Box(modifier = Modifier.fillMaxWidth(0.55f).height(14.dp).skeleton())
+                    Box(modifier = Modifier.fillMaxWidth(0.35f).height(14.dp).skeleton())
+                }
+            }
+        }
     }
 }
 

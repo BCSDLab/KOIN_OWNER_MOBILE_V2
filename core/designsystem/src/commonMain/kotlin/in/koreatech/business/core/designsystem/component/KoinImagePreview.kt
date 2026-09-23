@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,15 +42,7 @@ fun KoinImagePreview(
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
-            loading = {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = KoinTheme.colors.primary500,
-                        strokeWidth = 2.dp
-                    )
-                }
-            },
+            loading = { Box(modifier = Modifier.fillMaxSize().skeleton(shape = RoundedCornerShape(8.dp))) },
             error = {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(8.dp),

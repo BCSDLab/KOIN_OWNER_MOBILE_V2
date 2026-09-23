@@ -1,5 +1,8 @@
 package `in`.koreatech.business.navigation
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -20,7 +23,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -103,7 +105,7 @@ private fun MainNavigationBar(
     selectedTab: MainTabItem,
     onTabClick: (MainTabItem) -> Unit
 ) {
-    NavigationBar(containerColor = KoinTheme.colors.neutral200, tonalElevation = 8.dp) {
+    NavigationBar(containerColor = KoinTheme.colors.neutral100, tonalElevation = 8.dp) {
         mainTabItems.forEach { tab ->
             val selected = tab == selectedTab
             NavigationBarItem(
@@ -158,7 +160,19 @@ private fun MainNavDisplay(
                 navigateBack = { backStack.removeLastOrNull() },
                 selectTab = onSelectTab
             )
-        )
+        ),
+        transitionSpec = {
+            slideInHorizontally(initialOffsetX = { it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { -it })
+        },
+        popTransitionSpec = {
+            slideInHorizontally(initialOffsetX = { -it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { it })
+        },
+        predictivePopTransitionSpec = {
+            slideInHorizontally(initialOffsetX = { -it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { it })
+        }
     )
 }
 

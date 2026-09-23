@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -57,6 +56,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.ic_rebrand_
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.feature.home.component.ManagedShopCard
+import `in`.koreatech.business.feature.home.component.ManagedShopCardSkeleton
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -115,9 +115,7 @@ fun HomeScreenImpl(
             more = null
         ) {
             if (state.isLoading) {
-                Box(modifier = Modifier.fillMaxWidth().height(160.dp), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = KoinTheme.colors.primary500)
-                }
+                ManagedShopCardSkeleton()
             } else if (state.shop == null) {
                 EmptyShopCard(onRegisterShopClick = onRegisterShopClick)
             } else {

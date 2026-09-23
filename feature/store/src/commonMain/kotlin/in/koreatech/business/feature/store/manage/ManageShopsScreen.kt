@@ -3,11 +3,13 @@ package `in`.koreatech.business.feature.store.manage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,7 +30,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinEmptyContent
-import `in`.koreatech.business.core.designsystem.component.KoinLoadingContent
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
@@ -107,7 +109,7 @@ fun ManageShopsScreenImpl(
     modifier: Modifier = Modifier
 ) {
     when {
-        state.isLoading -> KoinLoadingContent(modifier)
+        state.isLoading -> ManageShopsLoadingContent(modifier)
         state.shops.isEmpty() ->
             KoinEmptyContent(
                 message = stringResource(Res.string.manage_shops_empty),
@@ -135,6 +137,35 @@ fun ManageShopsScreenImpl(
                     )
                 }
             }
+    }
+}
+
+@Composable
+private fun ManageShopsLoadingContent(modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(4) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, RoundedCornerShape(12.dp))
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Box(modifier = Modifier.weight(1f).height(20.dp).skeleton())
+                    Box(modifier = Modifier.fillMaxWidth(0.12f).height(16.dp).skeleton())
+                }
+                Box(modifier = Modifier.fillMaxWidth(0.72f).height(16.dp).skeleton())
+            }
+        }
     }
 }
 
