@@ -103,7 +103,7 @@ private fun MainNavigationBar(
     selectedTab: MainTabItem,
     onTabClick: (MainTabItem) -> Unit
 ) {
-    NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
+    NavigationBar(containerColor = KoinTheme.colors.neutral200, tonalElevation = 8.dp) {
         mainTabItems.forEach { tab ->
             val selected = tab == selectedTab
             NavigationBarItem(
@@ -126,11 +126,11 @@ private fun MainNavigationBar(
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = KoinTheme.colors.primary500,
-                    selectedTextColor = KoinTheme.colors.primary500,
+                    selectedIconColor = KoinTheme.colors.primary600,
+                    selectedTextColor = KoinTheme.colors.primary600,
                     unselectedIconColor = KoinTheme.colors.neutral500,
                     unselectedTextColor = KoinTheme.colors.neutral500,
-                    indicatorColor = Color.Transparent
+                    indicatorColor = KoinTheme.colors.primary100
                 )
             )
         }
