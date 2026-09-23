@@ -53,7 +53,7 @@ platform :ios do
       project: "iosApp/iosApp.xcodeproj",
       scheme: "iosApp",
       configuration: "Release",
-      export_method: "app-store-connect",
+      export_method: "app-store",
       export_team_id: team_id,
       codesigning_identity: "Apple Distribution",
       export_options: {
