@@ -13,13 +13,9 @@
 
 코인 사장님은 한국기술교육대학교 주변 상점의 사장님을 위한 매장 관리 애플리케이션입니다.
 
-<a href="https://play.google.com/store/apps/details?id=in.koreatech.business">
-  <img src="./assets/google-play-badge.svg" height="50" alt="Google Play">
-</a>
+[Google Play에서 코인 사장님 다운로드](https://play.google.com/store/apps/details?id=in.koreatech.business)
 
-<a href="https://apps.apple.com/us/app/%EC%BD%94%EC%9D%B8-%EC%82%AC%EC%9E%A5%EB%8B%98/id6815296415">
-  <img src="./assets/app-store-badge.svg" height="50" alt="App Store">
-</a>
+[App Store에서 코인 사장님 다운로드](https://apps.apple.com/us/app/%EC%BD%94%EC%9D%B8-%EC%82%AC%EC%9E%A5%EB%8B%98/id6815296415)
 
 ## Tech Stack
 
