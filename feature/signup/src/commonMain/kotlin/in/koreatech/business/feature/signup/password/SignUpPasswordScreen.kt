@@ -15,9 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -28,7 +26,7 @@ import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTex
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
-import `in`.koreatech.business.core.designsystem.component.user.signupButtonColors
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_password_confirm_hint
@@ -72,7 +70,7 @@ internal fun SignUpPasswordScreen(
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
-                .padding(bottom = 40.dp)
+                .padding(bottom = 24.dp)
         ) {
             KoinUserProgressHeader(text = stringResource(Res.string.sign_up_password_step), currentStep = 3, maxStep = 6)
             Spacer(modifier = Modifier.height(8.dp))
@@ -118,9 +116,9 @@ internal fun SignUpPasswordScreen(
                 onClick = navigateToNextScreen,
                 enabled = isPasswordValid && isPasswordEqual,
                 shape = KoinTheme.shapes.small,
-                colors = signupButtonColors(),
-                contentPadding = PaddingValues(12.dp)
-            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium15) }
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium16) }
         }
     }
 }

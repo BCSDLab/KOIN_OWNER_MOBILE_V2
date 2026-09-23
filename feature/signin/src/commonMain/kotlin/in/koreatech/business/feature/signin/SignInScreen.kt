@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_koin
 import `in`.koreatech.business.core.designsystem.generated.resources.common_koin_logo
@@ -156,12 +158,14 @@ fun SignInScreenImpl(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isLoading,
-                    colors = ButtonDefaults.buttonColors(containerColor = KoinTheme.colors.primary500),
+                    colors = primaryButtonColors(),
+                    shape = KoinTheme.shapes.small,
+                    contentPadding = PaddingValues(vertical = 12.dp),
                     onClick = signIn
                 ) {
                     Text(
                         stringResource(if (isLoading) Res.string.sign_in_loading else Res.string.sign_in_submit),
-                        style = KoinTheme.typography.medium15
+                        style = KoinTheme.typography.medium16
                     )
                 }
 
@@ -171,12 +175,14 @@ fun SignInScreenImpl(
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = KoinTheme.colors.neutral0),
                     border = BorderStroke(1.dp, KoinTheme.colors.primary500),
+                    shape = KoinTheme.shapes.small,
+                    contentPadding = PaddingValues(vertical = 12.dp),
                     onClick = onSignUpClick
                 ) {
                     Text(
                         stringResource(Res.string.sign_in_sign_up),
                         color = KoinTheme.colors.primary500,
-                        style = KoinTheme.typography.medium15
+                        style = KoinTheme.typography.medium16
                     )
                 }
 

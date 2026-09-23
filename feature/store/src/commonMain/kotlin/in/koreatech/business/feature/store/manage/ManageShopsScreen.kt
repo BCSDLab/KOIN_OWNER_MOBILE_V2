@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -30,6 +29,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinEmptyContent
 import `in`.koreatech.business.core.designsystem.component.KoinLoadingContent
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_edit
@@ -73,9 +73,10 @@ fun ManageShopsScreen(
         bottomBar = {
             Button(
                 onClick = onRegisterShopClick,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = KoinTheme.colors.primary500)
+                modifier = Modifier.fillMaxWidth().padding(24.dp),
+                contentPadding = PaddingValues(vertical = 12.dp),
+                shape = KoinTheme.shapes.small,
+                colors = primaryButtonColors()
             ) {
                 Text(
                     text = stringResource(Res.string.manage_shops_register),
@@ -112,6 +113,7 @@ fun ManageShopsScreenImpl(
                 message = stringResource(Res.string.manage_shops_empty),
                 modifier = modifier
             )
+
         else ->
             LazyColumn(
                 modifier = modifier,
@@ -122,7 +124,13 @@ fun ManageShopsScreenImpl(
                     ManageShopItem(
                         shop = shop,
                         selected = state.selectedShopId == shop.id,
-                        onClick = { onShopClick(shop.id) },
+                        onClick = {
+                            if (state.selectedShopId == shop.id) {
+                                onEditShopClick(shop.id)
+                            } else {
+                                onShopClick(shop.id)
+                            }
+                        },
                         onEdit = { onEditShopClick(shop.id) }
                     )
                 }
@@ -140,19 +148,19 @@ private fun ManageShopItem(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .border(
-                width = if (selected) 1.5.dp else 0.5.dp,
-                color = if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral300,
-                shape = RoundedCornerShape(12.dp)
-            ).noRippleClickable(onClick = onClick)
-            .padding(20.dp)
+            modifier
+                .fillMaxWidth()
+                .background(Color.White, RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = if (selected) KoinTheme.colors.primary300 else KoinTheme.colors.neutral300,
+                    shape = RoundedCornerShape(12.dp)
+                ).noRippleClickable(onClick = onClick)
+                .padding(20.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
             Text(
                 text = shop.name,
@@ -163,23 +171,23 @@ private fun ManageShopItem(
             if (selected) {
                 Text(
                     text = stringResource(Res.string.manage_shops_current),
-                    style = KoinTheme.typography.medium13,
-                    color = KoinTheme.colors.primary500
+                    style = KoinTheme.typography.medium12,
+                    color = KoinTheme.colors.primary300
                 )
             }
             Text(
                 text = stringResource(Res.string.common_edit),
-                style = KoinTheme.typography.medium13,
+                style = KoinTheme.typography.medium12,
                 color = KoinTheme.colors.primary500,
                 modifier = Modifier.padding(start = 12.dp).noRippleClickable(onClick = onEdit)
             )
         }
         Text(
             text =
-            shop.address.orEmpty().ifBlank {
-                stringResource(Res.string.manage_shops_address_not_registered)
-            },
-            style = KoinTheme.typography.regular13,
+                shop.address.orEmpty().ifBlank {
+                    stringResource(Res.string.manage_shops_address_not_registered)
+                },
+            style = KoinTheme.typography.regular12,
             color = KoinTheme.colors.neutral500
         )
     }

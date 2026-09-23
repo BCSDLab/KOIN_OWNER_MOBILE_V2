@@ -14,13 +14,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.user.signupButtonColors
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_koin
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_complete
@@ -63,9 +61,9 @@ internal fun SignUpCompleteScreen(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                 onClick = onComplete,
                 shape = KoinTheme.shapes.small,
-                colors = signupButtonColors(),
-                contentPadding = PaddingValues(12.dp)
-            ) { Text(stringResource(Res.string.sign_up_go_to_login), style = KoinTheme.typography.medium15) }
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) { Text(stringResource(Res.string.sign_up_go_to_login), style = KoinTheme.typography.medium16) }
             Spacer(modifier = Modifier.height(24.dp))
             Button(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
@@ -73,9 +71,13 @@ internal fun SignUpCompleteScreen(
                 shape = KoinTheme.shapes.small,
                 colors = ButtonDefaults.buttonColors(containerColor = KoinTheme.colors.neutral0),
                 border = BorderStroke(1.dp, KoinTheme.colors.primary500),
-                contentPadding = PaddingValues(12.dp)
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
-                Text(text = stringResource(Res.string.sign_up_go_to_start), color = KoinTheme.colors.primary500)
+                Text(
+                    text = stringResource(Res.string.sign_up_go_to_start),
+                    style = KoinTheme.typography.medium16,
+                    color = KoinTheme.colors.primary500
+                )
             }
         }
     }

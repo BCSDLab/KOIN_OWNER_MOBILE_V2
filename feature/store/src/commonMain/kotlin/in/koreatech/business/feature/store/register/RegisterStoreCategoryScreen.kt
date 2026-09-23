@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
@@ -66,7 +66,7 @@ internal fun RegisterStoreCategoryScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 24.dp)
+                .padding(24.dp)
         ) {
             KoinUserProgressHeader(stringResource(Res.string.register_store_category_step), 1, 4)
             Spacer(Modifier.height(8.dp))
@@ -127,17 +127,11 @@ internal fun RegisterStoreCategoryScreen(
                 onClick = onNext,
                 enabled = selectedCategoryId != null,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = KoinTheme.colors.primary500,
-                    contentColor = KoinTheme.colors.neutral0,
-                    disabledContainerColor = KoinTheme.colors.neutral200,
-                    disabledContentColor = KoinTheme.colors.neutral500
-                ),
-                contentPadding = PaddingValues(vertical = 14.dp)
+                shape = KoinTheme.shapes.small,
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
-                Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium15)
+                Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium16)
             }
         }
     }

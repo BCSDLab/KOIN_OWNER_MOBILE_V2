@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -25,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
@@ -36,6 +34,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinErrorContent
 import `in`.koreatech.business.core.designsystem.component.KoinLoadingContent
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
@@ -347,15 +346,11 @@ private fun RegisterStoreStartScreen(
             Button(
                 onClick = onStartClick,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = KoinTheme.colors.primary500,
-                    contentColor = KoinTheme.colors.neutral0
-                ),
-                contentPadding = PaddingValues(vertical = 14.dp)
+                shape = KoinTheme.shapes.small,
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
-                Text(stringResource(Res.string.register_store_start), style = KoinTheme.typography.medium15)
+                Text(stringResource(Res.string.register_store_start), style = KoinTheme.typography.medium16)
             }
         }
     }

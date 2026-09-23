@@ -16,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,7 @@ import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgress
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserWithButtonItem
-import `in`.koreatech.business.core.designsystem.component.user.signupButtonColors
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_confirm
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
@@ -85,7 +84,7 @@ internal fun SignUpVerificationScreen(
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
-                .padding(bottom = 40.dp)
+                .padding(bottom = 24.dp)
         ) {
             KoinUserProgressHeader(
                 text = stringResource(Res.string.sign_up_verification_step),
@@ -198,12 +197,12 @@ internal fun SignUpVerificationScreen(
                     state.verificationCodeState is VerificationCodeState.Valid &&
                     !state.isLoading,
                 shape = KoinTheme.shapes.small,
-                colors = signupButtonColors(),
-                contentPadding = PaddingValues(12.dp)
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
                 Text(
                     stringResource(Res.string.common_next),
-                    style = KoinTheme.typography.medium15
+                    style = KoinTheme.typography.medium16
                 )
             }
         }

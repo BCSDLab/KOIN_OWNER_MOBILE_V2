@@ -13,15 +13,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.SignupCheckBox
-import `in`.koreatech.business.core.designsystem.component.user.signupButtonColors
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_term_all
@@ -64,7 +62,7 @@ internal fun SignUpTermScreen(
                 .padding(contentPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
-                .padding(bottom = 40.dp)
+                .padding(bottom = 24.dp)
         ) {
             KoinUserProgressHeader(text = stringResource(Res.string.sign_up_term_step), currentStep = 1, maxStep = 6)
             Spacer(modifier = Modifier.height(8.dp))
@@ -94,9 +92,9 @@ internal fun SignUpTermScreen(
                 onClick = navigateToNextScreen,
                 enabled = state.agreedToPrivacy && state.agreedToService,
                 shape = KoinTheme.shapes.small,
-                colors = signupButtonColors(),
-                contentPadding = PaddingValues(12.dp)
-            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium15) }
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium16) }
         }
     }
 }

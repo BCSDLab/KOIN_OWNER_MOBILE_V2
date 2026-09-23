@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,11 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
-import `in`.koreatech.business.core.designsystem.component.user.signupButtonColors
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.home_bank_transfer
@@ -58,7 +58,7 @@ internal fun SignUpStoreSearchScreen(
     }
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         topBar = {
             KoinTopAppBar(
                 title = {
@@ -78,6 +78,7 @@ internal fun SignUpStoreSearchScreen(
                 .fillMaxSize()
                 .padding(contentPadding)
                 .padding(horizontal = 24.dp)
+                .padding(bottom = 24.dp)
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             KoinUserBasicTextField(
@@ -123,20 +124,22 @@ internal fun SignUpStoreSearchScreen(
                         }
                 }
             }
+
+            Spacer(modifier = Modifier.padding(16.dp))
+
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onSelect,
                 enabled = state.selectedStoreId != null,
                 shape = KoinTheme.shapes.small,
-                colors = signupButtonColors(),
-                contentPadding = PaddingValues(12.dp)
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
                 Text(
                     text = stringResource(Res.string.common_next),
-                    style = KoinTheme.typography.medium15
+                    style = KoinTheme.typography.medium16
                 )
             }
-            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

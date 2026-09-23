@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
 @Composable
@@ -47,7 +48,7 @@ fun KoinUserWithButtonItem(
                 onClick = onButtonClick,
                 enabled = buttonEnabled,
                 shape = KoinTheme.shapes.extraSmall,
-                colors = signupButtonColors(),
+                colors = primaryButtonColors(),
                 contentPadding = PaddingValues(vertical = 6.dp, horizontal = 12.dp)
             ) { Text(buttonText, style = KoinTheme.typography.regular10) }
         }

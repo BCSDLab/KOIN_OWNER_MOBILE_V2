@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -30,7 +29,7 @@ import `in`.koreatech.business.core.designsystem.component.user.AlertState
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserWithButtonItem
-import `in`.koreatech.business.core.designsystem.component.user.signupButtonColors
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_confirm
 import `in`.koreatech.business.core.designsystem.generated.resources.password_reset_complete
@@ -243,12 +242,13 @@ private fun PasswordResetPasswordContent(
                 state.password.length in 6..18 &&
                 state.password == state.passwordConfirmation,
             modifier = Modifier.fillMaxWidth(),
-            colors = signupButtonColors(),
-            contentPadding = PaddingValues(12.dp)
+            colors = primaryButtonColors(),
+            shape = KoinTheme.shapes.small,
+            contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             Text(
                 text = stringResource(Res.string.password_reset_submit),
-                style = KoinTheme.typography.medium15
+                style = KoinTheme.typography.medium16
             )
         }
     }
@@ -273,9 +273,11 @@ private fun PasswordResetCompleteContent(
         Button(
             onClick = onComplete,
             modifier = Modifier.fillMaxWidth(),
-            colors = signupButtonColors()
+            colors = primaryButtonColors(),
+            shape = KoinTheme.shapes.small,
+            contentPadding = PaddingValues(vertical = 12.dp)
         ) {
-            Text(text = stringResource(Res.string.password_reset_go_sign_in))
+            Text(text = stringResource(Res.string.password_reset_go_sign_in), style = KoinTheme.typography.medium16)
         }
     }
 }

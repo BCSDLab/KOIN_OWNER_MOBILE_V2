@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -29,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
+import `in`.koreatech.business.core.designsystem.component.button.secondaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_won
@@ -246,13 +247,9 @@ fun MenuFormScreenImpl(
                 onClick = openImagePicker,
                 enabled = state.imageUrls.size < 3 && !state.isUploading,
                 modifier = Modifier.fillMaxWidth(),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = KoinTheme.colors.primary100,
-                    contentColor = KoinTheme.colors.primary600
-                ),
-                shape = RoundedCornerShape(8.dp),
-                contentPadding = PaddingValues(12.dp)
+                colors = secondaryButtonColors(),
+                shape = KoinTheme.shapes.large,
+                contentPadding = PaddingValues(8.dp)
             ) {
                 Text(
                     text =
@@ -263,7 +260,7 @@ fun MenuFormScreenImpl(
                             Res.string.menu_image_add
                         }
                     ),
-                    style = KoinTheme.typography.medium15
+                    style = KoinTheme.typography.regular14
                 )
             }
         }
@@ -285,13 +282,16 @@ fun MenuFormScreenImpl(
                 color = KoinTheme.colors.danger600
             )
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
         Button(
             onClick = onSave,
             enabled = !state.isSaving && !state.isUploading,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = KoinTheme.colors.primary500),
-            shape = RoundedCornerShape(8.dp),
-            contentPadding = PaddingValues(14.dp)
+            colors = primaryButtonColors(),
+            shape = KoinTheme.shapes.small,
+            contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             Text(
                 text =
@@ -302,7 +302,6 @@ fun MenuFormScreenImpl(
                 color = Color.White
             )
         }
-        Spacer(Modifier.height(16.dp))
     }
 }
 
@@ -320,8 +319,8 @@ private fun PriceTypeButton(
         Modifier
             .background(
                 if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral100,
-                RoundedCornerShape(8.dp)
+                KoinTheme.shapes.extraLarge
             ).noRippleClickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(horizontal = 12.dp, vertical = 8.dp)
     )
 }

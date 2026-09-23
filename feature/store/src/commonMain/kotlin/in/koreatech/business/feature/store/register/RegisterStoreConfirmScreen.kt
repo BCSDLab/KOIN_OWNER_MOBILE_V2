@@ -16,16 +16,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
@@ -169,19 +168,15 @@ internal fun RegisterStoreConfirmScreen(
                 onClick = onConfirm,
                 enabled = !state.isSaving,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = KoinTheme.colors.primary500,
-                    contentColor = KoinTheme.colors.neutral0
-                ),
-                contentPadding = PaddingValues(vertical = 14.dp)
+                shape = KoinTheme.shapes.small,
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
                 Text(
                     stringResource(
                         if (state.shopId == null) Res.string.register_store_register else Res.string.register_store_edit
                     ),
-                    style = KoinTheme.typography.medium15
+                    style = KoinTheme.typography.medium16
                 )
             }
         }
@@ -253,14 +248,10 @@ internal fun RegisterStoreCompleteScreen(
             Button(
                 onClick = onComplete,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = KoinTheme.colors.primary500,
-                    contentColor = KoinTheme.colors.neutral0
-                ),
-                contentPadding = PaddingValues(vertical = 14.dp)
-            ) { Text(stringResource(Res.string.register_store_go_home), style = KoinTheme.typography.medium15) }
+                shape = KoinTheme.shapes.small,
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) { Text(stringResource(Res.string.register_store_go_home), style = KoinTheme.typography.medium16) }
         }
     }
 }

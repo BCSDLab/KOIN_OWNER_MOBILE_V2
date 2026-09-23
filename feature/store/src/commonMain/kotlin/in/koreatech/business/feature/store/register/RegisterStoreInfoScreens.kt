@@ -30,10 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserBasicTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
@@ -177,21 +177,15 @@ internal fun RegisterStoreBasicInfoScreen(
                 onAddressChange(it)
             }
             Spacer(Modifier.weight(1f))
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(32.dp))
             Button(
                 onClick = onNext,
                 enabled = state.isBasicInfoValid && !state.isUploading,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = KoinTheme.colors.primary500,
-                    contentColor = KoinTheme.colors.neutral0,
-                    disabledContainerColor = KoinTheme.colors.neutral200,
-                    disabledContentColor = KoinTheme.colors.neutral500
-                ),
-                contentPadding = PaddingValues(vertical = 14.dp)
-            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium15) }
+                shape = KoinTheme.shapes.small,
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium16) }
         }
     }
 }
@@ -469,21 +463,15 @@ internal fun RegisterStoreDetailInfoScreen(
                 )
             }
             Spacer(Modifier.weight(1f))
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(32.dp))
             Button(
                 onClick = onNext,
                 enabled = state.isDetailInfoValid,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = KoinTheme.colors.primary500,
-                    contentColor = KoinTheme.colors.neutral0,
-                    disabledContainerColor = KoinTheme.colors.neutral200,
-                    disabledContentColor = KoinTheme.colors.neutral500
-                ),
-                contentPadding = PaddingValues(vertical = 14.dp)
-            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium15) }
+                shape = KoinTheme.shapes.small,
+                colors = primaryButtonColors(),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium16) }
         }
     }
 }
