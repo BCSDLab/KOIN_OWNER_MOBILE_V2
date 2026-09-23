@@ -123,6 +123,7 @@ internal fun SignUpVerificationScreen(
                     keyboardType = KeyboardType.Number,
                     onValueChange = onPhoneNumberChange,
                     onButtonClick = onSendVerificationCode,
+                    maxLength = 11,
                     buttonEnabled = state.phoneNumber.isNotBlank() &&
                         state.verificationCodeState !is VerificationCodeState.Valid &&
                         !state.isLoading,
@@ -164,6 +165,7 @@ internal fun SignUpVerificationScreen(
                     keyboardType = KeyboardType.Number,
                     onValueChange = onVerificationCodeChange,
                     onButtonClick = onVerifyCode,
+                    maxLength = 6,
                     buttonEnabled = state.isVerificationCodeSent &&
                         state.verificationCode.length == 6 &&
                         state.verificationCodeState !is VerificationCodeState.Valid &&

@@ -24,6 +24,7 @@ fun KoinPasswordTextField(
     onValueChange: (String) -> Unit,
     hint: String,
     modifier: Modifier = Modifier,
+    maxLength: Int = Int.MAX_VALUE,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
@@ -33,6 +34,7 @@ fun KoinPasswordTextField(
         onValueChange = onValueChange,
         modifier = modifier,
         hint = hint,
+        maxLength = maxLength,
         keyboardOptions = keyboardOptions,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(mask = '●'),
         suffix = {

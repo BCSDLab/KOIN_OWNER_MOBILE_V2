@@ -107,7 +107,7 @@
     <string name="menu_saving">저장 중</string>
     <string name="menu_save">저장</string>
 
-    <string name="sign_in_id_hint">아이디</string>
+    <string name="sign_in_id_hint">아이디 (전화번호)</string>
     <string name="sign_in_password_hint">비밀번호</string>
     <string name="sign_in_error">아이디 또는 비밀번호를 확인해 주세요.</string>
     <string name="sign_in_loading">로그인 중</string>

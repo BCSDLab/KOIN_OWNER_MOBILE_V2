@@ -168,6 +168,7 @@ private fun PasswordResetVerificationContent(
             keyboardType = KeyboardType.Phone,
             onValueChange = onPhoneNumberChange,
             onButtonClick = onSendCode,
+            maxLength = 11,
             buttonEnabled = !state.isLoading && state.phoneNumber.isNotBlank(),
             visualTransformation = KRPhoneNumberVisualTransformation()
         )
@@ -178,6 +179,7 @@ private fun PasswordResetVerificationContent(
             keyboardType = KeyboardType.Number,
             onValueChange = onCodeChange,
             onButtonClick = onVerifyCode,
+            maxLength = 6,
             buttonEnabled = !state.isLoading && state.isCodeSent && state.code.length == 6
         )
         state.error?.let { PasswordResetErrorText(it) }
@@ -209,6 +211,7 @@ private fun PasswordResetPasswordContent(
             value = state.password,
             onValueChange = onPasswordChange,
             hint = stringResource(Res.string.sign_up_password_hint),
+            maxLength = 18,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Next
@@ -219,6 +222,7 @@ private fun PasswordResetPasswordContent(
             value = state.passwordConfirmation,
             onValueChange = onPasswordConfirmationChange,
             hint = stringResource(Res.string.sign_up_password_confirm_hint),
+            maxLength = 18,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done

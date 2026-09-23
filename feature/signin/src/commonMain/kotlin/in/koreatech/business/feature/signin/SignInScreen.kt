@@ -130,6 +130,7 @@ fun SignInScreenImpl(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = if (loginId.all(Char::isDigit)) KeyboardType.Phone else KeyboardType.Text
                     ),
+                    maxLength = 11,
                     visualTransformation = KRPhoneNumberVisualTransformation(),
                     suffix = if (loginId.isNotEmpty()) {
                         {

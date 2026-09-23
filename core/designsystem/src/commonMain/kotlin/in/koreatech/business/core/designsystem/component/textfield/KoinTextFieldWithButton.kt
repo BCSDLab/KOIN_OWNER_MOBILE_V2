@@ -34,6 +34,7 @@ fun KoinTextFieldWithButton(
     onValueChange: (String) -> Unit,
     onButtonClick: () -> Unit,
     buttonEnabled: Boolean,
+    maxLength: Int = Int.MAX_VALUE,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically) {
@@ -43,6 +44,7 @@ fun KoinTextFieldWithButton(
             modifier = Modifier.weight(1f),
             hint = hint,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = ImeAction.Done),
+            maxLength = maxLength,
             visualTransformation = visualTransformation
         )
         Spacer(modifier = Modifier.width(16.dp))

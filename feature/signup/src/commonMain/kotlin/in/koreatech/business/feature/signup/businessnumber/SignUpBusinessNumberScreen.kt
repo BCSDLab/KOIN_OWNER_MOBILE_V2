@@ -74,6 +74,7 @@ internal fun SignUpBusinessNumberScreen(
                     onValueChange = onBusinessNumberChange,
                     hint = stringResource(Res.string.sign_up_business_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                    maxLength = 10,
                     visualTransformation = BusinessNumberVisualTransformation()
                 )
             }

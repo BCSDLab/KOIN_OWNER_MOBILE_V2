@@ -81,6 +81,7 @@ internal fun SignUpPasswordScreen(
                     value = state.password,
                     onValueChange = onPasswordChange,
                     hint = stringResource(Res.string.sign_up_password_hint),
+                    maxLength = 18,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next)
                 )
                 if (state.password.isNotEmpty() && !isPasswordValid) {
@@ -92,6 +93,7 @@ internal fun SignUpPasswordScreen(
                         value = state.passwordConfirmation,
                         onValueChange = onPasswordConfirmChange,
                         hint = stringResource(Res.string.sign_up_password_confirm_hint),
+                        maxLength = 18,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done)
                     )
                 }

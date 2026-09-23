@@ -37,6 +37,7 @@ fun KoinUnderlineTextField(
     textStyle: TextStyle = KoinTheme.typography.regular14,
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else 4,
+    maxLength: Int = Int.MAX_VALUE,
     title: (@Composable () -> Unit)? = null,
     suffix: (@Composable RowScope.() -> Unit)? = null
 ) {
@@ -47,7 +48,7 @@ fun KoinUnderlineTextField(
         }
         BasicTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { onValueChange(it.take(maxLength)) },
             modifier = Modifier.fillMaxWidth(),
             textStyle = textStyle.copy(color = KoinTheme.colors.neutral800),
             keyboardOptions = keyboardOptions,

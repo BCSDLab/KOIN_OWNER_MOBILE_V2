@@ -97,6 +97,7 @@ internal fun SignUpStoreScreen(
                     onValueChange = onStorePhoneNumberChange,
                     hint = stringResource(Res.string.sign_up_store_phone_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    maxLength = 11,
                     visualTransformation = KRPhoneNumberVisualTransformation()
                 )
             }

@@ -361,6 +361,7 @@ internal fun RegisterStoreDetailInfoScreen(
                 stringResource(Res.string.register_store_phone_hint),
                 KeyboardType.Phone,
                 onValueChange = { onPhoneNumberChange(it) },
+                maxLength = 11,
                 visualTransformation = KRPhoneNumberVisualTransformation()
             )
             Spacer(Modifier.height(24.dp))
@@ -529,6 +530,7 @@ private fun RegisterStoreField(
     value: String,
     hint: String,
     keyboardType: KeyboardType = KeyboardType.Text,
+    maxLength: Int = Int.MAX_VALUE,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     suffix: (@Composable androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
     onValueChange: (String) -> Unit
@@ -540,6 +542,7 @@ private fun RegisterStoreField(
         onValueChange = onValueChange,
         hint = hint,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        maxLength = maxLength,
         visualTransformation = visualTransformation,
         suffix = suffix
     )
