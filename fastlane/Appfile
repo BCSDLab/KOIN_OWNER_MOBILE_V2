@@ -1,0 +1,10 @@
+for_platform :android do
+  package_name("in.koreatech.business")
+end
+
+for_platform :ios do
+  app_identifier("in.koreatech.business.koinowner")
+  apple_id(ENV["APPLE_ID"]) if ENV["APPLE_ID"]
+  team_id("K626UYGR25")
+  itc_team_id(ENV["APP_STORE_CONNECT_TEAM_ID"]) if ENV["APP_STORE_CONNECT_TEAM_ID"]
+end
