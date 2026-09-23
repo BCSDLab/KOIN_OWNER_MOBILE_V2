@@ -56,6 +56,9 @@ internal val LocalShapes =
     }
 
 @Composable
+expect fun StatusBar(darkTheme: Boolean)
+
+@Composable
 fun KoinTheme(
     darkTheme: Boolean = false, // TODO: Change to isSystemInDarkTheme() after dark theme ready
     content: @Composable () -> Unit
@@ -72,6 +75,8 @@ fun KoinTheme(
             darkTheme -> KoinDarkColorScheme
             else -> KoinLightColorScheme
         }
+
+    StatusBar(darkTheme)
 
     val koinTypography = createKoinTypography()
 
