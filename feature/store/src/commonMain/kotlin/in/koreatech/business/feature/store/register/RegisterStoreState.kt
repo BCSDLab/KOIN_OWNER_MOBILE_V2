@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.store.register
 
+import `in`.koreatech.business.domain.model.address.AddressSearchResult
 import `in`.koreatech.business.domain.model.store.ShopCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -11,6 +12,10 @@ data class RegisterStoreState(
     val selectedCategoryId: Int? = null,
     val storeName: String = "",
     val address: String = "",
+    val addressSearchResults: ImmutableList<AddressSearchResult> = persistentListOf(),
+    val hasAddressSearchResult: Boolean = false,
+    val isAddressSearching: Boolean = false,
+    val isAddressSearchError: Boolean = false,
     val phoneNumber: String = "",
     val deliveryFee: String = "",
     val operatingTimes: ImmutableList<RegisterStoreOperatingTime> = persistentListOf(

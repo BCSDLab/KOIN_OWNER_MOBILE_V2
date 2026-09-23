@@ -4,11 +4,13 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import `in`.koreatech.business.core.di.AppScope
+import `in`.koreatech.business.data.mapper.toAddressSearchResult
 import `in`.koreatech.business.data.mapper.toOwnerShop
 import `in`.koreatech.business.data.mapper.toOwnerShopRequest
 import `in`.koreatech.business.data.mapper.toShopCategory
 import `in`.koreatech.business.data.source.remote.OwnerShopRemoteDataSource
 import `in`.koreatech.business.data.util.suspendRunCatching
+import `in`.koreatech.business.domain.model.address.AddressSearchResult
 import `in`.koreatech.business.domain.model.store.OwnerShop
 import `in`.koreatech.business.domain.model.store.OwnerShopForm
 import `in`.koreatech.business.domain.model.store.ShopCategory
@@ -20,6 +22,10 @@ import `in`.koreatech.business.domain.repository.OwnerShopRepository
 class OwnerShopRepositoryImpl(
     private val ownerShopRemoteDataSource: OwnerShopRemoteDataSource
 ) : OwnerShopRepository {
+    override suspend fun searchAddress(keyword: String): Result<List<AddressSearchResult>> = suspendRunCatching {
+        ownerShopRemoteDataSource.searchAddress(keyword).addresses.map { it.toAddressSearchResult() }
+    }
+
     override suspend fun getOwnerShops(): Result<List<OwnerShop>> = suspendRunCatching {
         ownerShopRemoteDataSource.getOwnerShops().shops.map { summary ->
             ownerShopRemoteDataSource.getOwnerShop(summary.id).toOwnerShop(summary)

@@ -10,16 +10,22 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -51,6 +58,11 @@ import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.common_won
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_hint
+import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_search
+import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_search_button
+import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_search_empty
+import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_search_error
+import `in`.koreatech.business.core.designsystem.generated.resources.register_store_address_search_hint
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_apply
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_available_items
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_bank_transfer_available
@@ -88,6 +100,7 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.file.rememberImageFilePicker
 import `in`.koreatech.business.core.util.CurrencyVisualTransformation
 import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
+import `in`.koreatech.business.domain.model.address.AddressSearchResult
 import `in`.koreatech.business.feature.store.register.util.isValidTimeInput
 import `in`.koreatech.business.feature.store.register.util.toTimeText
 import kotlinx.collections.immutable.ImmutableList
@@ -100,7 +113,8 @@ internal fun RegisterStoreBasicInfoScreen(
     title: String,
     state: RegisterStoreState,
     onStoreNameChange: (String) -> Unit,
-    onAddressChange: (String) -> Unit,
+    onAddressSelect: (String) -> Unit,
+    onAddressSearch: (String) -> Unit,
     onUploadImage: (String, String, ByteArray) -> Unit,
     onImageSelectionFailed: () -> Unit,
     onRemoveImage: (Int) -> Unit,
@@ -108,10 +122,25 @@ internal fun RegisterStoreBasicInfoScreen(
     onNext: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showAddressSearchDialog by remember { mutableStateOf(false) }
     val openImagePicker = rememberImageFilePicker(
         onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
         onFailure = { onImageSelectionFailed() }
     )
+    if (showAddressSearchDialog) {
+        RegisterStoreAddressSearchDialog(
+            results = state.addressSearchResults,
+            hasSearchResult = state.hasAddressSearchResult,
+            isSearching = state.isAddressSearching,
+            isError = state.isAddressSearchError,
+            onSearch = onAddressSearch,
+            onSelect = {
+                onAddressSelect(it.displayAddress)
+                showAddressSearchDialog = false
+            },
+            onDismiss = { showAddressSearchDialog = false }
+        )
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = KoinTheme.colors.neutral75,
@@ -174,10 +203,15 @@ internal fun RegisterStoreBasicInfoScreen(
             RegisterStoreField(
                 stringResource(Res.string.register_store_address),
                 state.address,
-                stringResource(Res.string.register_store_address_hint)
-            ) {
-                onAddressChange(it)
-            }
+                stringResource(Res.string.register_store_address_hint),
+                readOnly = true,
+                suffix = {
+                    TextButton(onClick = { showAddressSearchDialog = true }) {
+                        Text(stringResource(Res.string.register_store_address_search_button))
+                    }
+                },
+                onValueChange = {}
+            )
             Spacer(Modifier.weight(1f))
             Spacer(Modifier.height(32.dp))
             Button(
@@ -190,6 +224,98 @@ internal fun RegisterStoreBasicInfoScreen(
             ) { Text(stringResource(Res.string.common_next), style = KoinTheme.typography.medium16) }
         }
     }
+}
+
+@Composable
+private fun RegisterStoreAddressSearchDialog(
+    results: ImmutableList<AddressSearchResult>,
+    hasSearchResult: Boolean,
+    isSearching: Boolean,
+    isError: Boolean,
+    onSearch: (String) -> Unit,
+    onSelect: (AddressSearchResult) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var keyword by remember { mutableStateOf("") }
+    val search = { onSearch(keyword) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(Res.string.register_store_address_search), style = KoinTheme.typography.medium18) },
+        text = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                KoinUnderlineTextField(
+                    value = keyword,
+                    onValueChange = { keyword = it },
+                    hint = stringResource(Res.string.register_store_address_search_hint),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = { search() }),
+                    suffix = {
+                        TextButton(onClick = search, enabled = keyword.isNotBlank() && !isSearching) {
+                            Text(stringResource(Res.string.register_store_address_search_button))
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                when {
+                    isSearching -> Box(
+                        modifier = Modifier.fillMaxWidth().height(120.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(modifier = Modifier.size(32.dp))
+                    }
+                    isError -> AddressSearchMessage(stringResource(Res.string.register_store_address_search_error))
+                    hasSearchResult && results.isEmpty() ->
+                        AddressSearchMessage(stringResource(Res.string.register_store_address_search_empty))
+                    else -> LazyColumn(modifier = Modifier.fillMaxWidth().heightIn(max = 320.dp)) {
+                        items(
+                            items = results,
+                            key = { "${it.zipCode}-${it.roadAddress}-${it.jibunAddress}" }
+                        ) { address ->
+                            AddressSearchItem(address = address, onClick = { onSelect(address) })
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(Res.string.common_cancel)) }
+        }
+    )
+}
+
+@Composable
+private fun AddressSearchMessage(message: String) {
+    Box(
+        modifier = Modifier.fillMaxWidth().height(120.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(message, style = KoinTheme.typography.regular14, color = KoinTheme.colors.neutral500)
+    }
+}
+
+@Composable
+private fun AddressSearchItem(
+    address: AddressSearchResult,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth().noRippleClickable { onClick() }.padding(vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = address.buildingName.ifBlank { address.displayAddress },
+            style = KoinTheme.typography.medium14,
+            color = KoinTheme.colors.neutral800
+        )
+        if (address.buildingName.isNotBlank()) {
+            Text(address.displayAddress, style = KoinTheme.typography.regular13, color = KoinTheme.colors.neutral600)
+        }
+        if (address.jibunAddress.isNotBlank() && address.jibunAddress != address.displayAddress) {
+            Text(address.jibunAddress, style = KoinTheme.typography.regular13, color = KoinTheme.colors.neutral500)
+        }
+    }
+    HorizontalDivider(color = KoinTheme.colors.neutral200)
 }
 
 @Composable
@@ -531,6 +657,7 @@ private fun RegisterStoreField(
     hint: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     maxLength: Int = Int.MAX_VALUE,
+    readOnly: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     suffix: (@Composable androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
     onValueChange: (String) -> Unit
@@ -543,6 +670,7 @@ private fun RegisterStoreField(
         hint = hint,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         maxLength = maxLength,
+        readOnly = readOnly,
         visualTransformation = visualTransformation,
         suffix = suffix
     )

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import `in`.koreatech.business.domain.model.store.OwnerShop
 import `in`.koreatech.business.domain.model.upload.PreSignedUrlDomain
+import `in`.koreatech.business.domain.usecase.address.SearchAddressUseCase
 import `in`.koreatech.business.domain.usecase.presignedurl.UploadImageUseCase
 import `in`.koreatech.business.domain.usecase.store.GetOwnerShopUseCase
 import `in`.koreatech.business.domain.usecase.store.GetShopCategoriesUseCase
@@ -11,6 +12,7 @@ import `in`.koreatech.business.domain.usecase.store.SaveOwnerShopUseCase
 import `in`.koreatech.business.feature.store.register.mapper.toOwnerShopForm
 import `in`.koreatech.business.feature.store.register.mapper.toRegisterStoreState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.orbitmvi.orbit.OrbitContainerHost
 import org.orbitmvi.orbit.blockingIntent
@@ -21,7 +23,8 @@ class RegisterStoreViewModel internal constructor(
     private val getShopCategoriesUseCase: GetShopCategoriesUseCase,
     private val getOwnerShopUseCase: GetOwnerShopUseCase,
     private val saveOwnerShopUseCase: SaveOwnerShopUseCase,
-    private val uploadImageUseCase: UploadImageUseCase
+    private val uploadImageUseCase: UploadImageUseCase,
+    private val searchAddressUseCase: SearchAddressUseCase
 ) : ViewModel(), OrbitContainerHost<RegisterStoreState, RegisterStoreState, RegisterStoreSideEffect> {
     private val shopId = savedStateHandle.get<Int>(SHOP_ID_KEY)
 
@@ -66,7 +69,36 @@ class RegisterStoreViewModel internal constructor(
 
     fun onStoreNameChanged(value: String) = blockingIntent { reduce { state.copy(storeName = value) } }
 
-    fun onAddressChanged(value: String) = blockingIntent { reduce { state.copy(address = value) } }
+    fun onAddressSelected(value: String) = blockingIntent { reduce { state.copy(address = value) } }
+
+    fun searchAddress(keyword: String) = intent {
+        if (keyword.isBlank() || state.isAddressSearching) return@intent
+        reduce {
+            state.copy(
+                isAddressSearching = true,
+                isAddressSearchError = false
+            )
+        }
+        searchAddressUseCase(keyword)
+            .onSuccess { addresses ->
+                reduce {
+                    state.copy(
+                        addressSearchResults = addresses.toImmutableList(),
+                        hasAddressSearchResult = true,
+                        isAddressSearching = false
+                    )
+                }
+            }.onFailure {
+                reduce {
+                    state.copy(
+                        addressSearchResults = persistentListOf(),
+                        hasAddressSearchResult = true,
+                        isAddressSearching = false,
+                        isAddressSearchError = true
+                    )
+                }
+            }
+    }
 
     fun onBasicInfoCompleted() = intent {
         if (!state.isBasicInfoValid || state.isUploading) return@intent
