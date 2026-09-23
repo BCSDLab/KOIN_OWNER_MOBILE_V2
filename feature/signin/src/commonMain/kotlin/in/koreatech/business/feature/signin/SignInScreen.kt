@@ -26,11 +26,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinPasswordTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_koin
@@ -148,24 +148,11 @@ fun SignInScreenImpl(
 
                 Spacer(Modifier.height(24.dp))
 
-                KoinUnderlineTextField(
+                KoinPasswordTextField(
                     value = password,
                     onValueChange = setPassword,
                     hint = stringResource(Res.string.sign_in_password_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    visualTransformation = PasswordVisualTransformation(mask = '●'),
-                    suffix = if (password.isNotEmpty()) {
-                        {
-                            Text(
-                                text = "◉",
-                                style = KoinTheme.typography.regular16,
-                                color = KoinTheme.colors.neutral600,
-                                modifier = Modifier.clickable { setPassword("") }
-                            )
-                        }
-                    } else {
-                        null
-                    },
                     modifier = Modifier.fillMaxWidth()
                 )
 

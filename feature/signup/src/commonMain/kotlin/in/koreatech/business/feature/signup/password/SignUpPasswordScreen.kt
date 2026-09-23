@@ -18,9 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinPasswordTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.textfield.TextFieldAlertState
@@ -78,24 +78,22 @@ internal fun SignUpPasswordScreen(
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(text = stringResource(Res.string.sign_up_password_input), style = KoinTheme.typography.medium16)
                 Spacer(modifier = Modifier.height(16.dp))
-                KoinUnderlineTextField(
+                KoinPasswordTextField(
                     value = state.password,
                     onValueChange = onPasswordChange,
                     hint = stringResource(Res.string.sign_up_password_hint),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
-                    visualTransformation = PasswordVisualTransformation(mask = '●')
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next)
                 )
                 if (state.password.isNotEmpty() && !isPasswordValid) {
                     KoinTextFieldAlert(stringResource(Res.string.sign_up_password_rule), TextFieldAlertState.Warning)
                 }
                 if (isPasswordValid) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    KoinUnderlineTextField(
+                    KoinPasswordTextField(
                         value = state.passwordConfirmation,
                         onValueChange = onPasswordConfirmChange,
                         hint = stringResource(Res.string.sign_up_password_confirm_hint),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
-                        visualTransformation = PasswordVisualTransformation(mask = '●')
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done)
                     )
                 }
                 if (isPasswordValid && state.passwordConfirmation.isNotEmpty()) {

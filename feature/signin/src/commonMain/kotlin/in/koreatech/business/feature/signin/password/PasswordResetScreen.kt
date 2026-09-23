@@ -21,10 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.textfield.KoinPasswordTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.textfield.TextFieldAlertState
@@ -204,26 +204,24 @@ private fun PasswordResetPasswordContent(
             color = KoinTheme.colors.neutral600
         )
         Spacer(modifier = Modifier.height(32.dp))
-        KoinUnderlineTextField(
+        KoinPasswordTextField(
             value = state.password,
             onValueChange = onPasswordChange,
             hint = stringResource(Res.string.sign_up_password_hint),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Next
-            ),
-            visualTransformation = PasswordVisualTransformation(mask = '●')
+            )
         )
         Spacer(modifier = Modifier.height(24.dp))
-        KoinUnderlineTextField(
+        KoinPasswordTextField(
             value = state.passwordConfirmation,
             onValueChange = onPasswordConfirmationChange,
             hint = stringResource(Res.string.sign_up_password_confirm_hint),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
-            ),
-            visualTransformation = PasswordVisualTransformation(mask = '●')
+            )
         )
         state.error?.let {
             Spacer(modifier = Modifier.height(8.dp))
