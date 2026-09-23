@@ -18,35 +18,31 @@ import org.orbitmvi.orbit.viewmodel.orbitContainer
 class TermsViewModel(
     private val termsContentProvider: TermsContentProvider
 ) : ViewModel(), OrbitContainerHost<TermsState, TermsState, Nothing> {
-    override val container =
-        orbitContainer<TermsState, Nothing>(
-            initialState = TermsState(),
-            onCreate = { loadTerms() }
+    override val container = orbitContainer<TermsState, Nothing>(
+        initialState = TermsState(),
+        onCreate = { loadTerms() }
+    )
+
+    fun selectTerm(index: Int) = blockingIntent {
+        if (index in state.terms.indices) reduce { state.copy(selectedIndex = index) }
+    }
+
+    private suspend fun loadTerms() = subIntent {
+        val content = termsContentProvider.getTerms()
+        val terms = listOf(
+            TermItem(
+                type = TermType.Service,
+                content = content.service
+            ),
+            TermItem(
+                type = TermType.Privacy,
+                content = content.privacy
+            ),
+            TermItem(
+                type = TermType.Marketing,
+                content = content.marketing
+            )
         )
-
-    fun selectTerm(index: Int) =
-        blockingIntent {
-            if (index in state.terms.indices) reduce { state.copy(selectedIndex = index) }
-        }
-
-    private suspend fun loadTerms() =
-        subIntent {
-            val content = termsContentProvider.getTerms()
-            val terms =
-                listOf(
-                    TermItem(
-                        type = TermType.Service,
-                        content = content.service
-                    ),
-                    TermItem(
-                        type = TermType.Privacy,
-                        content = content.privacy
-                    ),
-                    TermItem(
-                        type = TermType.Marketing,
-                        content = content.marketing
-                    )
-                )
-            reduce { state.copy(terms = terms.toImmutableList(), isLoading = false) }
-        }
+        reduce { state.copy(terms = terms.toImmutableList(), isLoading = false) }
+    }
 }

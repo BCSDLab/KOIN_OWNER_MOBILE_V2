@@ -81,20 +81,18 @@ private sealed interface RegisterStoreRoute : NavKey {
     data object Complete : RegisterStoreRoute
 }
 
-private val registerStoreSavedStateConfiguration =
-    SavedStateConfiguration {
-        serializersModule =
-            SerializersModule {
-                polymorphic(NavKey::class) {
-                    subclass(RegisterStoreRoute.Start::class)
-                    subclass(RegisterStoreRoute.Category::class)
-                    subclass(RegisterStoreRoute.BasicInfo::class)
-                    subclass(RegisterStoreRoute.DetailInfo::class)
-                    subclass(RegisterStoreRoute.Confirm::class)
-                    subclass(RegisterStoreRoute.Complete::class)
-                }
-            }
+private val registerStoreSavedStateConfiguration = SavedStateConfiguration {
+    serializersModule = SerializersModule {
+        polymorphic(NavKey::class) {
+            subclass(RegisterStoreRoute.Start::class)
+            subclass(RegisterStoreRoute.Category::class)
+            subclass(RegisterStoreRoute.BasicInfo::class)
+            subclass(RegisterStoreRoute.DetailInfo::class)
+            subclass(RegisterStoreRoute.Confirm::class)
+            subclass(RegisterStoreRoute.Complete::class)
+        }
     }
+}
 
 @Composable
 fun RegisterStoreScreen(
@@ -104,11 +102,10 @@ fun RegisterStoreScreen(
     modifier: Modifier = Modifier,
     viewModel: RegisterStoreViewModel = registerStoreViewModel(shopId)
 ) {
-    val backStack =
-        rememberNavBackStack(
-            registerStoreSavedStateConfiguration,
-            if (shopId == null) RegisterStoreRoute.Start else RegisterStoreRoute.Category
-        )
+    val backStack = rememberNavBackStack(
+        registerStoreSavedStateConfiguration,
+        if (shopId == null) RegisterStoreRoute.Start else RegisterStoreRoute.Category
+    )
     val state by viewModel.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val imageUploadErrorMessage = stringResource(Res.string.error_store_image_upload)
@@ -176,10 +173,9 @@ fun RegisterStoreScreen(
 
 @Composable
 private fun registerStoreViewModel(shopId: Int?): RegisterStoreViewModel {
-    val extras =
-        rememberSavedStateViewModelCreationExtras(shopId) {
-            shopId?.let { putInt(RegisterStoreViewModel.SHOP_ID_KEY, it) }
-        }
+    val extras = rememberSavedStateViewModelCreationExtras(shopId) {
+        shopId?.let { putInt(RegisterStoreViewModel.SHOP_ID_KEY, it) }
+    }
     return assistedMetroViewModel(extras = extras)
 }
 
@@ -209,16 +205,14 @@ internal fun RegisterStoreScreenImpl(
     onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val screenTitle =
-        stringResource(
-            if (state.shopId == null) Res.string.register_store_title else Res.string.register_store_edit_title
-        )
+    val screenTitle = stringResource(
+        if (state.shopId == null) Res.string.register_store_title else Res.string.register_store_edit_title
+    )
     NavDisplay(
         modifier = modifier,
         backStack = backStack,
         onBack = onBack,
-        entryProvider =
-        entryProvider {
+        entryProvider = entryProvider {
             entry<RegisterStoreRoute.Start> {
                 RegisterStoreStartScreen(onBack = onBack, onStartClick = onStart)
             }
@@ -293,8 +287,7 @@ private fun RegisterStoreStartScreen(
         }
     ) { contentPadding ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
                 .padding(24.dp),
@@ -302,8 +295,7 @@ private fun RegisterStoreStartScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Box(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .size(72.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(KoinTheme.colors.primary100),
@@ -327,8 +319,7 @@ private fun RegisterStoreStartScreen(
             )
             Spacer(modifier = Modifier.height(40.dp))
             Column(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
                     .background(KoinTheme.colors.neutral0)
@@ -363,8 +354,7 @@ private fun RegisterStoreGuideItem(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .size(28.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(KoinTheme.colors.primary100),

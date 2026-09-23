@@ -24,9 +24,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
+import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.home_bank_transfer
@@ -73,8 +73,7 @@ internal fun SignUpStoreSearchScreen(
         containerColor = KoinTheme.colors.neutral75
     ) { contentPadding ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
                 .padding(horizontal = 24.dp)
@@ -152,8 +151,7 @@ private fun StoreSearchItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .border(
                 width = if (selected) 1.5.dp else 1.dp,

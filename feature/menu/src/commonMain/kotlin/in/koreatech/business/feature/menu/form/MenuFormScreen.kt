@@ -11,10 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
@@ -85,8 +83,7 @@ fun MenuFormScreen(
             KoinTopAppBar(
                 title = {
                     Text(
-                        text =
-                        stringResource(
+                        text = stringResource(
                             if (state.isEdit) Res.string.menu_edit_title else Res.string.menu_add_title
                         ),
                         style = KoinTheme.typography.medium18
@@ -121,11 +118,10 @@ private fun menuFormViewModel(
     shopId: Int,
     menuId: Int?
 ): MenuFormViewModel {
-    val extras =
-        rememberSavedStateViewModelCreationExtras(shopId, menuId) {
-            putInt(MenuFormViewModel.SHOP_ID_KEY, shopId)
-            menuId?.let { putInt(MenuFormViewModel.MENU_ID_KEY, it) }
-        }
+    val extras = rememberSavedStateViewModelCreationExtras(shopId, menuId) {
+        putInt(MenuFormViewModel.SHOP_ID_KEY, shopId)
+        menuId?.let { putInt(MenuFormViewModel.MENU_ID_KEY, it) }
+    }
     return assistedMetroViewModel(extras = extras)
 }
 
@@ -146,11 +142,10 @@ fun MenuFormScreenImpl(
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val openImagePicker =
-        rememberImageFilePicker(
-            onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
-            onFailure = { onImageSelectionFailed() }
-        )
+    val openImagePicker = rememberImageFilePicker(
+        onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
+        onFailure = { onImageSelectionFailed() }
+    )
     if (state.isLoading) {
         Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             CircularProgressIndicator(color = KoinTheme.colors.primary500)
@@ -235,8 +230,7 @@ fun MenuFormScreenImpl(
                     state.imageUrls.forEachIndexed { index, imageUrl ->
                         KoinImagePreview(
                             imageUrl = imageUrl,
-                            contentDescription =
-                            stringResource(
+                            contentDescription = stringResource(
                                 Res.string.menu_image_description,
                                 index + 1
                             ),
@@ -258,8 +252,7 @@ fun MenuFormScreenImpl(
                 contentPadding = PaddingValues(8.dp)
             ) {
                 Text(
-                    text =
-                    stringResource(
+                    text = stringResource(
                         if (state.isUploading) {
                             Res.string.menu_image_uploading
                         } else {
@@ -272,8 +265,7 @@ fun MenuFormScreenImpl(
         }
         state.error?.let { error ->
             Text(
-                text =
-                stringResource(
+                text = stringResource(
                     when (error) {
                         MenuFormError.CategoryLoad -> Res.string.error_menu_category_load
                         MenuFormError.DetailLoad -> Res.string.error_menu_detail_load
@@ -300,8 +292,7 @@ fun MenuFormScreenImpl(
             contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             Text(
-                text =
-                stringResource(
+                text = stringResource(
                     if (state.isSaving) Res.string.menu_saving else Res.string.menu_save
                 ),
                 style = KoinTheme.typography.medium16,
@@ -321,8 +312,7 @@ private fun PriceTypeButton(
         text,
         style = KoinTheme.typography.medium14,
         color = if (selected) Color.White else KoinTheme.colors.neutral600,
-        modifier =
-        Modifier
+        modifier = Modifier
             .background(
                 if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral100,
                 KoinTheme.shapes.extraLarge

@@ -53,27 +53,25 @@ sealed interface Screen : NavKey {
     @Serializable data object OpenSourceLicenses : Screen
 }
 
-val screenSavedStateConfiguration =
-    SavedStateConfiguration {
-        serializersModule =
-            SerializersModule {
-                polymorphic(NavKey::class) {
-                    subclass(Screen.SignIn::class)
-                    subclass(Screen.SignUp::class)
-                    subclass(Screen.PasswordReset::class)
-                    subclass(Screen.Home::class)
-                    subclass(Screen.RegisterStore::class)
-                    subclass(Screen.Menu::class)
-                    subclass(Screen.MenuCreate::class)
-                    subclass(Screen.MenuEdit::class)
-                    subclass(Screen.Event::class)
-                    subclass(Screen.EventCreate::class)
-                    subclass(Screen.EventEdit::class)
-                    subclass(Screen.Settings::class)
-                    subclass(Screen.ManageShops::class)
-                    subclass(Screen.StoreEdit::class)
-                    subclass(Screen.Terms::class)
-                    subclass(Screen.OpenSourceLicenses::class)
-                }
-            }
+val screenSavedStateConfiguration = SavedStateConfiguration {
+    serializersModule = SerializersModule {
+        polymorphic(NavKey::class) {
+            subclass(Screen.SignIn::class)
+            subclass(Screen.SignUp::class)
+            subclass(Screen.PasswordReset::class)
+            subclass(Screen.Home::class)
+            subclass(Screen.RegisterStore::class)
+            subclass(Screen.Menu::class)
+            subclass(Screen.MenuCreate::class)
+            subclass(Screen.MenuEdit::class)
+            subclass(Screen.Event::class)
+            subclass(Screen.EventCreate::class)
+            subclass(Screen.EventEdit::class)
+            subclass(Screen.Settings::class)
+            subclass(Screen.ManageShops::class)
+            subclass(Screen.StoreEdit::class)
+            subclass(Screen.Terms::class)
+            subclass(Screen.OpenSourceLicenses::class)
+        }
     }
+}

@@ -19,14 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserWithButtonItem
-import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_confirm
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
@@ -78,8 +78,7 @@ internal fun SignUpVerificationScreen(
         containerColor = KoinTheme.colors.neutral75
     ) { contentPadding ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
                 .imePadding()
@@ -116,8 +115,7 @@ internal fun SignUpVerificationScreen(
                 KoinUserWithButtonItem(
                     value = state.phoneNumber,
                     hint = stringResource(Res.string.sign_up_phone_hint),
-                    buttonText =
-                    if (state.isVerificationCodeSent) {
+                    buttonText = if (state.isVerificationCodeSent) {
                         stringResource(Res.string.sign_up_verification_resend)
                     } else {
                         stringResource(Res.string.sign_up_verification_send)
@@ -125,8 +123,7 @@ internal fun SignUpVerificationScreen(
                     keyboardType = KeyboardType.Number,
                     onValueChange = onPhoneNumberChange,
                     onButtonClick = onSendVerificationCode,
-                    buttonEnabled =
-                    state.phoneNumber.isNotBlank() &&
+                    buttonEnabled = state.phoneNumber.isNotBlank() &&
                         state.verificationCodeState !is VerificationCodeState.Valid &&
                         !state.isLoading,
                     visualTransformation = KRPhoneNumberVisualTransformation()
@@ -167,8 +164,7 @@ internal fun SignUpVerificationScreen(
                     keyboardType = KeyboardType.Number,
                     onValueChange = onVerificationCodeChange,
                     onButtonClick = onVerifyCode,
-                    buttonEnabled =
-                    state.isVerificationCodeSent &&
+                    buttonEnabled = state.isVerificationCodeSent &&
                         state.verificationCode.length == 6 &&
                         state.verificationCodeState !is VerificationCodeState.Valid &&
                         !state.isLoading
@@ -194,8 +190,7 @@ internal fun SignUpVerificationScreen(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = navigateToNextScreen,
-                enabled =
-                state.name.isNotBlank() &&
+                enabled = state.name.isNotBlank() &&
                     state.verificationCodeState is VerificationCodeState.Valid &&
                     !state.isLoading,
                 shape = KoinTheme.shapes.small,

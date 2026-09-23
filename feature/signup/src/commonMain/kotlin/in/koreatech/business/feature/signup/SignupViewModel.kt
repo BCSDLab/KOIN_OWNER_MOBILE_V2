@@ -45,125 +45,112 @@ class SignupViewModel(
     private val searchStoresUseCase: SearchStoresUseCase,
     private val termsContentProvider: TermsContentProvider
 ) : ViewModel(), OrbitContainerHost<SignupState, SignupState, SignupSideEffect> {
-    override val container =
-        orbitContainer<SignupState, SignupSideEffect>(SignupState(), onCreate = { loadTerms() })
+    override val container = orbitContainer<SignupState, SignupSideEffect>(SignupState(), onCreate = { loadTerms() })
 
     private var storeSearchJob: Job? = null
 
-    private suspend fun loadTerms() =
-        subIntent {
-            val terms = termsContentProvider.getTerms()
-            reduce {
-                state.copy(
-                    privacyTerm = terms.privacy,
-                    koinTerm = terms.service,
-                    marketingTerm = terms.marketing
-                )
-            }
+    private suspend fun loadTerms() = subIntent {
+        val terms = termsContentProvider.getTerms()
+        reduce {
+            state.copy(
+                privacyTerm = terms.privacy,
+                koinTerm = terms.service,
+                marketingTerm = terms.marketing
+            )
         }
+    }
 
-    fun setAllTermsAgreed(isChecked: Boolean) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    agreedToService = isChecked,
-                    agreedToPrivacy = isChecked,
-                    agreedToMarketing = isChecked
-                )
-            }
+    fun setAllTermsAgreed(isChecked: Boolean) = blockingIntent {
+        reduce {
+            state.copy(
+                agreedToService = isChecked,
+                agreedToPrivacy = isChecked,
+                agreedToMarketing = isChecked
+            )
         }
+    }
 
-    fun setServiceTermsAgreed(isChecked: Boolean) =
-        blockingIntent {
-            reduce { state.copy(agreedToService = isChecked) }
-        }
+    fun setServiceTermsAgreed(isChecked: Boolean) = blockingIntent {
+        reduce { state.copy(agreedToService = isChecked) }
+    }
 
-    fun setPrivacyTermsAgreed(isChecked: Boolean) =
-        blockingIntent {
-            reduce { state.copy(agreedToPrivacy = isChecked) }
-        }
+    fun setPrivacyTermsAgreed(isChecked: Boolean) = blockingIntent {
+        reduce { state.copy(agreedToPrivacy = isChecked) }
+    }
 
-    fun setMarketingTermsAgreed(isChecked: Boolean) =
-        blockingIntent {
-            reduce { state.copy(agreedToMarketing = isChecked) }
-        }
+    fun setMarketingTermsAgreed(isChecked: Boolean) = blockingIntent {
+        reduce { state.copy(agreedToMarketing = isChecked) }
+    }
 
-    fun updatePhoneNumber(value: String) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    phoneNumber = value.filter(Char::isDigit).take(11),
-                    verificationCode = "",
-                    isVerificationCodeSent = false,
-                    phoneNumberVerificationState = PhoneNumberVerificationState.None,
-                    verificationCodeState = VerificationCodeState.None,
-                    verificationToken = null,
-                    error = null
-                )
-            }
+    fun updatePhoneNumber(value: String) = blockingIntent {
+        reduce {
+            state.copy(
+                phoneNumber = value.filter(Char::isDigit).take(11),
+                verificationCode = "",
+                isVerificationCodeSent = false,
+                phoneNumberVerificationState = PhoneNumberVerificationState.None,
+                verificationCodeState = VerificationCodeState.None,
+                verificationToken = null,
+                error = null
+            )
         }
+    }
 
-    fun updateVerificationCode(value: String) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    verificationCode = value.filter(Char::isDigit).take(6),
-                    verificationCodeState = VerificationCodeState.None,
-                    verificationToken = null,
-                    error = null
-                )
-            }
+    fun updateVerificationCode(value: String) = blockingIntent {
+        reduce {
+            state.copy(
+                verificationCode = value.filter(Char::isDigit).take(6),
+                verificationCodeState = VerificationCodeState.None,
+                verificationToken = null,
+                error = null
+            )
         }
+    }
 
     fun updateName(value: String) = blockingIntent { reduce { state.copy(name = value, error = null) } }
 
     fun updatePassword(value: String) = blockingIntent { reduce { state.copy(password = value, error = null) } }
 
-    fun updatePasswordConfirmation(value: String) =
-        blockingIntent {
-            reduce { state.copy(passwordConfirmation = value, error = null) }
-        }
+    fun updatePasswordConfirmation(value: String) = blockingIntent {
+        reduce { state.copy(passwordConfirmation = value, error = null) }
+    }
 
-    fun updateBusinessNumber(value: String) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    businessNumber = value.filter(Char::isDigit).take(10),
-                    error = null
-                )
-            }
+    fun updateBusinessNumber(value: String) = blockingIntent {
+        reduce {
+            state.copy(
+                businessNumber = value.filter(Char::isDigit).take(10),
+                error = null
+            )
         }
+    }
 
-    fun updateStoreName(value: String) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    storeName = value,
-                    selectedStoreId = null,
-                    error = null
-                )
-            }
+    fun updateStoreName(value: String) = blockingIntent {
+        reduce {
+            state.copy(
+                storeName = value,
+                selectedStoreId = null,
+                error = null
+            )
         }
+    }
 
-    fun updateStorePhoneNumber(value: String) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    storePhoneNumber = value.filter(Char::isDigit).take(11),
-                    selectedStoreId = null,
-                    error = null
-                )
-            }
+    fun updateStorePhoneNumber(value: String) = blockingIntent {
+        reduce {
+            state.copy(
+                storePhoneNumber = value.filter(Char::isDigit).take(11),
+                selectedStoreId = null,
+                error = null
+            )
         }
+    }
 
     fun updateStoreSearchQuery(value: String) {
         storeSearchJob?.cancel()
-        storeSearchJob =
-            intent {
-                reduce { state.copy(storeSearchQuery = value, selectedStoreId = null, error = null) }
-                delay(STORE_SEARCH_DEBOUNCE_MILLIS)
-                searchStores(value)
-            }
+        storeSearchJob = intent {
+            reduce { state.copy(storeSearchQuery = value, selectedStoreId = null, error = null) }
+            delay(STORE_SEARCH_DEBOUNCE_MILLIS)
+            searchStores(value)
+        }
     }
 
     fun loadStores() {
@@ -171,48 +158,45 @@ class SignupViewModel(
         storeSearchJob = intent { searchStores(state.storeSearchQuery) }
     }
 
-    private suspend fun searchStores(query: String) =
-        subIntent {
-            searchStoresUseCase(query.trim())
-                .onStart { reduce { state.copy(isSearchingStores = true) } }
-                .onEach { result ->
-                    result
-                        .onSuccess { stores ->
-                            reduce {
-                                state.copy(
-                                    storeSearchResults = stores.toImmutableList(),
-                                    isSearchingStores = false
-                                )
-                            }
-                        }.onFailure {
-                            reduce {
-                                state.copy(
-                                    storeSearchResults = persistentListOf(),
-                                    isSearchingStores = false,
-                                    error = SignupError.StoreSearch
-                                )
-                            }
+    private suspend fun searchStores(query: String) = subIntent {
+        searchStoresUseCase(query.trim())
+            .onStart { reduce { state.copy(isSearchingStores = true) } }
+            .onEach { result ->
+                result
+                    .onSuccess { stores ->
+                        reduce {
+                            state.copy(
+                                storeSearchResults = stores.toImmutableList(),
+                                isSearchingStores = false
+                            )
                         }
-                }.collect()
-        }
+                    }.onFailure {
+                        reduce {
+                            state.copy(
+                                storeSearchResults = persistentListOf(),
+                                isSearchingStores = false,
+                                error = SignupError.StoreSearch
+                            )
+                        }
+                    }
+            }.collect()
+    }
 
-    fun selectStore(storeId: Int) =
-        blockingIntent {
-            reduce { state.copy(selectedStoreId = storeId) }
-        }
+    fun selectStore(storeId: Int) = blockingIntent {
+        reduce { state.copy(selectedStoreId = storeId) }
+    }
 
-    fun applySelectedStore() =
-        intent {
-            val store = state.storeSearchResults.firstOrNull { it.id == state.selectedStoreId } ?: return@intent
-            reduce {
-                state.copy(
-                    storeName = store.name,
-                    storePhoneNumber = store.phone.filter(Char::isDigit).take(11),
-                    error = null
-                )
-            }
-            postSideEffect(SignupSideEffect.NavigateBackFromStoreSearch)
+    fun applySelectedStore() = intent {
+        val store = state.storeSearchResults.firstOrNull { it.id == state.selectedStoreId } ?: return@intent
+        reduce {
+            state.copy(
+                storeName = store.name,
+                storePhoneNumber = store.phone.filter(Char::isDigit).take(11),
+                error = null
+            )
         }
+        postSideEffect(SignupSideEffect.NavigateBackFromStoreSearch)
+    }
 
     fun uploadFile(
         fileName: String,
@@ -220,11 +204,10 @@ class SignupViewModel(
         bytes: ByteArray
     ) = intent {
         if (state.fileInfo.size >= 5 || state.isUploading) return@intent
-        val verificationToken =
-            state.verificationToken ?: run {
-                reduce { state.copy(error = SignupError.PhoneVerificationRequired) }
-                return@intent
-            }
+        val verificationToken = state.verificationToken ?: run {
+            reduce { state.copy(error = SignupError.PhoneVerificationRequired) }
+            return@intent
+        }
         reduce { state.copy(isUploading = true, error = null) }
         uploadImageUseCase(
             domain = PreSignedUrlDomain.OWNERS,
@@ -238,8 +221,7 @@ class SignupViewModel(
                 state.copy(
                     isUploading = false,
                     selectedImages = (state.selectedImages + AttachStore(resultUrl, fileName)).toImmutableList(),
-                    fileInfo =
-                        (state.fileInfo + resultUrl.toStoreUrl(fileName, mediaType, bytes.size.toLong())).toImmutableList()
+                    fileInfo = (state.fileInfo + resultUrl.toStoreUrl(fileName, mediaType, bytes.size.toLong())).toImmutableList()
                 )
             }
         }.onFailure { error ->
@@ -252,142 +234,129 @@ class SignupViewModel(
         }
     }
 
-    fun removeFile(index: Int) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    selectedImages = state.selectedImages.filterIndexed { fileIndex, _ -> fileIndex != index }.toImmutableList(),
-                    fileInfo = state.fileInfo.filterIndexed { fileIndex, _ -> fileIndex != index }.toImmutableList()
-                )
-            }
+    fun removeFile(index: Int) = blockingIntent {
+        reduce {
+            state.copy(
+                selectedImages = state.selectedImages.filterIndexed { fileIndex, _ -> fileIndex != index }.toImmutableList(),
+                fileInfo = state.fileInfo.filterIndexed { fileIndex, _ -> fileIndex != index }.toImmutableList()
+            )
         }
+    }
 
-    fun onFileSelectionFailed() =
-        blockingIntent {
-            reduce { state.copy(error = SignupError.FileUpload) }
+    fun onFileSelectionFailed() = blockingIntent {
+        reduce { state.copy(error = SignupError.FileUpload) }
+    }
+
+    fun navigateToAccount() = intent {
+        postSideEffect(SignupSideEffect.NavigateToAccount)
+    }
+
+    fun navigateToPassword() = intent {
+        postSideEffect(SignupSideEffect.NavigateToPassword)
+    }
+
+    fun navigateToBusiness() = intent {
+        postSideEffect(SignupSideEffect.NavigateToBusiness)
+    }
+
+    fun navigateToAttachments() = intent {
+        postSideEffect(SignupSideEffect.NavigateToAttachments)
+    }
+
+    fun completeSignup() = intent {
+        postSideEffect(SignupSideEffect.CompleteSignup)
+    }
+
+    fun sendVerificationCode() = intent {
+        if (state.isLoading) return@intent
+        if (!state.phoneNumber.isValidPhoneNumber) {
+            reduce { state.copy(phoneNumberVerificationState = PhoneNumberVerificationState.WrongFormat) }
+            return@intent
         }
-
-    fun navigateToAccount() =
-        intent {
-            postSideEffect(SignupSideEffect.NavigateToAccount)
-        }
-
-    fun navigateToPassword() =
-        intent {
-            postSideEffect(SignupSideEffect.NavigateToPassword)
-        }
-
-    fun navigateToBusiness() =
-        intent {
-            postSideEffect(SignupSideEffect.NavigateToBusiness)
-        }
-
-    fun navigateToAttachments() =
-        intent {
-            postSideEffect(SignupSideEffect.NavigateToAttachments)
-        }
-
-    fun completeSignup() =
-        intent {
-            postSideEffect(SignupSideEffect.CompleteSignup)
-        }
-
-    fun sendVerificationCode() =
-        intent {
-            if (state.isLoading) return@intent
-            if (!state.phoneNumber.isValidPhoneNumber) {
-                reduce { state.copy(phoneNumberVerificationState = PhoneNumberVerificationState.WrongFormat) }
-                return@intent
-            }
-            reduce { state.copy(isLoading = true, error = null) }
-            sendSignupSmsCodeUseCase(state.phoneNumber)
-                .onSuccess {
-                    reduce {
-                        state.copy(
-                            isLoading = false,
-                            isVerificationCodeSent = true,
-                            phoneNumberVerificationState = PhoneNumberVerificationState.Sent,
-                            verificationCodeState = VerificationCodeState.None
-                        )
-                    }
-                }.onFailure { error ->
-                    reduce {
-                        state.copy(
-                            isLoading = false,
-                            phoneNumberVerificationState =
-                                if (error is PhoneNumberAlreadyExistsException) {
-                                    PhoneNumberVerificationState.AlreadySignedUp
-                                } else {
-                                    PhoneNumberVerificationState.Failed(error.message)
-                                }
-                        )
-                    }
+        reduce { state.copy(isLoading = true, error = null) }
+        sendSignupSmsCodeUseCase(state.phoneNumber)
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        isLoading = false,
+                        isVerificationCodeSent = true,
+                        phoneNumberVerificationState = PhoneNumberVerificationState.Sent,
+                        verificationCodeState = VerificationCodeState.None
+                    )
                 }
-        }
-
-    fun verifyCode() =
-        intent {
-            if (!state.isVerificationCodeSent || state.verificationCode.length != 6 || state.isLoading) return@intent
-            reduce { state.copy(isLoading = true, error = null) }
-            verifySignupSmsCodeUseCase(state.phoneNumber, state.verificationCode)
-                .onSuccess { token ->
-                    reduce {
-                        state.copy(
-                            isLoading = false,
-                            verificationCodeState = VerificationCodeState.Valid,
-                            verificationToken = token
-                        )
-                    }
-                }.onFailure {
-                    reduce {
-                        state.copy(
-                            isLoading = false,
-                            verificationCodeState = VerificationCodeState.NotValid
-                        )
-                    }
-                }
-        }
-
-    fun checkBusinessNumber() =
-        intent {
-            if (state.businessNumber.length != 10 || state.isLoading) return@intent
-            reduce { state.copy(isLoading = true, error = null) }
-            checkCompanyNumberUseCase(state.businessNumber.formatBusinessNumber())
-                .onSuccess {
-                    reduce { state.copy(isLoading = false) }
-                    postSideEffect(SignupSideEffect.NavigateToStore)
-                }.onFailure { error ->
-                    reduce {
-                        state.copy(
-                            isLoading = false,
-                            error =
-                                error.message?.let(SignupError::Dynamic)
-                                    ?: SignupError.BusinessNumberCheck
-                        )
-                    }
-                }
-        }
-
-    fun register() =
-        intent {
-            val token = state.verificationToken ?: return@intent
-            if (state.isLoading) return@intent
-            reduce { state.copy(isLoading = true, error = null) }
-            registerOwnerUseCase(
-                registration = state.toOwnerRegistration(),
-                verificationToken = token
-            ).onSuccess {
-                reduce { state.copy(isLoading = false) }
-                postSideEffect(SignupSideEffect.NavigateToComplete)
             }.onFailure { error ->
                 reduce {
                     state.copy(
                         isLoading = false,
-                        error = error.message?.let(SignupError::Dynamic) ?: SignupError.Submit
+                        phoneNumberVerificationState = if (error is PhoneNumberAlreadyExistsException) {
+                            PhoneNumberVerificationState.AlreadySignedUp
+                        } else {
+                            PhoneNumberVerificationState.Failed(error.message)
+                        }
                     )
                 }
             }
+    }
+
+    fun verifyCode() = intent {
+        if (!state.isVerificationCodeSent || state.verificationCode.length != 6 || state.isLoading) return@intent
+        reduce { state.copy(isLoading = true, error = null) }
+        verifySignupSmsCodeUseCase(state.phoneNumber, state.verificationCode)
+            .onSuccess { token ->
+                reduce {
+                    state.copy(
+                        isLoading = false,
+                        verificationCodeState = VerificationCodeState.Valid,
+                        verificationToken = token
+                    )
+                }
+            }.onFailure {
+                reduce {
+                    state.copy(
+                        isLoading = false,
+                        verificationCodeState = VerificationCodeState.NotValid
+                    )
+                }
+            }
+    }
+
+    fun checkBusinessNumber() = intent {
+        if (state.businessNumber.length != 10 || state.isLoading) return@intent
+        reduce { state.copy(isLoading = true, error = null) }
+        checkCompanyNumberUseCase(state.businessNumber.formatBusinessNumber())
+            .onSuccess {
+                reduce { state.copy(isLoading = false) }
+                postSideEffect(SignupSideEffect.NavigateToStore)
+            }.onFailure { error ->
+                reduce {
+                    state.copy(
+                        isLoading = false,
+                        error = error.message?.let(SignupError::Dynamic)
+                            ?: SignupError.BusinessNumberCheck
+                    )
+                }
+            }
+    }
+
+    fun register() = intent {
+        val token = state.verificationToken ?: return@intent
+        if (state.isLoading) return@intent
+        reduce { state.copy(isLoading = true, error = null) }
+        registerOwnerUseCase(
+            registration = state.toOwnerRegistration(),
+            verificationToken = token
+        ).onSuccess {
+            reduce { state.copy(isLoading = false) }
+            postSideEffect(SignupSideEffect.NavigateToComplete)
+        }.onFailure { error ->
+            reduce {
+                state.copy(
+                    isLoading = false,
+                    error = error.message?.let(SignupError::Dynamic) ?: SignupError.Submit
+                )
+            }
         }
+    }
 
     private companion object {
         const val STORE_SEARCH_DEBOUNCE_MILLIS = 300L

@@ -61,8 +61,7 @@ internal fun RegisterStoreCategoryScreen(
         }
     ) { paddingValues ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
@@ -86,8 +85,7 @@ internal fun RegisterStoreCategoryScreen(
                         rowCategories.forEach { category ->
                             val selected = category.id == selectedCategoryId
                             Column(
-                                modifier =
-                                Modifier
+                                modifier = Modifier
                                     .weight(1f)
                                     .clip(RoundedCornerShape(16.dp))
                                     .background(if (selected) KoinTheme.colors.primary100 else KoinTheme.colors.neutral0)
@@ -96,8 +94,7 @@ internal fun RegisterStoreCategoryScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Box(
-                                    modifier =
-                                    Modifier
+                                    modifier = Modifier
                                         .size(40.dp)
                                         .clip(RoundedCornerShape(12.dp))
                                         .background(if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral100),

@@ -30,8 +30,7 @@ class SignupRemoteDataSource(
         httpClient.post("owners/verification/sms") { setBody(request) }
     }
 
-    suspend fun verifySmsCode(request: VerificationCodeSmsRequest): VerificationCodeResponse =
-        httpClient.post("owners/verification/code/sms") { setBody(request) }.body()
+    suspend fun verifySmsCode(request: VerificationCodeSmsRequest): VerificationCodeResponse = httpClient.post("owners/verification/code/sms") { setBody(request) }.body()
 
     suspend fun checkCompanyNumber(request: CheckCompanyNumberRequest) {
         httpClient.post("owners/exists/company-number") { setBody(request) }
@@ -47,9 +46,8 @@ class SignupRemoteDataSource(
         }
     }
 
-    suspend fun searchStores(query: String): StoreSearchResponse =
-        httpClient
-            .get("v2/shops") {
-                parameter("query", query.takeIf(String::isNotBlank))
-            }.body()
+    suspend fun searchStores(query: String): StoreSearchResponse = httpClient
+        .get("v2/shops") {
+            parameter("query", query.takeIf(String::isNotBlank))
+        }.body()
 }

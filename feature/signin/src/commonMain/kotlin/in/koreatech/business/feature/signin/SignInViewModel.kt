@@ -21,31 +21,28 @@ class SignInViewModel(
 ) : ViewModel(), OrbitContainerHost<SignInState, SignInState, SignInSideEffect> {
     override val container = orbitContainer<SignInState, SignInSideEffect>(SignInState())
 
-    fun updatePhoneNumber(value: String) =
-        blockingIntent {
-            reduce { state.copy(phoneNumber = value.filter(Char::isDigit), error = null) }
-        }
+    fun updatePhoneNumber(value: String) = blockingIntent {
+        reduce { state.copy(phoneNumber = value.filter(Char::isDigit), error = null) }
+    }
 
-    fun updatePassword(value: String) =
-        blockingIntent {
-            reduce { state.copy(password = value, error = null) }
-        }
+    fun updatePassword(value: String) = blockingIntent {
+        reduce { state.copy(password = value, error = null) }
+    }
 
-    fun signIn() =
-        intent {
-            if (state.isLoading) return@intent
-            if (state.phoneNumber.length != 11 || state.password.isBlank()) {
-                reduce { state.copy(error = SignInError.Required) }
-                return@intent
+    fun signIn() = intent {
+        if (state.isLoading) return@intent
+        if (state.phoneNumber.length != 11 || state.password.isBlank()) {
+            reduce { state.copy(error = SignInError.Required) }
+            return@intent
+        }
+        reduce { state.copy(isLoading = true, error = null) }
+        signInUseCase(state.phoneNumber, state.password)
+            .onSuccess { tokens ->
+                saveTokensUseCase(tokens.accessToken, tokens.refreshToken)
+                reduce { state.copy(isLoading = false) }
+                postSideEffect(SignInSideEffect.SignInSuccess)
+            }.onFailure {
+                reduce { state.copy(isLoading = false, error = SignInError.Failed) }
             }
-            reduce { state.copy(isLoading = true, error = null) }
-            signInUseCase(state.phoneNumber, state.password)
-                .onSuccess { tokens ->
-                    saveTokensUseCase(tokens.accessToken, tokens.refreshToken)
-                    reduce { state.copy(isLoading = false) }
-                    postSideEffect(SignInSideEffect.SignInSuccess)
-                }.onFailure {
-                    reduce { state.copy(isLoading = false, error = SignInError.Failed) }
-                }
-        }
+    }
 }

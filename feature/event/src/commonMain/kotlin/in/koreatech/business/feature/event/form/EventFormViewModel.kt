@@ -28,57 +28,50 @@ class EventFormViewModel internal constructor(
     private val shopId = checkNotNull(savedStateHandle.get<Int>(SHOP_ID_KEY))
     private val eventId = savedStateHandle.get<Int>(EVENT_ID_KEY)
 
-    override val container =
-        orbitContainer<EventFormState, EventFormSideEffect>(
-            initialState = EventFormState(isEdit = eventId != null, isLoading = eventId != null),
-            onCreate = { loadEvent() }
-        )
+    override val container = orbitContainer<EventFormState, EventFormSideEffect>(
+        initialState = EventFormState(isEdit = eventId != null, isLoading = eventId != null),
+        onCreate = { loadEvent() }
+    )
 
-    private suspend fun loadEvent() =
-        subIntent {
-            val id = eventId ?: return@subIntent
-            getOwnerEventsUseCase(shopId)
-                .onStart { reduce { state.copy(isLoading = true, error = null) } }
-                .onEach { result ->
-                    val events =
-                        result.getOrElse {
-                            reduce { state.copy(isLoading = false, error = EventFormError.Load) }
-                            return@onEach
-                        }
-                    val event = events.firstOrNull { it.id == id }
-                    if (event == null) {
-                        reduce { state.copy(isLoading = false, error = EventFormError.Load) }
-                        return@onEach
-                    }
-                    reduce { state.withOwnerEvent(event) }
-                }.collect()
-        }
+    private suspend fun loadEvent() = subIntent {
+        val id = eventId ?: return@subIntent
+        getOwnerEventsUseCase(shopId)
+            .onStart { reduce { state.copy(isLoading = true, error = null) } }
+            .onEach { result ->
+                val events = result.getOrElse {
+                    reduce { state.copy(isLoading = false, error = EventFormError.Load) }
+                    return@onEach
+                }
+                val event = events.firstOrNull { it.id == id }
+                if (event == null) {
+                    reduce { state.copy(isLoading = false, error = EventFormError.Load) }
+                    return@onEach
+                }
+                reduce { state.withOwnerEvent(event) }
+            }.collect()
+    }
 
-    fun updateTitle(value: String) =
-        blockingIntent {
-            reduce { state.copy(title = value.take(MAX_TITLE_LENGTH), error = null) }
-        }
+    fun updateTitle(value: String) = blockingIntent {
+        reduce { state.copy(title = value.take(MAX_TITLE_LENGTH), error = null) }
+    }
 
-    fun updateContent(value: String) =
-        blockingIntent {
-            reduce { state.copy(content = value.take(MAX_CONTENT_LENGTH), error = null) }
-        }
+    fun updateContent(value: String) = blockingIntent {
+        reduce { state.copy(content = value.take(MAX_CONTENT_LENGTH), error = null) }
+    }
 
-    fun updateStartDate(value: String) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    startDate = value,
-                    endDate = state.endDate.takeUnless { it.isNotEmpty() && it < value }.orEmpty(),
-                    error = null
-                )
-            }
+    fun updateStartDate(value: String) = blockingIntent {
+        reduce {
+            state.copy(
+                startDate = value,
+                endDate = state.endDate.takeUnless { it.isNotEmpty() && it < value }.orEmpty(),
+                error = null
+            )
         }
+    }
 
-    fun updateEndDate(value: String) =
-        blockingIntent {
-            reduce { state.copy(endDate = value, error = null) }
-        }
+    fun updateEndDate(value: String) = blockingIntent {
+        reduce { state.copy(endDate = value, error = null) }
+    }
 
     fun uploadImage(
         fileName: String,
@@ -105,53 +98,47 @@ class EventFormViewModel internal constructor(
         }
     }
 
-    fun deleteImage(index: Int) =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    imageUrls =
-                    state.imageUrls
-                        .filterIndexed { imageIndex, _ -> imageIndex != index }
-                        .toImmutableList()
-                )
-            }
+    fun deleteImage(index: Int) = blockingIntent {
+        reduce {
+            state.copy(
+                imageUrls = state.imageUrls
+                    .filterIndexed { imageIndex, _ -> imageIndex != index }
+                    .toImmutableList()
+            )
         }
+    }
 
-    fun onImageSelectionFailed() =
-        blockingIntent {
-            reduce { state.copy(error = EventFormError.ImageUpload) }
-        }
+    fun onImageSelectionFailed() = blockingIntent {
+        reduce { state.copy(error = EventFormError.ImageUpload) }
+    }
 
-    fun save() =
-        intent {
-            if (state.isSaving || state.isUploading) return@intent
-            val error =
-                when {
-                    state.title.isBlank() -> EventFormError.TitleRequired
-                    state.content.isBlank() -> EventFormError.ContentRequired
-                    dateToEpochMillis(state.startDate) == null ||
-                        dateToEpochMillis(state.endDate) == null ||
-                        state.startDate > state.endDate -> EventFormError.DateInvalid
-                    else -> null
-                }
-            if (error != null) {
-                reduce { state.copy(error = error) }
-                return@intent
-            }
-            val event = state.toOwnerEventForm()
-            reduce { state.copy(isSaving = true, error = null) }
-            val result =
-                eventId?.let {
-                    updateOwnerEventUseCase(shopId, it, event)
-                } ?: createOwnerEventUseCase(shopId, event)
-            result
-                .onSuccess {
-                    reduce { state.copy(isSaving = false) }
-                    postSideEffect(EventFormSideEffect.Saved)
-                }.onFailure {
-                    reduce { state.copy(isSaving = false, error = EventFormError.Save) }
-                }
+    fun save() = intent {
+        if (state.isSaving || state.isUploading) return@intent
+        val error = when {
+            state.title.isBlank() -> EventFormError.TitleRequired
+            state.content.isBlank() -> EventFormError.ContentRequired
+            dateToEpochMillis(state.startDate) == null ||
+                dateToEpochMillis(state.endDate) == null ||
+                state.startDate > state.endDate -> EventFormError.DateInvalid
+            else -> null
         }
+        if (error != null) {
+            reduce { state.copy(error = error) }
+            return@intent
+        }
+        val event = state.toOwnerEventForm()
+        reduce { state.copy(isSaving = true, error = null) }
+        val result = eventId?.let {
+            updateOwnerEventUseCase(shopId, it, event)
+        } ?: createOwnerEventUseCase(shopId, event)
+        result
+            .onSuccess {
+                reduce { state.copy(isSaving = false) }
+                postSideEffect(EventFormSideEffect.Saved)
+            }.onFailure {
+                reduce { state.copy(isSaving = false, error = EventFormError.Save) }
+            }
+    }
 
     companion object {
         internal const val SHOP_ID_KEY = "shopId"

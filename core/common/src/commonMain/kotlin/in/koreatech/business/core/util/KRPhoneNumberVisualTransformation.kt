@@ -29,20 +29,18 @@ class KRPhoneNumberVisualTransformation : VisualTransformation {
 
         return object : OffsetMapping {
 
-            override fun originalToTransformed(offset: Int): Int =
-                when (offset) {
-                    in 0..3 -> offset
-                    in 4..firstGroupEnd -> offset + 1
-                    else -> (offset + 2).coerceAtMost(transformedLength)
-                }
+            override fun originalToTransformed(offset: Int): Int = when (offset) {
+                in 0..3 -> offset
+                in 4..firstGroupEnd -> offset + 1
+                else -> (offset + 2).coerceAtMost(transformedLength)
+            }
 
-            override fun transformedToOriginal(offset: Int): Int =
-                when (offset) {
-                    in 0..2 -> offset
-                    in 3..(firstGroupEnd - 1) -> offset - 1
-                    in secondGroupStart..secondGroupEnd -> offset - 2
-                    else -> originalLength
-                }
+            override fun transformedToOriginal(offset: Int): Int = when (offset) {
+                in 0..2 -> offset
+                in 3..(firstGroupEnd - 1) -> offset - 1
+                in secondGroupStart..secondGroupEnd -> offset - 2
+                else -> originalLength
+            }
         }
     }
 }

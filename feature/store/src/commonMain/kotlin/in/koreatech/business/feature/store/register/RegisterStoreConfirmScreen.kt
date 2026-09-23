@@ -74,16 +74,15 @@ internal fun RegisterStoreConfirmScreen(
     val none = stringResource(Res.string.common_none)
     val closed = stringResource(Res.string.register_store_closed)
     val open24Hours = stringResource(Res.string.register_store_open_24_hours)
-    val weekdayLabels =
-        mapOf(
-            RegisterStoreDay.Monday to stringResource(Res.string.weekday_monday),
-            RegisterStoreDay.Tuesday to stringResource(Res.string.weekday_tuesday),
-            RegisterStoreDay.Wednesday to stringResource(Res.string.weekday_wednesday),
-            RegisterStoreDay.Thursday to stringResource(Res.string.weekday_thursday),
-            RegisterStoreDay.Friday to stringResource(Res.string.weekday_friday),
-            RegisterStoreDay.Saturday to stringResource(Res.string.weekday_saturday),
-            RegisterStoreDay.Sunday to stringResource(Res.string.weekday_sunday)
-        )
+    val weekdayLabels = mapOf(
+        RegisterStoreDay.Monday to stringResource(Res.string.weekday_monday),
+        RegisterStoreDay.Tuesday to stringResource(Res.string.weekday_tuesday),
+        RegisterStoreDay.Wednesday to stringResource(Res.string.weekday_wednesday),
+        RegisterStoreDay.Thursday to stringResource(Res.string.weekday_thursday),
+        RegisterStoreDay.Friday to stringResource(Res.string.weekday_friday),
+        RegisterStoreDay.Saturday to stringResource(Res.string.weekday_saturday),
+        RegisterStoreDay.Sunday to stringResource(Res.string.weekday_sunday)
+    )
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = KoinTheme.colors.neutral75,
@@ -96,8 +95,7 @@ internal fun RegisterStoreConfirmScreen(
         }
     ) { paddingValues ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
@@ -116,8 +114,7 @@ internal fun RegisterStoreConfirmScreen(
             )
             Spacer(Modifier.height(24.dp))
             Column(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
                     .background(KoinTheme.colors.neutral0)
@@ -139,16 +136,14 @@ internal fun RegisterStoreConfirmScreen(
                     stringResource(Res.string.register_store_operating_time),
                     state.operatingTimes
                         .joinToString("\n") { operatingTime ->
-                            val days =
-                                operatingTime.days.joinToString(" · ") { day ->
-                                    weekdayLabels.getValue(day)
-                                }
-                            val time =
-                                if (operatingTime.is24Hours) {
-                                    open24Hours
-                                } else {
-                                    "${operatingTime.openingTime}–${operatingTime.closingTime}"
-                                }
+                            val days = operatingTime.days.joinToString(" · ") { day ->
+                                weekdayLabels.getValue(day)
+                            }
+                            val time = if (operatingTime.is24Hours) {
+                                open24Hours
+                            } else {
+                                "${operatingTime.openingTime}–${operatingTime.closingTime}"
+                            }
                             "$days $time"
                         }.ifBlank { closed }
                 )
@@ -202,8 +197,7 @@ internal fun RegisterStoreCompleteScreen(
 ) {
     Scaffold(modifier = modifier.fillMaxSize(), containerColor = KoinTheme.colors.neutral75) { paddingValues ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 24.dp),
@@ -215,8 +209,7 @@ internal fun RegisterStoreCompleteScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Box(
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .size(72.dp)
                             .clip(RoundedCornerShape(36.dp))
                             .background(KoinTheme.colors.primary100),

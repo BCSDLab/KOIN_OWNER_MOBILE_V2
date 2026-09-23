@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
@@ -52,8 +52,7 @@ internal fun MenuCategorySelector(
                         category.name,
                         style = KoinTheme.typography.medium13,
                         color = if (selected) Color.White else KoinTheme.colors.neutral600,
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .weight(1f)
                             .background(
                                 if (selected) KoinTheme.colors.primary500 else Color.White,
@@ -82,8 +81,7 @@ internal fun MenuOptionPriceRow(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(KoinTheme.colors.neutral50, RoundedCornerShape(12.dp))
             .border(1.dp, KoinTheme.colors.neutral200, RoundedCornerShape(12.dp))
@@ -101,8 +99,7 @@ internal fun MenuOptionPriceRow(
                 stringResource(Res.string.common_delete),
                 style = KoinTheme.typography.medium13,
                 color = KoinTheme.colors.danger600,
-                modifier =
-                Modifier
+                modifier = Modifier
                     .noRippleClickable(onClick = onDelete)
                     .padding(horizontal = 4.dp, vertical = 2.dp)
             )

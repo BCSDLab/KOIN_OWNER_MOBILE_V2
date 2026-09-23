@@ -58,8 +58,7 @@ fun KoinUnderlineTextField(
             decorationBox = { innerTextField ->
                 Column(modifier = Modifier.width(IntrinsicSize.Min)) {
                     Row(
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .fillMaxWidth()
                             .then(if (singleLine) Modifier.height(44.dp) else Modifier.heightIn(min = 96.dp))
                             .padding(horizontal = 4.dp),

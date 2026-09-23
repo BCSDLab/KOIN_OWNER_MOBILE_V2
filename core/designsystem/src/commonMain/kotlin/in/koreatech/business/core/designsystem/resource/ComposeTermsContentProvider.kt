@@ -12,10 +12,9 @@ import `in`.koreatech.business.core.term.TermsContentProvider
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class ComposeTermsContentProvider : TermsContentProvider {
-    override suspend fun getTerms(): TermsContent =
-        TermsContent(
-            service = Res.readBytes("files/Terms_koin_sign_up.txt").decodeToString(),
-            privacy = Res.readBytes("files/Terms_personal_information.txt").decodeToString(),
-            marketing = Res.readBytes("files/Terms_marketing.txt").decodeToString()
-        )
+    override suspend fun getTerms(): TermsContent = TermsContent(
+        service = Res.readBytes("files/Terms_koin_sign_up.txt").decodeToString(),
+        privacy = Res.readBytes("files/Terms_personal_information.txt").decodeToString(),
+        marketing = Res.readBytes("files/Terms_marketing.txt").decodeToString()
+    )
 }

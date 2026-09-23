@@ -75,13 +75,12 @@ fun EventScreen(
 ) {
     val state by viewModel.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val errorMessages =
-        mapOf(
-            EventSideEffect.ShopLoadFailed to stringResource(Res.string.error_shop_load),
-            EventSideEffect.EventLoadFailed to stringResource(Res.string.error_event_load),
-            EventSideEffect.EventReloadFailed to stringResource(Res.string.error_event_reload),
-            EventSideEffect.EventDeleteFailed to stringResource(Res.string.error_event_delete)
-        )
+    val errorMessages = mapOf(
+        EventSideEffect.ShopLoadFailed to stringResource(Res.string.error_shop_load),
+        EventSideEffect.EventLoadFailed to stringResource(Res.string.error_event_load),
+        EventSideEffect.EventReloadFailed to stringResource(Res.string.error_event_reload),
+        EventSideEffect.EventDeleteFailed to stringResource(Res.string.error_event_delete)
+    )
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         viewModel.onResume()
     }
@@ -123,8 +122,7 @@ fun EventScreen(
                 shape = CircleShape,
                 containerColor = KoinTheme.colors.primary500,
                 contentColor = Color.White,
-                elevation =
-                FloatingActionButtonDefaults.elevation(
+                elevation = FloatingActionButtonDefaults.elevation(
                     defaultElevation = 0.dp,
                     pressedElevation = 0.dp,
                     focusedElevation = 0.dp,
@@ -182,8 +180,7 @@ fun EventScreenImpl(
                 )
             else ->
                 LazyColumn(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 24.dp),
                     contentPadding = PaddingValues(bottom = 96.dp),
@@ -210,8 +207,7 @@ fun EventScreenImpl(
             },
             text = {
                 Text(
-                    text =
-                    stringResource(
+                    text = stringResource(
                         Res.string.event_delete_description,
                         state.deleteEventTitle.orEmpty()
                     ),
@@ -224,8 +220,7 @@ fun EventScreenImpl(
                     onClick = onConfirmDelete
                 ) {
                     Text(
-                        text =
-                        stringResource(
+                        text = stringResource(
                             if (state.isDeleting) {
                                 Res.string.event_deleting
                             } else {
@@ -255,8 +250,7 @@ private fun EventCard(
     onDelete: () -> Unit
 ) {
     Row(
-        modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(Color.White)
@@ -286,8 +280,7 @@ private fun EventCard(
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text =
-                stringResource(
+                text = stringResource(
                     Res.string.event_period,
                     event.startDate,
                     event.endDate

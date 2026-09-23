@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import `in`.koreatech.business.core.designsystem.component.KoinLoadingContent
@@ -66,8 +65,7 @@ fun TermsScreenImpl(
 
     Column(modifier = modifier) {
         KoinSelectableChipGroup(
-            items =
-            state.terms.mapIndexed { index, term ->
+            items = state.terms.mapIndexed { index, term ->
                 KoinSelectableItem(index, term.type.title())
             },
             selectedItemId = state.selectedIndex,
@@ -91,11 +89,10 @@ fun TermsScreenImpl(
 }
 
 @Composable
-private fun TermType.title(): String =
-    stringResource(
-        when (this) {
-            TermType.Service -> Res.string.terms_service
-            TermType.Privacy -> Res.string.terms_privacy
-            TermType.Marketing -> Res.string.terms_marketing
-        }
-    )
+private fun TermType.title(): String = stringResource(
+    when (this) {
+        TermType.Service -> Res.string.terms_service
+        TermType.Privacy -> Res.string.terms_privacy
+        TermType.Marketing -> Res.string.terms_marketing
+    }
+)

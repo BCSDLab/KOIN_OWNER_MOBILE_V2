@@ -217,8 +217,7 @@ private fun EmptyShopCard(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .homeCard()
             .noRippleClickable(onClick = onRegisterShopClick)
@@ -258,10 +257,9 @@ private fun HomeFeatureCard(
 }
 
 @Composable
-private fun Modifier.homeCard(): Modifier =
-    border(0.5.dp, KoinTheme.colors.neutral250, RoundedCornerShape(16.dp))
-        .clip(RoundedCornerShape(16.dp))
-        .background(Color.White)
+private fun Modifier.homeCard(): Modifier = border(0.5.dp, KoinTheme.colors.neutral250, RoundedCornerShape(16.dp))
+    .clip(RoundedCornerShape(16.dp))
+    .background(Color.White)
 
 @Composable
 private fun HomeBadge(
@@ -269,8 +267,7 @@ private fun HomeBadge(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .size(40.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(KoinTheme.colors.primary100),

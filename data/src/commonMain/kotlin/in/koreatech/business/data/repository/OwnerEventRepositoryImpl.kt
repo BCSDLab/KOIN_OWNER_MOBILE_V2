@@ -18,33 +18,29 @@ import `in`.koreatech.business.domain.repository.OwnerEventRepository
 class OwnerEventRepositoryImpl(
     private val ownerEventRemoteDataSource: OwnerEventRemoteDataSource
 ) : OwnerEventRepository {
-    override suspend fun getOwnerEvents(shopId: Int): Result<List<OwnerEvent>> =
-        suspendRunCatching {
-            ownerEventRemoteDataSource.getOwnerEvents(shopId).events.map { it.toOwnerEvent() }
-        }
+    override suspend fun getOwnerEvents(shopId: Int): Result<List<OwnerEvent>> = suspendRunCatching {
+        ownerEventRemoteDataSource.getOwnerEvents(shopId).events.map { it.toOwnerEvent() }
+    }
 
     override suspend fun createOwnerEvent(
         shopId: Int,
         event: OwnerEventForm
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerEventRemoteDataSource.createOwnerEvent(shopId, event.toOwnerEventRequest())
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerEventRemoteDataSource.createOwnerEvent(shopId, event.toOwnerEventRequest())
+    }
 
     override suspend fun updateOwnerEvent(
         shopId: Int,
         eventId: Int,
         event: OwnerEventForm
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerEventRemoteDataSource.updateOwnerEvent(shopId, eventId, event.toOwnerEventRequest())
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerEventRemoteDataSource.updateOwnerEvent(shopId, eventId, event.toOwnerEventRequest())
+    }
 
     override suspend fun deleteOwnerEvent(
         shopId: Int,
         eventId: Int
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerEventRemoteDataSource.deleteOwnerEvent(shopId, eventId)
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerEventRemoteDataSource.deleteOwnerEvent(shopId, eventId)
+    }
 }

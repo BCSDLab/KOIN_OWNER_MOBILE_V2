@@ -24,53 +24,47 @@ import kotlinx.coroutines.CancellationException
 class SignupRepositoryImpl(
     private val signupRemoteDataSource: SignupRemoteDataSource
 ) : SignupRepository {
-    override suspend fun checkAccount(phoneNumber: String): Result<Unit> =
-        try {
-            signupRemoteDataSource.checkAccount(phoneNumber)
-            Result.success(Unit)
-        } catch (exception: ApiException) {
-            if (exception.statusCode == 409) {
-                Result.failure(PhoneNumberAlreadyExistsException())
-            } else {
-                Result.failure(exception)
-            }
-        } catch (exception: CancellationException) {
-            throw exception
-        } catch (throwable: Throwable) {
-            Result.failure(throwable)
+    override suspend fun checkAccount(phoneNumber: String): Result<Unit> = try {
+        signupRemoteDataSource.checkAccount(phoneNumber)
+        Result.success(Unit)
+    } catch (exception: ApiException) {
+        if (exception.statusCode == 409) {
+            Result.failure(PhoneNumberAlreadyExistsException())
+        } else {
+            Result.failure(exception)
         }
+    } catch (exception: CancellationException) {
+        throw exception
+    } catch (throwable: Throwable) {
+        Result.failure(throwable)
+    }
 
-    override suspend fun requestSmsVerification(phoneNumber: String): Result<Unit> =
-        suspendRunCatching {
-            signupRemoteDataSource.requestSmsVerification(VerificationSmsRequest(phoneNumber))
-        }
+    override suspend fun requestSmsVerification(phoneNumber: String): Result<Unit> = suspendRunCatching {
+        signupRemoteDataSource.requestSmsVerification(VerificationSmsRequest(phoneNumber))
+    }
 
     override suspend fun verifySmsCode(
         phoneNumber: String,
         verificationCode: String
-    ): Result<String> =
-        suspendRunCatching {
-            signupRemoteDataSource
-                .verifySmsCode(
-                    VerificationCodeSmsRequest(phoneNumber, verificationCode)
-                ).token
-        }
+    ): Result<String> = suspendRunCatching {
+        signupRemoteDataSource
+            .verifySmsCode(
+                VerificationCodeSmsRequest(phoneNumber, verificationCode)
+            ).token
+    }
 
-    override suspend fun checkCompanyNumber(companyNumber: String): Result<Unit> =
-        suspendRunCatching {
-            signupRemoteDataSource.checkCompanyNumber(CheckCompanyNumberRequest(companyNumber))
-        }
+    override suspend fun checkCompanyNumber(companyNumber: String): Result<Unit> = suspendRunCatching {
+        signupRemoteDataSource.checkCompanyNumber(CheckCompanyNumberRequest(companyNumber))
+    }
 
     override suspend fun registerOwner(
         registration: OwnerRegistration,
         verificationToken: String
-    ): Result<Unit> =
-        suspendRunCatching {
-            signupRemoteDataSource.registerOwner(registration.toOwnerRegisterRequest(), verificationToken)
-        }
+    ): Result<Unit> = suspendRunCatching {
+        signupRemoteDataSource.registerOwner(registration.toOwnerRegisterRequest(), verificationToken)
+    }
 
-    override suspend fun searchStores(query: String): Result<List<StoreSearchResult>> =
-        suspendRunCatching {
-            signupRemoteDataSource.searchStores(query).shops.map { it.toStoreSearchResult() }
-        }
+    override suspend fun searchStores(query: String): Result<List<StoreSearchResult>> = suspendRunCatching {
+        signupRemoteDataSource.searchStores(query).shops.map { it.toStoreSearchResult() }
+    }
 }

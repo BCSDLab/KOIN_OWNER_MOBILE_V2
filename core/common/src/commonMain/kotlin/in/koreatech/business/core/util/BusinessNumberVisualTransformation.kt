@@ -19,18 +19,16 @@ class BusinessNumberVisualTransformation : VisualTransformation {
 
     private val businessNumberOffsetTranslator = object : OffsetMapping {
 
-        override fun originalToTransformed(offset: Int): Int =
-            when (offset) {
-                in 0..3 -> offset
-                in 4..5 -> offset + 1
-                else -> (offset + 2).coerceAtMost(12)
-            }
+        override fun originalToTransformed(offset: Int): Int = when (offset) {
+            in 0..3 -> offset
+            in 4..5 -> offset + 1
+            else -> (offset + 2).coerceAtMost(12)
+        }
 
-        override fun transformedToOriginal(offset: Int): Int =
-            when (offset) {
-                in 0..2 -> offset
-                in 3..4 -> offset - 1
-                else -> offset - 2
-            }
+        override fun transformedToOriginal(offset: Int): Int = when (offset) {
+            in 0..2 -> offset
+            in 3..4 -> offset - 1
+            else -> offset - 2
+        }
     }
 }

@@ -20,13 +20,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
-import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_next
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_password_confirm_hint
@@ -63,8 +63,7 @@ internal fun SignUpPasswordScreen(
         containerColor = KoinTheme.colors.neutral75
     ) { contentPadding ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
                 .imePadding()
@@ -101,8 +100,7 @@ internal fun SignUpPasswordScreen(
                 }
                 if (isPasswordValid && state.passwordConfirmation.isNotEmpty()) {
                     KoinUserTextFieldAlert(
-                        text =
-                        stringResource(
+                        text = stringResource(
                             if (isPasswordEqual) Res.string.sign_up_password_match else Res.string.sign_up_password_mismatch
                         ),
                         state = if (isPasswordEqual) AlertState.Success else AlertState.Warning

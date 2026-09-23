@@ -13,22 +13,20 @@ class GetSelectedShopUseCase(
     private val ownerShopRepository: OwnerShopRepository,
     private val selectedShopRepository: SelectedShopRepository
 ) {
-    operator fun invoke(): Flow<Result<OwnerShop?>> =
-        flow {
-            val selectedShopId = selectedShopRepository.observeSelectedShopId().first()
-            emit(
-                ownerShopRepository.getOwnerShops().map { shops ->
-                    val selectedShop =
-                        shops.firstOrNull { it.id == selectedShopId }
-                            ?: shops.firstOrNull()
-                    when {
-                        selectedShop == null -> selectedShopRepository.clearSelectedShopId()
-                        selectedShop.id != selectedShopId -> {
-                            selectedShopRepository.saveSelectedShopId(selectedShop.id)
-                        }
+    operator fun invoke(): Flow<Result<OwnerShop?>> = flow {
+        val selectedShopId = selectedShopRepository.observeSelectedShopId().first()
+        emit(
+            ownerShopRepository.getOwnerShops().map { shops ->
+                val selectedShop = shops.firstOrNull { it.id == selectedShopId }
+                    ?: shops.firstOrNull()
+                when {
+                    selectedShop == null -> selectedShopRepository.clearSelectedShopId()
+                    selectedShop.id != selectedShopId -> {
+                        selectedShopRepository.saveSelectedShopId(selectedShop.id)
                     }
-                    selectedShop
                 }
-            )
-        }
+                selectedShop
+            }
+        )
+    }
 }

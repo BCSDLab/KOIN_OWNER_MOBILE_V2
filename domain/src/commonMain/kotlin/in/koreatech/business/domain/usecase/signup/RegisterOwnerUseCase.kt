@@ -13,9 +13,8 @@ class RegisterOwnerUseCase(
     suspend operator fun invoke(
         registration: OwnerRegistration,
         verificationToken: String
-    ): Result<Unit> =
-        repository.registerOwner(
-            registration.copy(password = passwordHasher.hash(registration.password)),
-            verificationToken
-        )
+    ): Result<Unit> = repository.registerOwner(
+        registration.copy(password = passwordHasher.hash(registration.password)),
+        verificationToken
+    )
 }

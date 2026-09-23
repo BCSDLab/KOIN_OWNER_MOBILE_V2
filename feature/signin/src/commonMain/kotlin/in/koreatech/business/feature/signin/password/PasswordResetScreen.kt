@@ -24,12 +24,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.AlertState
-import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserWithButtonItem
-import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_confirm
 import `in`.koreatech.business.core.designsystem.generated.resources.password_reset_complete
@@ -143,8 +143,7 @@ private fun PasswordResetVerificationContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxSize()
             .imePadding()
             .verticalScroll(rememberScrollState())
@@ -159,8 +158,7 @@ private fun PasswordResetVerificationContent(
         KoinUserWithButtonItem(
             value = state.phoneNumber,
             hint = stringResource(Res.string.sign_up_phone_hint),
-            buttonText =
-            stringResource(
+            buttonText = stringResource(
                 if (state.isCodeSent) {
                     Res.string.sign_up_verification_resend
                 } else {
@@ -194,8 +192,7 @@ private fun PasswordResetPasswordContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxSize()
             .imePadding()
             .verticalScroll(rememberScrollState())
@@ -211,8 +208,7 @@ private fun PasswordResetPasswordContent(
             value = state.password,
             onValueChange = onPasswordChange,
             hint = stringResource(Res.string.sign_up_password_hint),
-            keyboardOptions =
-            KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Next
             ),
@@ -223,8 +219,7 @@ private fun PasswordResetPasswordContent(
             value = state.passwordConfirmation,
             onValueChange = onPasswordConfirmationChange,
             hint = stringResource(Res.string.sign_up_password_confirm_hint),
-            keyboardOptions =
-            KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
@@ -237,8 +232,7 @@ private fun PasswordResetPasswordContent(
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = onReset,
-            enabled =
-            !state.isLoading &&
+            enabled = !state.isLoading &&
                 state.password.length in 6..18 &&
                 state.password == state.passwordConfirmation,
             modifier = Modifier.fillMaxWidth(),
@@ -285,8 +279,7 @@ private fun PasswordResetCompleteContent(
 @Composable
 private fun PasswordResetErrorText(error: PasswordResetError) {
     KoinUserTextFieldAlert(
-        text =
-        stringResource(
+        text = stringResource(
             when (error) {
                 PasswordResetError.InvalidPhone -> Res.string.password_reset_error_phone
                 PasswordResetError.Send -> Res.string.password_reset_error_send

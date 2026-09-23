@@ -21,12 +21,11 @@ class RegisterStoreViewModelFactory(
     private val saveOwnerShopUseCase: SaveOwnerShopUseCase,
     private val uploadImageUseCase: UploadImageUseCase
 ) : ViewModelAssistedFactory {
-    override fun create(extras: CreationExtras) =
-        RegisterStoreViewModel(
-            savedStateHandle = extras.createSavedStateHandle(),
-            getShopCategoriesUseCase = getShopCategoriesUseCase,
-            getOwnerShopUseCase = getOwnerShopUseCase,
-            saveOwnerShopUseCase = saveOwnerShopUseCase,
-            uploadImageUseCase = uploadImageUseCase
-        )
+    override fun create(extras: CreationExtras) = RegisterStoreViewModel(
+        savedStateHandle = extras.createSavedStateHandle(),
+        getShopCategoriesUseCase = getShopCategoriesUseCase,
+        getOwnerShopUseCase = getOwnerShopUseCase,
+        saveOwnerShopUseCase = saveOwnerShopUseCase,
+        uploadImageUseCase = uploadImageUseCase
+    )
 }

@@ -7,9 +7,8 @@ import `in`.koreatech.business.domain.repository.SignupRepository
 class SendSignupSmsCodeUseCase(
     private val repository: SignupRepository
 ) {
-    suspend operator fun invoke(phoneNumber: String): Result<Unit> =
-        repository.checkAccount(phoneNumber).fold(
-            onSuccess = { repository.requestSmsVerification(phoneNumber) },
-            onFailure = { Result.failure(it) }
-        )
+    suspend operator fun invoke(phoneNumber: String): Result<Unit> = repository.checkAccount(phoneNumber).fold(
+        onSuccess = { repository.requestSmsVerification(phoneNumber) },
+        onFailure = { Result.failure(it) }
+    )
 }

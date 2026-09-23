@@ -12,8 +12,7 @@ internal fun OwnerMenuForm.toOwnerMenuRequest(): OwnerMenuRequest {
         imageUrls = imageUrls,
         isSingle = isSingle,
         name = name,
-        optionPrices =
-        prices.takeUnless { isSingle }?.map {
+        optionPrices = prices.takeUnless { isSingle }?.map {
             OwnerMenuPriceRequest(option = it.option.orEmpty(), price = it.price)
         },
         singlePrice = prices.singleOrNull()?.price?.takeIf { isSingle }

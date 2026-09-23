@@ -71,15 +71,14 @@ object KoinTopAppBarDefaults {
         titleContentColor: Color = KoinTheme.colors.neutral800,
         actionIconContentColor: Color = KoinTheme.colors.neutral800,
         subtitleContentColor: Color = Color.Unspecified
-    ): TopAppBarColors =
-        TopAppBarDefaults.topAppBarColors(
-            containerColor,
-            scrolledContainerColor,
-            navigationIconContentColor,
-            titleContentColor,
-            actionIconContentColor,
-            subtitleContentColor
-        )
+    ): TopAppBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor,
+        scrolledContainerColor,
+        navigationIconContentColor,
+        titleContentColor,
+        actionIconContentColor,
+        subtitleContentColor
+    )
 
     val KoinTopAppBarExpandedHeight: Dp = 56.dp
     val windowInsets: WindowInsets

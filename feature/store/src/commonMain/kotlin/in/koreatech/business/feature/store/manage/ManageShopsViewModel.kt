@@ -27,11 +27,10 @@ class ManageShopsViewModel(
     private val observeSelectedShopIdUseCase: ObserveSelectedShopIdUseCase,
     private val setSelectedShopUseCase: SetSelectedShopUseCase
 ) : ViewModel(), OrbitContainerHost<ManageShopsState, ManageShopsState, ManageShopsSideEffect> {
-    override val container =
-        orbitContainer<ManageShopsState, ManageShopsSideEffect>(
-            initialState = ManageShopsState(),
-            onCreate = { initialize() }
-        )
+    override val container = orbitContainer<ManageShopsState, ManageShopsSideEffect>(
+        initialState = ManageShopsState(),
+        onCreate = { initialize() }
+    )
 
     private var hasResumed = false
 
@@ -43,43 +42,38 @@ class ManageShopsViewModel(
         }
     }
 
-    fun selectShop(shopId: Int) =
-        intent {
-            setSelectedShopUseCase(shopId)
-        }
+    fun selectShop(shopId: Int) = intent {
+        setSelectedShopUseCase(shopId)
+    }
 
     fun retry() = intent { loadShops() }
 
-    private suspend fun initialize() =
-        coroutineScope {
-            launch { observeSelectedShop() }
-            launch { loadShops() }
-        }
+    private suspend fun initialize() = coroutineScope {
+        launch { observeSelectedShop() }
+        launch { loadShops() }
+    }
 
-    private suspend fun loadShops() =
-        subIntent {
-            getOwnerShopsUseCase()
-                .onStart { reduce { state.copy(isLoading = true) } }
-                .onEach { result ->
-                    result
-                        .onSuccess { shops ->
-                            val selectedShopId =
-                                state.selectedShopId
-                                    ?.takeIf { shopId -> shops.any { it.id == shopId } }
-                                    ?: shops.firstOrNull()?.id
-                            setSelectedShopUseCase(selectedShopId)
-                            reduce { state.copy(shops = shops.toImmutableList(), isLoading = false) }
-                        }.onFailure {
-                            reduce { state.copy(isLoading = false) }
-                            postSideEffect(ManageShopsSideEffect.ShopLoadFailed)
-                        }
-                }.collect()
-        }
+    private suspend fun loadShops() = subIntent {
+        getOwnerShopsUseCase()
+            .onStart { reduce { state.copy(isLoading = true) } }
+            .onEach { result ->
+                result
+                    .onSuccess { shops ->
+                        val selectedShopId = state.selectedShopId
+                            ?.takeIf { shopId -> shops.any { it.id == shopId } }
+                            ?: shops.firstOrNull()?.id
+                        setSelectedShopUseCase(selectedShopId)
+                        reduce { state.copy(shops = shops.toImmutableList(), isLoading = false) }
+                    }.onFailure {
+                        reduce { state.copy(isLoading = false) }
+                        postSideEffect(ManageShopsSideEffect.ShopLoadFailed)
+                    }
+            }.collect()
+    }
 
-    private suspend fun observeSelectedShop() =
-        subIntent {
-            observeSelectedShopIdUseCase().collectLatest { shopId ->
-                reduce { state.copy(selectedShopId = shopId) }
-            }
+    private suspend fun observeSelectedShop() = subIntent {
+        observeSelectedShopIdUseCase().collectLatest { shopId ->
+            reduce { state.copy(selectedShopId = shopId) }
         }
+    }
 }

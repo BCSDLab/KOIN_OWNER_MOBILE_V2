@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -77,8 +76,7 @@ fun EventFormScreen(
             KoinTopAppBar(
                 title = {
                     Text(
-                        text =
-                        stringResource(
+                        text = stringResource(
                             if (state.isEdit) Res.string.event_edit_title else Res.string.event_form_title
                         ),
                         style = KoinTheme.typography.medium18
@@ -99,8 +97,7 @@ fun EventFormScreen(
             onImageSelectionFailed = viewModel::onImageSelectionFailed,
             onDeleteImage = viewModel::deleteImage,
             onSave = viewModel::save,
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         )
@@ -112,11 +109,10 @@ private fun eventFormViewModel(
     shopId: Int,
     eventId: Int?
 ): EventFormViewModel {
-    val extras =
-        rememberSavedStateViewModelCreationExtras(shopId, eventId) {
-            putInt(EventFormViewModel.SHOP_ID_KEY, shopId)
-            eventId?.let { putInt(EventFormViewModel.EVENT_ID_KEY, it) }
-        }
+    val extras = rememberSavedStateViewModelCreationExtras(shopId, eventId) {
+        putInt(EventFormViewModel.SHOP_ID_KEY, shopId)
+        eventId?.let { putInt(EventFormViewModel.EVENT_ID_KEY, it) }
+    }
     return assistedMetroViewModel(extras = extras)
 }
 
@@ -133,11 +129,10 @@ fun EventFormScreenImpl(
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val openImagePicker =
-        rememberImageFilePicker(
-            onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
-            onFailure = { onImageSelectionFailed() }
-        )
+    val openImagePicker = rememberImageFilePicker(
+        onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
+        onFailure = { onImageSelectionFailed() }
+    )
     if (state.isLoading) {
         Column(
             modifier = modifier,
@@ -149,8 +144,7 @@ fun EventFormScreenImpl(
         return
     }
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .imePadding()
             .verticalScroll(rememberScrollState())
             .padding(24.dp),
@@ -196,8 +190,7 @@ fun EventFormScreenImpl(
                     state.imageUrls.forEachIndexed { index, imageUrl ->
                         KoinImagePreview(
                             imageUrl = imageUrl,
-                            contentDescription =
-                            stringResource(
+                            contentDescription = stringResource(
                                 Res.string.event_image_description,
                                 index + 1
                             ),
@@ -219,8 +212,7 @@ fun EventFormScreenImpl(
                 contentPadding = PaddingValues(8.dp)
             ) {
                 Text(
-                    text =
-                    stringResource(
+                    text = stringResource(
                         if (state.isUploading) {
                             Res.string.event_image_uploading
                         } else {
@@ -233,8 +225,7 @@ fun EventFormScreenImpl(
         }
         state.error?.let { error ->
             Text(
-                text =
-                stringResource(
+                text = stringResource(
                     when (error) {
                         EventFormError.Load -> Res.string.error_event_load
                         EventFormError.TitleRequired -> Res.string.error_event_title_required
@@ -260,8 +251,7 @@ fun EventFormScreenImpl(
             contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             Text(
-                text =
-                stringResource(
+                text = stringResource(
                     when {
                         state.isSaving && state.isEdit -> Res.string.event_updating
                         state.isSaving -> Res.string.event_saving

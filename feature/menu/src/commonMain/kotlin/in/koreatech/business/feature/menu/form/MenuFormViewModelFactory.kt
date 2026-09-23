@@ -21,12 +21,11 @@ class MenuFormViewModelFactory(
     private val saveOwnerMenuUseCase: SaveOwnerMenuUseCase,
     private val uploadImageUseCase: UploadImageUseCase
 ) : ViewModelAssistedFactory {
-    override fun create(extras: CreationExtras) =
-        MenuFormViewModel(
-            savedStateHandle = extras.createSavedStateHandle(),
-            getOwnerMenuCategoriesUseCase = getOwnerMenuCategoriesUseCase,
-            getOwnerMenuUseCase = getOwnerMenuUseCase,
-            saveOwnerMenuUseCase = saveOwnerMenuUseCase,
-            uploadImageUseCase = uploadImageUseCase
-        )
+    override fun create(extras: CreationExtras) = MenuFormViewModel(
+        savedStateHandle = extras.createSavedStateHandle(),
+        getOwnerMenuCategoriesUseCase = getOwnerMenuCategoriesUseCase,
+        getOwnerMenuUseCase = getOwnerMenuUseCase,
+        saveOwnerMenuUseCase = saveOwnerMenuUseCase,
+        uploadImageUseCase = uploadImageUseCase
+    )
 }

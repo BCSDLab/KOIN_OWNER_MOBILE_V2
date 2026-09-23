@@ -147,16 +147,15 @@ private fun ManageShopItem(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(12.dp))
-                .border(
-                    width = 1.dp,
-                    color = if (selected) KoinTheme.colors.primary300 else KoinTheme.colors.neutral300,
-                    shape = RoundedCornerShape(12.dp)
-                ).noRippleClickable(onClick = onClick)
-                .padding(20.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = if (selected) KoinTheme.colors.primary300 else KoinTheme.colors.neutral300,
+                shape = RoundedCornerShape(12.dp)
+            ).noRippleClickable(onClick = onClick)
+            .padding(20.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -183,10 +182,9 @@ private fun ManageShopItem(
             )
         }
         Text(
-            text =
-                shop.address.orEmpty().ifBlank {
-                    stringResource(Res.string.manage_shops_address_not_registered)
-                },
+            text = shop.address.orEmpty().ifBlank {
+                stringResource(Res.string.manage_shops_address_not_registered)
+            },
             style = KoinTheme.typography.regular12,
             color = KoinTheme.colors.neutral500
         )

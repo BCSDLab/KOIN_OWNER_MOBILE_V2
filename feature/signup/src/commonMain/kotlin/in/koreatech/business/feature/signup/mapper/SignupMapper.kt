@@ -6,17 +6,16 @@ import `in`.koreatech.business.domain.util.formatBusinessNumber
 import `in`.koreatech.business.feature.signup.SignupState
 import kotlinx.collections.immutable.toImmutableList
 
-internal fun SignupState.toOwnerRegistration() =
-    OwnerRegistration(
-        attachmentUrls = fileInfo.map(StoreUrl::resultUrl).toImmutableList(),
-        companyNumber = businessNumber.formatBusinessNumber(),
-        name = name,
-        password = password,
-        phoneNumber = phoneNumber,
-        shopNumber = storePhoneNumber,
-        shopId = selectedStoreId,
-        shopName = storeName
-    )
+internal fun SignupState.toOwnerRegistration() = OwnerRegistration(
+    attachmentUrls = fileInfo.map(StoreUrl::resultUrl).toImmutableList(),
+    companyNumber = businessNumber.formatBusinessNumber(),
+    name = name,
+    password = password,
+    phoneNumber = phoneNumber,
+    shopNumber = storePhoneNumber,
+    shopId = selectedStoreId,
+    shopName = storeName
+)
 
 internal fun String.toStoreUrl(
     fileName: String,

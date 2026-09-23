@@ -34,8 +34,7 @@ class MenuViewModel(
     private val updateOwnerMenuCategoryUseCase: UpdateOwnerMenuCategoryUseCase,
     private val deleteOwnerMenuCategoryUseCase: DeleteOwnerMenuCategoryUseCase
 ) : ViewModel(), OrbitContainerHost<MenuState, MenuState, MenuSideEffect> {
-    override val container =
-        orbitContainer<MenuState, MenuSideEffect>(MenuState(), onCreate = { observeSelectedShop() })
+    override val container = orbitContainer<MenuState, MenuSideEffect>(MenuState(), onCreate = { observeSelectedShop() })
 
     private var hasResumed = false
 
@@ -47,28 +46,25 @@ class MenuViewModel(
         }
     }
 
-    fun addMenu() =
-        intent {
-            reduce { state.copy(isFabMenuExpanded = false) }
-            state.shop?.id?.let { postSideEffect(MenuSideEffect.NavigateToCreate(it)) }
-        }
+    fun addMenu() = intent {
+        reduce { state.copy(isFabMenuExpanded = false) }
+        state.shop?.id?.let { postSideEffect(MenuSideEffect.NavigateToCreate(it)) }
+    }
 
-    fun toggleFabMenu() =
-        blockingIntent {
-            reduce { state.copy(isFabMenuExpanded = !state.isFabMenuExpanded) }
-        }
+    fun toggleFabMenu() = blockingIntent {
+        reduce { state.copy(isFabMenuExpanded = !state.isFabMenuExpanded) }
+    }
 
-    fun openCreateCategory() =
-        blockingIntent {
-            reduce {
-                state.copy(
-                    isFabMenuExpanded = false,
-                    isCategoryEditorVisible = true,
-                    categoryEditorId = null,
-                    categoryName = ""
-                )
-            }
+    fun openCreateCategory() = blockingIntent {
+        reduce {
+            state.copy(
+                isFabMenuExpanded = false,
+                isCategoryEditorVisible = true,
+                categoryEditorId = null,
+                categoryName = ""
+            )
         }
+    }
 
     fun openEditCategory(
         categoryId: Int,
@@ -83,41 +79,37 @@ class MenuViewModel(
         }
     }
 
-    fun updateCategoryName(value: String) =
-        blockingIntent {
-            reduce { state.copy(categoryName = value.take(20)) }
-        }
+    fun updateCategoryName(value: String) = blockingIntent {
+        reduce { state.copy(categoryName = value.take(20)) }
+    }
 
-    fun dismissCategoryEditor() =
-        blockingIntent {
-            if (!state.isSavingCategory) {
-                reduce {
-                    state.copy(
-                        isCategoryEditorVisible = false,
-                        categoryEditorId = null,
-                        categoryName = ""
-                    )
-                }
+    fun dismissCategoryEditor() = blockingIntent {
+        if (!state.isSavingCategory) {
+            reduce {
+                state.copy(
+                    isCategoryEditorVisible = false,
+                    categoryEditorId = null,
+                    categoryName = ""
+                )
             }
         }
+    }
 
-    fun saveCategory() =
-        intent {
-            val shopId = state.shop?.id ?: return@intent
-            val name = state.categoryName.trim()
-            if (name.isEmpty() || state.isSavingCategory) return@intent
-            reduce { state.copy(isSavingCategory = true) }
-            val result =
-                state.categoryEditorId?.let {
-                    updateOwnerMenuCategoryUseCase(it, name)
-                } ?: createOwnerMenuCategoryUseCase(shopId, name)
-            if (result.isFailure) {
-                reduce { state.copy(isSavingCategory = false) }
-                postSideEffect(MenuSideEffect.ShowError(MenuError.CategorySave))
-                return@intent
-            }
-            reloadAfterCategorySave(shopId)
+    fun saveCategory() = intent {
+        val shopId = state.shop?.id ?: return@intent
+        val name = state.categoryName.trim()
+        if (name.isEmpty() || state.isSavingCategory) return@intent
+        reduce { state.copy(isSavingCategory = true) }
+        val result = state.categoryEditorId?.let {
+            updateOwnerMenuCategoryUseCase(it, name)
+        } ?: createOwnerMenuCategoryUseCase(shopId, name)
+        if (result.isFailure) {
+            reduce { state.copy(isSavingCategory = false) }
+            postSideEffect(MenuSideEffect.ShowError(MenuError.CategorySave))
+            return@intent
         }
+        reloadAfterCategorySave(shopId)
+    }
 
     fun requestDeleteCategory(
         categoryId: Int,
@@ -131,31 +123,28 @@ class MenuViewModel(
         }
     }
 
-    fun dismissDeleteCategory() =
-        blockingIntent {
-            if (!state.isDeletingCategory) {
-                reduce { state.copy(deleteCategoryId = null, deleteCategoryName = null) }
-            }
+    fun dismissDeleteCategory() = blockingIntent {
+        if (!state.isDeletingCategory) {
+            reduce { state.copy(deleteCategoryId = null, deleteCategoryName = null) }
         }
+    }
 
-    fun deleteCategory() =
-        intent {
-            val shopId = state.shop?.id ?: return@intent
-            val categoryId = state.deleteCategoryId ?: return@intent
-            if (state.isDeletingCategory) return@intent
-            reduce { state.copy(isDeletingCategory = true) }
-            if (deleteOwnerMenuCategoryUseCase(categoryId).isFailure) {
-                reduce { state.copy(isDeletingCategory = false) }
-                postSideEffect(MenuSideEffect.ShowError(MenuError.CategoryDelete))
-                return@intent
-            }
-            reloadAfterCategoryDelete(shopId)
+    fun deleteCategory() = intent {
+        val shopId = state.shop?.id ?: return@intent
+        val categoryId = state.deleteCategoryId ?: return@intent
+        if (state.isDeletingCategory) return@intent
+        reduce { state.copy(isDeletingCategory = true) }
+        if (deleteOwnerMenuCategoryUseCase(categoryId).isFailure) {
+            reduce { state.copy(isDeletingCategory = false) }
+            postSideEffect(MenuSideEffect.ShowError(MenuError.CategoryDelete))
+            return@intent
         }
+        reloadAfterCategoryDelete(shopId)
+    }
 
-    fun editMenu(menuId: Int) =
-        intent {
-            state.shop?.id?.let { postSideEffect(MenuSideEffect.NavigateToEdit(it, menuId)) }
-        }
+    fun editMenu(menuId: Int) = intent {
+        state.shop?.id?.let { postSideEffect(MenuSideEffect.NavigateToEdit(it, menuId)) }
+    }
 
     fun requestDelete(
         menuId: Int,
@@ -164,144 +153,136 @@ class MenuViewModel(
         reduce { state.copy(deleteMenuId = menuId, deleteMenuName = menuName) }
     }
 
-    fun dismissDelete() =
-        blockingIntent {
-            if (!state.isDeleting) reduce { state.copy(deleteMenuId = null, deleteMenuName = null) }
-        }
+    fun dismissDelete() = blockingIntent {
+        if (!state.isDeleting) reduce { state.copy(deleteMenuId = null, deleteMenuName = null) }
+    }
 
-    fun deleteMenu() =
-        intent {
-            val menuId = state.deleteMenuId ?: return@intent
-            val shopId = state.shop?.id ?: return@intent
-            if (state.isDeleting) return@intent
-            reduce { state.copy(isDeleting = true) }
-            if (deleteOwnerMenuUseCase(menuId).isFailure) {
-                reduce { state.copy(isDeleting = false) }
-                postSideEffect(MenuSideEffect.ShowError(MenuError.MenuDelete))
-                return@intent
+    fun deleteMenu() = intent {
+        val menuId = state.deleteMenuId ?: return@intent
+        val shopId = state.shop?.id ?: return@intent
+        if (state.isDeleting) return@intent
+        reduce { state.copy(isDeleting = true) }
+        if (deleteOwnerMenuUseCase(menuId).isFailure) {
+            reduce { state.copy(isDeleting = false) }
+            postSideEffect(MenuSideEffect.ShowError(MenuError.MenuDelete))
+            return@intent
+        }
+        reloadAfterMenuDelete(shopId)
+    }
+
+    private suspend fun reloadAfterCategorySave(shopId: Int) = subIntent {
+        getOwnerMenusUseCase(shopId)
+            .first()
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        categories = it.toImmutableList(),
+                        isCategoryEditorVisible = false,
+                        categoryEditorId = null,
+                        categoryName = "",
+                        isSavingCategory = false
+                    )
+                }
+            }.onFailure {
+                reduce { state.copy(isSavingCategory = false) }
+                postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
             }
-            reloadAfterMenuDelete(shopId)
-        }
+    }
 
-    private suspend fun reloadAfterCategorySave(shopId: Int) =
-        subIntent {
-            getOwnerMenusUseCase(shopId)
-                .first()
-                .onSuccess {
-                    reduce {
-                        state.copy(
-                            categories = it.toImmutableList(),
-                            isCategoryEditorVisible = false,
-                            categoryEditorId = null,
-                            categoryName = "",
-                            isSavingCategory = false
-                        )
-                    }
-                }.onFailure {
-                    reduce { state.copy(isSavingCategory = false) }
-                    postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
+    private suspend fun reloadAfterCategoryDelete(shopId: Int) = subIntent {
+        getOwnerMenusUseCase(shopId)
+            .first()
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        categories = it.toImmutableList(),
+                        deleteCategoryId = null,
+                        deleteCategoryName = null,
+                        isDeletingCategory = false
+                    )
                 }
-        }
-
-    private suspend fun reloadAfterCategoryDelete(shopId: Int) =
-        subIntent {
-            getOwnerMenusUseCase(shopId)
-                .first()
-                .onSuccess {
-                    reduce {
-                        state.copy(
-                            categories = it.toImmutableList(),
-                            deleteCategoryId = null,
-                            deleteCategoryName = null,
-                            isDeletingCategory = false
-                        )
-                    }
-                }.onFailure {
-                    reduce { state.copy(isDeletingCategory = false) }
-                    postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
-                }
-        }
-
-    private suspend fun reloadAfterMenuDelete(shopId: Int) =
-        subIntent {
-            getOwnerMenusUseCase(shopId)
-                .first()
-                .onSuccess { menus ->
-                    reduce {
-                        state.copy(
-                            categories = menus.toImmutableList(),
-                            isDeleting = false,
-                            deleteMenuId = null,
-                            deleteMenuName = null
-                        )
-                    }
-                }.onFailure {
-                    reduce { state.copy(isDeleting = false, deleteMenuId = null, deleteMenuName = null) }
-                    postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
-                }
-        }
-
-    fun retry() =
-        intent {
-            state.shop?.id?.let { shopId ->
-                getOwnerMenusUseCase(shopId)
-                    .onStart { reduce { state.copy(isLoading = true) } }
-                    .onEach { result ->
-                        result
-                            .onSuccess {
-                                reduce { state.copy(categories = it.toImmutableList(), isLoading = false) }
-                            }.onFailure {
-                                reduce { state.copy(isLoading = false) }
-                                postSideEffect(MenuSideEffect.ShowError(MenuError.MenuLoad))
-                            }
-                    }.collect()
+            }.onFailure {
+                reduce { state.copy(isDeletingCategory = false) }
+                postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
             }
-        }
+    }
 
-    fun refresh() =
-        intent {
-            val shopId = state.shop?.id ?: return@intent
-            if (state.isRefreshing) return@intent
+    private suspend fun reloadAfterMenuDelete(shopId: Int) = subIntent {
+        getOwnerMenusUseCase(shopId)
+            .first()
+            .onSuccess { menus ->
+                reduce {
+                    state.copy(
+                        categories = menus.toImmutableList(),
+                        isDeleting = false,
+                        deleteMenuId = null,
+                        deleteMenuName = null
+                    )
+                }
+            }.onFailure {
+                reduce { state.copy(isDeleting = false, deleteMenuId = null, deleteMenuName = null) }
+                postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
+            }
+    }
+
+    fun retry() = intent {
+        state.shop?.id?.let { shopId ->
             getOwnerMenusUseCase(shopId)
-                .onStart { reduce { state.copy(isRefreshing = true) } }
+                .onStart { reduce { state.copy(isLoading = true) } }
                 .onEach { result ->
                     result
                         .onSuccess {
-                            reduce { state.copy(categories = it.toImmutableList(), isRefreshing = false) }
+                            reduce { state.copy(categories = it.toImmutableList(), isLoading = false) }
                         }.onFailure {
-                            reduce { state.copy(isRefreshing = false) }
-                            postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
+                            reduce { state.copy(isLoading = false) }
+                            postSideEffect(MenuSideEffect.ShowError(MenuError.MenuLoad))
                         }
                 }.collect()
         }
+    }
 
-    private suspend fun observeSelectedShop() =
-        subIntent {
-            observeSelectedShopUseCase().collectLatest { result ->
+    fun refresh() = intent {
+        val shopId = state.shop?.id ?: return@intent
+        if (state.isRefreshing) return@intent
+        getOwnerMenusUseCase(shopId)
+            .onStart { reduce { state.copy(isRefreshing = true) } }
+            .onEach { result ->
                 result
-                    .onSuccess { shop ->
-                        reduce { state.copy(shop = shop, categories = persistentListOf()) }
-                        shop?.id?.let { shopId ->
-                            getOwnerMenusUseCase(shopId)
-                                .onStart { reduce { state.copy(isLoading = true) } }
-                                .onEach { result ->
-                                    result
-                                        .onSuccess { menus ->
-                                            reduce {
-                                                state.copy(
-                                                    categories = menus.toImmutableList(),
-                                                    isLoading = false
-                                                )
-                                            }
-                                        }.onFailure {
-                                            reduce { state.copy(isLoading = false) }
-                                            postSideEffect(MenuSideEffect.ShowError(MenuError.MenuLoad))
-                                        }
-                                }.collect()
-                        }
+                    .onSuccess {
+                        reduce { state.copy(categories = it.toImmutableList(), isRefreshing = false) }
                     }.onFailure {
-                        postSideEffect(MenuSideEffect.ShowError(MenuError.ShopLoad))
+                        reduce { state.copy(isRefreshing = false) }
+                        postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
                     }
-            }
+            }.collect()
+    }
+
+    private suspend fun observeSelectedShop() = subIntent {
+        observeSelectedShopUseCase().collectLatest { result ->
+            result
+                .onSuccess { shop ->
+                    reduce { state.copy(shop = shop, categories = persistentListOf()) }
+                    shop?.id?.let { shopId ->
+                        getOwnerMenusUseCase(shopId)
+                            .onStart { reduce { state.copy(isLoading = true) } }
+                            .onEach { result ->
+                                result
+                                    .onSuccess { menus ->
+                                        reduce {
+                                            state.copy(
+                                                categories = menus.toImmutableList(),
+                                                isLoading = false
+                                            )
+                                        }
+                                    }.onFailure {
+                                        reduce { state.copy(isLoading = false) }
+                                        postSideEffect(MenuSideEffect.ShowError(MenuError.MenuLoad))
+                                    }
+                            }.collect()
+                    }
+                }.onFailure {
+                    postSideEffect(MenuSideEffect.ShowError(MenuError.ShopLoad))
+                }
         }
+    }
 }

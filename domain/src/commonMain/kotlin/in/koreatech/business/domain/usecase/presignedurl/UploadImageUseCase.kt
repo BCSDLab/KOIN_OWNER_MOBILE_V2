@@ -16,30 +16,28 @@ class UploadImageUseCase(
         fileName: String,
         bytes: ByteArray,
         authorizationToken: String? = null
-    ): Result<String> =
-        try {
-            val preSignedUrl =
-                repository
-                    .getUploadUrl(
-                        domain = domain.domain,
-                        contentLength = contentLength,
-                        contentType = contentType,
-                        fileName = fileName,
-                        authorizationToken = authorizationToken
-                    ).getOrThrow()
+    ): Result<String> = try {
+        val preSignedUrl = repository
+            .getUploadUrl(
+                domain = domain.domain,
+                contentLength = contentLength,
+                contentType = contentType,
+                fileName = fileName,
+                authorizationToken = authorizationToken
+            ).getOrThrow()
 
-            repository
-                .uploadFile(
-                    url = preSignedUrl.preSignedUrl,
-                    bytes = bytes,
-                    mediaType = contentType,
-                    mediaSize = contentLength
-                ).getOrThrow()
+        repository
+            .uploadFile(
+                url = preSignedUrl.preSignedUrl,
+                bytes = bytes,
+                mediaType = contentType,
+                mediaSize = contentLength
+            ).getOrThrow()
 
-            Result.success(preSignedUrl.fileUrl)
-        } catch (error: CancellationException) {
-            throw error
-        } catch (error: Exception) {
-            Result.failure(error)
-        }
+        Result.success(preSignedUrl.fileUrl)
+    } catch (error: CancellationException) {
+        throw error
+    } catch (error: Exception) {
+        Result.failure(error)
+    }
 }

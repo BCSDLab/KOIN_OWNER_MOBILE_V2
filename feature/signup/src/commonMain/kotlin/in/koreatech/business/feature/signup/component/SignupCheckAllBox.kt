@@ -38,8 +38,7 @@ fun SignupCheckAllBox(
                 if (checked) Res.drawable.ic_checkbox_checked else Res.drawable.ic_checkbox_unchecked
             ),
             text,
-            modifier =
-            Modifier.clickable {
+            modifier = Modifier.clickable {
                 onCheckedChange(!checked)
             }
         )
@@ -48,8 +47,7 @@ fun SignupCheckAllBox(
             text,
             color = KoinTheme.colors.primary500,
             style = KoinTheme.typography.medium14,
-            modifier =
-            Modifier.clickable {
+            modifier = Modifier.clickable {
                 onCheckedChange(!checked)
             }
         )

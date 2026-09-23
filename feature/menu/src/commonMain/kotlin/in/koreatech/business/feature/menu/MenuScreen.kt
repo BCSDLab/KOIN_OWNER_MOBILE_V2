@@ -98,15 +98,14 @@ fun MenuScreen(
 ) {
     val state by viewModel.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val errorMessages =
-        mapOf(
-            MenuError.ShopLoad to stringResource(Res.string.error_shop_load),
-            MenuError.MenuLoad to stringResource(Res.string.error_menu_load),
-            MenuError.MenuReload to stringResource(Res.string.error_menu_reload),
-            MenuError.MenuDelete to stringResource(Res.string.error_menu_delete),
-            MenuError.CategorySave to stringResource(Res.string.error_menu_category_save),
-            MenuError.CategoryDelete to stringResource(Res.string.error_menu_category_delete)
-        )
+    val errorMessages = mapOf(
+        MenuError.ShopLoad to stringResource(Res.string.error_shop_load),
+        MenuError.MenuLoad to stringResource(Res.string.error_menu_load),
+        MenuError.MenuReload to stringResource(Res.string.error_menu_reload),
+        MenuError.MenuDelete to stringResource(Res.string.error_menu_delete),
+        MenuError.CategorySave to stringResource(Res.string.error_menu_category_save),
+        MenuError.CategoryDelete to stringResource(Res.string.error_menu_category_delete)
+    )
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         viewModel.onResume()
     }
@@ -174,8 +173,7 @@ fun MenuScreen(
                         shape = CircleShape,
                         containerColor = KoinTheme.colors.primary500,
                         contentColor = Color.White,
-                        elevation =
-                        FloatingActionButtonDefaults.elevation(
+                        elevation = FloatingActionButtonDefaults.elevation(
                             defaultElevation = 0.dp,
                             pressedElevation = 0.dp,
                             focusedElevation = 0.dp,
@@ -183,8 +181,7 @@ fun MenuScreen(
                         )
                     ) {
                         Text(
-                            text =
-                            stringResource(
+                            text = stringResource(
                                 if (state.isFabMenuExpanded) {
                                     Res.string.common_remove_symbol
                                 } else {
@@ -237,16 +234,15 @@ fun MenuScreenImpl(
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val categoryStartIndices =
-        remember(state.categories) {
-            buildMap {
-                var itemIndex = 0
-                state.categories.forEach { category ->
-                    put(category.id, itemIndex)
-                    itemIndex += category.menus.size + 1
-                }
+    val categoryStartIndices = remember(state.categories) {
+        buildMap {
+            var itemIndex = 0
+            state.categories.forEach { category ->
+                put(category.id, itemIndex)
+                itemIndex += category.menus.size + 1
             }
         }
+    }
     val selectedCategoryId by remember(state.categories, categoryStartIndices, listState) {
         derivedStateOf {
             categoryStartIndices.entries
@@ -308,8 +304,7 @@ fun MenuScreenImpl(
                                         text = stringResource(Res.string.common_edit),
                                         style = KoinTheme.typography.medium13,
                                         color = KoinTheme.colors.primary500,
-                                        modifier =
-                                        Modifier.noRippleClickable {
+                                        modifier = Modifier.noRippleClickable {
                                             onEditCategory(category.id, category.name)
                                         }
                                     )
@@ -318,8 +313,7 @@ fun MenuScreenImpl(
                                         text = stringResource(Res.string.common_delete),
                                         style = KoinTheme.typography.medium13,
                                         color = KoinTheme.colors.danger600,
-                                        modifier =
-                                        Modifier.noRippleClickable {
+                                        modifier = Modifier.noRippleClickable {
                                             onDeleteCategory(category.id, category.name)
                                         }
                                     )
@@ -351,8 +345,7 @@ fun MenuScreenImpl(
             },
             text = {
                 Text(
-                    text =
-                    stringResource(
+                    text = stringResource(
                         Res.string.menu_delete_description,
                         state.deleteMenuName.orEmpty()
                     ),
@@ -362,8 +355,7 @@ fun MenuScreenImpl(
             confirmButton = {
                 TextButton(enabled = !state.isDeleting, onClick = onConfirmDelete) {
                     Text(
-                        text =
-                        stringResource(
+                        text = stringResource(
                             if (state.isDeleting) Res.string.menu_deleting else Res.string.common_delete
                         ),
                         color = KoinTheme.colors.danger600
@@ -393,8 +385,7 @@ private fun MenuCategoryDialogs(
             onDismissRequest = onDismissEditor,
             title = {
                 Text(
-                    text =
-                    stringResource(
+                    text = stringResource(
                         if (state.categoryEditorId == null) {
                             Res.string.menu_category_create_title
                         } else {
@@ -418,8 +409,7 @@ private fun MenuCategoryDialogs(
                     onClick = onSave
                 ) {
                     Text(
-                        text =
-                        stringResource(
+                        text = stringResource(
                             if (state.isSavingCategory) {
                                 Res.string.menu_category_saving
                             } else {
@@ -447,8 +437,7 @@ private fun MenuCategoryDialogs(
             },
             text = {
                 Text(
-                    text =
-                    stringResource(
+                    text = stringResource(
                         Res.string.menu_category_delete_description,
                         state.deleteCategoryName.orEmpty()
                     ),
@@ -483,8 +472,7 @@ private fun MenuCard(
 ) {
     val won = stringResource(Res.string.common_won)
     Row(
-        modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(Color.White)
@@ -526,8 +514,7 @@ private fun MenuCard(
             }
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text =
-                menu.prices
+                text = menu.prices
                     .joinToString(" · ") { price ->
                         listOfNotNull(
                             price.option,

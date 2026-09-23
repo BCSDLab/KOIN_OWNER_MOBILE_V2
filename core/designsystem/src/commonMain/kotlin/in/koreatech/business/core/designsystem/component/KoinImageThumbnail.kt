@@ -24,8 +24,7 @@ fun KoinImageThumbnail(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .background(KoinTheme.colors.neutral100),
         contentAlignment = Alignment.Center

@@ -12,10 +12,9 @@ class SaveOwnerMenuUseCase(
         shopId: Int,
         menuId: Int?,
         menu: OwnerMenuForm
-    ): Result<Unit> =
-        if (menuId == null) {
-            repository.createOwnerMenu(shopId, menu)
-        } else {
-            repository.updateOwnerMenu(menuId, menu)
-        }
+    ): Result<Unit> = if (menuId == null) {
+        repository.createOwnerMenu(shopId, menu)
+    } else {
+        repository.updateOwnerMenu(menuId, menu)
+    }
 }

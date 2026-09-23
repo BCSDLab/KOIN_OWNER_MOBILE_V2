@@ -27,8 +27,7 @@ class EventViewModel(
     private val getOwnerEventsUseCase: GetOwnerEventsUseCase,
     private val deleteOwnerEventUseCase: DeleteOwnerEventUseCase
 ) : ViewModel(), OrbitContainerHost<EventState, EventState, EventSideEffect> {
-    override val container =
-        orbitContainer<EventState, EventSideEffect>(EventState(), onCreate = { observeSelectedShop() })
+    override val container = orbitContainer<EventState, EventSideEffect>(EventState(), onCreate = { observeSelectedShop() })
 
     private var hasResumed = false
 
@@ -40,32 +39,29 @@ class EventViewModel(
         }
     }
 
-    fun retry() =
-        intent {
-            state.shop?.id?.let { shopId ->
-                getOwnerEventsUseCase(shopId)
-                    .onStart { reduce { state.copy(isLoading = true) } }
-                    .onEach { result ->
-                        result
-                            .onSuccess {
-                                reduce { state.copy(events = it.toImmutableList(), isLoading = false) }
-                            }.onFailure {
-                                reduce { state.copy(isLoading = false) }
-                                postSideEffect(EventSideEffect.EventLoadFailed)
-                            }
-                    }.collect()
-            }
+    fun retry() = intent {
+        state.shop?.id?.let { shopId ->
+            getOwnerEventsUseCase(shopId)
+                .onStart { reduce { state.copy(isLoading = true) } }
+                .onEach { result ->
+                    result
+                        .onSuccess {
+                            reduce { state.copy(events = it.toImmutableList(), isLoading = false) }
+                        }.onFailure {
+                            reduce { state.copy(isLoading = false) }
+                            postSideEffect(EventSideEffect.EventLoadFailed)
+                        }
+                }.collect()
         }
+    }
 
-    fun addEvent() =
-        intent {
-            state.shop?.id?.let { postSideEffect(EventSideEffect.NavigateToCreate(it)) }
-        }
+    fun addEvent() = intent {
+        state.shop?.id?.let { postSideEffect(EventSideEffect.NavigateToCreate(it)) }
+    }
 
-    fun editEvent(eventId: Int) =
-        intent {
-            state.shop?.id?.let { postSideEffect(EventSideEffect.NavigateToEdit(it, eventId)) }
-        }
+    fun editEvent(eventId: Int) = intent {
+        state.shop?.id?.let { postSideEffect(EventSideEffect.NavigateToEdit(it, eventId)) }
+    }
 
     fun requestDelete(
         eventId: Int,
@@ -79,79 +75,75 @@ class EventViewModel(
         }
     }
 
-    fun dismissDelete() =
-        blockingIntent {
-            if (!state.isDeleting) {
-                reduce { state.copy(deleteEventId = null, deleteEventTitle = null) }
-            }
+    fun dismissDelete() = blockingIntent {
+        if (!state.isDeleting) {
+            reduce { state.copy(deleteEventId = null, deleteEventTitle = null) }
         }
+    }
 
-    fun deleteEvent() =
-        intent {
-            val shopId = state.shop?.id ?: return@intent
-            val eventId = state.deleteEventId ?: return@intent
-            if (state.isDeleting) return@intent
-            reduce { state.copy(isDeleting = true) }
-            deleteOwnerEventUseCase(shopId, eventId)
-                .onSuccess {
-                    reduce {
-                        state.copy(
-                            events = state.events.filterNot { it.id == eventId }.toImmutableList(),
-                            isDeleting = false,
-                            deleteEventId = null,
-                            deleteEventTitle = null
-                        )
+    fun deleteEvent() = intent {
+        val shopId = state.shop?.id ?: return@intent
+        val eventId = state.deleteEventId ?: return@intent
+        if (state.isDeleting) return@intent
+        reduce { state.copy(isDeleting = true) }
+        deleteOwnerEventUseCase(shopId, eventId)
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        events = state.events.filterNot { it.id == eventId }.toImmutableList(),
+                        isDeleting = false,
+                        deleteEventId = null,
+                        deleteEventTitle = null
+                    )
+                }
+            }.onFailure {
+                reduce { state.copy(isDeleting = false) }
+                postSideEffect(EventSideEffect.EventDeleteFailed)
+            }
+    }
+
+    fun refresh() = intent {
+        val shopId = state.shop?.id ?: return@intent
+        if (state.isRefreshing) return@intent
+        getOwnerEventsUseCase(shopId)
+            .onStart { reduce { state.copy(isRefreshing = true) } }
+            .onEach { result ->
+                result
+                    .onSuccess {
+                        reduce { state.copy(events = it.toImmutableList(), isRefreshing = false) }
+                    }.onFailure {
+                        reduce { state.copy(isRefreshing = false) }
+                        postSideEffect(EventSideEffect.EventReloadFailed)
+                    }
+            }.collect()
+    }
+
+    private suspend fun observeSelectedShop() = subIntent {
+        observeSelectedShopUseCase().collectLatest { result ->
+            result
+                .onSuccess { shop ->
+                    reduce { state.copy(shop = shop, events = persistentListOf()) }
+                    shop?.id?.let { shopId ->
+                        getOwnerEventsUseCase(shopId)
+                            .onStart { reduce { state.copy(isLoading = true) } }
+                            .onEach { result ->
+                                result
+                                    .onSuccess { events ->
+                                        reduce {
+                                            state.copy(
+                                                events = events.toImmutableList(),
+                                                isLoading = false
+                                            )
+                                        }
+                                    }.onFailure {
+                                        reduce { state.copy(isLoading = false) }
+                                        postSideEffect(EventSideEffect.EventLoadFailed)
+                                    }
+                            }.collect()
                     }
                 }.onFailure {
-                    reduce { state.copy(isDeleting = false) }
-                    postSideEffect(EventSideEffect.EventDeleteFailed)
+                    postSideEffect(EventSideEffect.ShopLoadFailed)
                 }
         }
-
-    fun refresh() =
-        intent {
-            val shopId = state.shop?.id ?: return@intent
-            if (state.isRefreshing) return@intent
-            getOwnerEventsUseCase(shopId)
-                .onStart { reduce { state.copy(isRefreshing = true) } }
-                .onEach { result ->
-                    result
-                        .onSuccess {
-                            reduce { state.copy(events = it.toImmutableList(), isRefreshing = false) }
-                        }.onFailure {
-                            reduce { state.copy(isRefreshing = false) }
-                            postSideEffect(EventSideEffect.EventReloadFailed)
-                        }
-                }.collect()
-        }
-
-    private suspend fun observeSelectedShop() =
-        subIntent {
-            observeSelectedShopUseCase().collectLatest { result ->
-                result
-                    .onSuccess { shop ->
-                        reduce { state.copy(shop = shop, events = persistentListOf()) }
-                        shop?.id?.let { shopId ->
-                            getOwnerEventsUseCase(shopId)
-                                .onStart { reduce { state.copy(isLoading = true) } }
-                                .onEach { result ->
-                                    result
-                                        .onSuccess { events ->
-                                            reduce {
-                                                state.copy(
-                                                    events = events.toImmutableList(),
-                                                    isLoading = false
-                                                )
-                                            }
-                                        }.onFailure {
-                                            reduce { state.copy(isLoading = false) }
-                                            postSideEffect(EventSideEffect.EventLoadFailed)
-                                        }
-                                }.collect()
-                        }
-                    }.onFailure {
-                        postSideEffect(EventSideEffect.ShopLoadFailed)
-                    }
-            }
-        }
+    }
 }

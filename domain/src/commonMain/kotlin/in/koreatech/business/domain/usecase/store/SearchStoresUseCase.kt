@@ -10,8 +10,7 @@ import kotlinx.coroutines.flow.flow
 class SearchStoresUseCase(
     private val repository: SignupRepository
 ) {
-    operator fun invoke(query: String): Flow<Result<List<StoreSearchResult>>> =
-        flow {
-            emit(repository.searchStores(query))
-        }
+    operator fun invoke(query: String): Flow<Result<List<StoreSearchResult>>> = flow {
+        emit(repository.searchStores(query))
+    }
 }

@@ -20,16 +20,13 @@ fun AuthenticationNavigation(viewModel: MainNavigationViewModel = metroViewModel
 
     NavDisplay(
         backStack = backStack,
-        entryDecorators =
-        listOf(
+        entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
-        entryProvider =
-        authenticationEntryProvider(
+        entryProvider = authenticationEntryProvider(
             entryProviders = viewModel.authenticationEntryProviders,
-            navigator =
-            AuthenticationNavigator(
+            navigator = AuthenticationNavigator(
                 navigate = backStack::add,
                 navigateBack = { backStack.removeLastOrNull() },
                 finishFlow = {
@@ -44,9 +41,8 @@ fun AuthenticationNavigation(viewModel: MainNavigationViewModel = metroViewModel
 private fun authenticationEntryProvider(
     entryProviders: Set<AuthenticationNavigationEntryProvider>,
     navigator: AuthenticationNavigator
-): (NavKey) -> NavEntry<NavKey> =
-    entryProvider {
-        entryProviders.forEach { provider ->
-            with(provider) { provideEntries(navigator) }
-        }
+): (NavKey) -> NavEntry<NavKey> = entryProvider {
+    entryProviders.forEach { provider ->
+        with(provider) { provideEntries(navigator) }
     }
+}

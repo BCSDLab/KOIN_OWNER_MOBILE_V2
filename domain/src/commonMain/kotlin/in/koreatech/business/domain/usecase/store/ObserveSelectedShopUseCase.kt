@@ -12,10 +12,9 @@ class ObserveSelectedShopUseCase(
     private val selectedShopRepository: SelectedShopRepository,
     private val getSelectedShopUseCase: GetSelectedShopUseCase
 ) {
-    operator fun invoke(): Flow<Result<OwnerShop?>> =
-        flow {
-            selectedShopRepository.observeSelectedShopId().collect {
-                emitAll(getSelectedShopUseCase())
-            }
+    operator fun invoke(): Flow<Result<OwnerShop?>> = flow {
+        selectedShopRepository.observeSelectedShopId().collect {
+            emitAll(getSelectedShopUseCase())
         }
+    }
 }

@@ -59,23 +59,21 @@ private data class MainTabItem(
     val icon: DrawableResource
 )
 
-private val mainTabItems =
-    listOf(
-        MainTabItem(MainTab.Home, Screen.Home, Res.string.bottom_navigation_home, Res.drawable.ic_bottom_home),
-        MainTabItem(MainTab.Menu, Screen.Menu, Res.string.bottom_navigation_menu, Res.drawable.ic_bottom_menu),
-        MainTabItem(MainTab.Event, Screen.Event, Res.string.bottom_navigation_event, Res.drawable.ic_bottom_event),
-        MainTabItem(MainTab.Settings, Screen.Settings, Res.string.bottom_navigation_settings, Res.drawable.ic_bottom_settings)
-    )
+private val mainTabItems = listOf(
+    MainTabItem(MainTab.Home, Screen.Home, Res.string.bottom_navigation_home, Res.drawable.ic_bottom_home),
+    MainTabItem(MainTab.Menu, Screen.Menu, Res.string.bottom_navigation_menu, Res.drawable.ic_bottom_menu),
+    MainTabItem(MainTab.Event, Screen.Event, Res.string.bottom_navigation_event, Res.drawable.ic_bottom_event),
+    MainTabItem(MainTab.Settings, Screen.Settings, Res.string.bottom_navigation_settings, Res.drawable.ic_bottom_settings)
+)
 
 @Composable
 fun MainNavigation(viewModel: MainNavigationViewModel = metroViewModel()) {
-    val backStacks =
-        mapOf(
-            MainTab.Home to rememberNavBackStack(screenSavedStateConfiguration, Screen.Home),
-            MainTab.Menu to rememberNavBackStack(screenSavedStateConfiguration, Screen.Menu),
-            MainTab.Event to rememberNavBackStack(screenSavedStateConfiguration, Screen.Event),
-            MainTab.Settings to rememberNavBackStack(screenSavedStateConfiguration, Screen.Settings)
-        )
+    val backStacks = mapOf(
+        MainTab.Home to rememberNavBackStack(screenSavedStateConfiguration, Screen.Home),
+        MainTab.Menu to rememberNavBackStack(screenSavedStateConfiguration, Screen.Menu),
+        MainTab.Event to rememberNavBackStack(screenSavedStateConfiguration, Screen.Event),
+        MainTab.Settings to rememberNavBackStack(screenSavedStateConfiguration, Screen.Settings)
+    )
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(MainTab.Home.ordinal) }
     val selectedTab = mainTabItems[selectedTabIndex]
     val currentBackStack = requireNotNull(backStacks[selectedTab.tab])
@@ -115,8 +113,7 @@ private fun MainNavigationBar(
                     Image(
                         painter = painterResource(tab.icon),
                         contentDescription = stringResource(tab.label),
-                        colorFilter =
-                        ColorFilter.tint(
+                        colorFilter = ColorFilter.tint(
                             if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral500
                         ),
                         modifier = Modifier.size(24.dp)
@@ -128,8 +125,7 @@ private fun MainNavigationBar(
                         style = KoinTheme.typography.medium12
                     )
                 },
-                colors =
-                NavigationBarItemDefaults.colors(
+                colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = KoinTheme.colors.primary500,
                     selectedTextColor = KoinTheme.colors.primary500,
                     unselectedIconColor = KoinTheme.colors.neutral500,
@@ -151,16 +147,13 @@ private fun MainNavDisplay(
     NavDisplay(
         modifier = modifier,
         backStack = backStack,
-        entryDecorators =
-        listOf(
+        entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
-        entryProvider =
-        mainEntryProvider(
+        entryProvider = mainEntryProvider(
             entryProviders = entryProviders,
-            navigator =
-            MainNavigator(
+            navigator = MainNavigator(
                 navigate = backStack::add,
                 navigateBack = { backStack.removeLastOrNull() },
                 selectTab = onSelectTab
@@ -172,9 +165,8 @@ private fun MainNavDisplay(
 private fun mainEntryProvider(
     entryProviders: Set<MainNavigationEntryProvider>,
     navigator: MainNavigator
-): (NavKey) -> NavEntry<NavKey> =
-    entryProvider {
-        entryProviders.forEach { provider ->
-            with(provider) { provideEntries(navigator) }
-        }
+): (NavKey) -> NavEntry<NavKey> = entryProvider {
+    entryProviders.forEach { provider ->
+        with(provider) { provideEntries(navigator) }
     }
+}

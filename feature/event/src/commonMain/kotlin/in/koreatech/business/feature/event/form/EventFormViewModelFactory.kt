@@ -21,12 +21,11 @@ class EventFormViewModelFactory(
     private val getOwnerEventsUseCase: GetOwnerEventsUseCase,
     private val uploadImageUseCase: UploadImageUseCase
 ) : ViewModelAssistedFactory {
-    override fun create(extras: CreationExtras) =
-        EventFormViewModel(
-            savedStateHandle = extras.createSavedStateHandle(),
-            createOwnerEventUseCase = createOwnerEventUseCase,
-            updateOwnerEventUseCase = updateOwnerEventUseCase,
-            getOwnerEventsUseCase = getOwnerEventsUseCase,
-            uploadImageUseCase = uploadImageUseCase
-        )
+    override fun create(extras: CreationExtras) = EventFormViewModel(
+        savedStateHandle = extras.createSavedStateHandle(),
+        createOwnerEventUseCase = createOwnerEventUseCase,
+        updateOwnerEventUseCase = updateOwnerEventUseCase,
+        getOwnerEventsUseCase = getOwnerEventsUseCase,
+        uploadImageUseCase = uploadImageUseCase
+    )
 }

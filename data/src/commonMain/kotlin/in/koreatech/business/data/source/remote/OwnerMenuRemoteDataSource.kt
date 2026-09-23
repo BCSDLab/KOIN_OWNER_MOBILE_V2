@@ -23,19 +23,17 @@ import io.ktor.client.request.setBody
 class OwnerMenuRemoteDataSource(
     private val httpClient: HttpClient
 ) {
-    suspend fun getOwnerMenus(shopId: Int): OwnerMenuResponse =
-        httpClient
-            .get("owner/shops/menus") {
-                parameter("shopId", shopId)
-            }.body()
+    suspend fun getOwnerMenus(shopId: Int): OwnerMenuResponse = httpClient
+        .get("owner/shops/menus") {
+            parameter("shopId", shopId)
+        }.body()
 
     suspend fun getOwnerMenu(menuId: Int): OwnerMenuDetailResponse = httpClient.get("owner/shops/menus/$menuId").body()
 
-    suspend fun getOwnerMenuCategories(shopId: Int): OwnerMenuCategoriesResponse =
-        httpClient
-            .get("owner/shops/menus/categories") {
-                parameter("shopId", shopId)
-            }.body()
+    suspend fun getOwnerMenuCategories(shopId: Int): OwnerMenuCategoriesResponse = httpClient
+        .get("owner/shops/menus/categories") {
+            parameter("shopId", shopId)
+        }.body()
 
     suspend fun createOwnerMenu(
         shopId: Int,

@@ -16,10 +16,9 @@ fun rememberSavedStateViewModelCreationExtras(
     defaultArguments: SavedStateWriter.() -> Unit
 ): CreationExtras {
     val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
-    val defaultExtras =
-        (viewModelStoreOwner as? HasDefaultViewModelProviderFactory)
-            ?.defaultViewModelCreationExtras
-            ?: CreationExtras.Empty
+    val defaultExtras = (viewModelStoreOwner as? HasDefaultViewModelProviderFactory)
+        ?.defaultViewModelCreationExtras
+        ?: CreationExtras.Empty
     return remember(viewModelStoreOwner, *keys) {
         MutableCreationExtras(defaultExtras).apply {
             this[DEFAULT_ARGS_KEY] = savedState(builderAction = defaultArguments)

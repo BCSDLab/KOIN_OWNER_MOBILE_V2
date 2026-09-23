@@ -24,68 +24,59 @@ import `in`.koreatech.business.domain.repository.OwnerMenuRepository
 class OwnerMenuRepositoryImpl(
     private val ownerMenuRemoteDataSource: OwnerMenuRemoteDataSource
 ) : OwnerMenuRepository {
-    override suspend fun getOwnerMenus(shopId: Int): Result<List<OwnerMenuCategory>> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.getOwnerMenus(shopId).menuCategories.map {
-                it.toOwnerMenuCategory()
-            }
+    override suspend fun getOwnerMenus(shopId: Int): Result<List<OwnerMenuCategory>> = suspendRunCatching {
+        ownerMenuRemoteDataSource.getOwnerMenus(shopId).menuCategories.map {
+            it.toOwnerMenuCategory()
         }
+    }
 
-    override suspend fun getOwnerMenu(menuId: Int): Result<OwnerMenuDetail> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.getOwnerMenu(menuId).toOwnerMenuDetail()
-        }
+    override suspend fun getOwnerMenu(menuId: Int): Result<OwnerMenuDetail> = suspendRunCatching {
+        ownerMenuRemoteDataSource.getOwnerMenu(menuId).toOwnerMenuDetail()
+    }
 
-    override suspend fun getOwnerMenuCategories(shopId: Int): Result<List<OwnerMenuCategoryOption>> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.getOwnerMenuCategories(shopId).toOwnerMenuCategoryOptions()
-        }
+    override suspend fun getOwnerMenuCategories(shopId: Int): Result<List<OwnerMenuCategoryOption>> = suspendRunCatching {
+        ownerMenuRemoteDataSource.getOwnerMenuCategories(shopId).toOwnerMenuCategoryOptions()
+    }
 
     override suspend fun createOwnerMenu(
         shopId: Int,
         menu: OwnerMenuForm
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.createOwnerMenu(shopId, menu.toOwnerMenuRequest())
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerMenuRemoteDataSource.createOwnerMenu(shopId, menu.toOwnerMenuRequest())
+    }
 
     override suspend fun updateOwnerMenu(
         menuId: Int,
         menu: OwnerMenuForm
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.updateOwnerMenu(menuId, menu.toOwnerMenuRequest())
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerMenuRemoteDataSource.updateOwnerMenu(menuId, menu.toOwnerMenuRequest())
+    }
 
-    override suspend fun deleteOwnerMenu(menuId: Int): Result<Unit> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.deleteOwnerMenu(menuId)
-        }
+    override suspend fun deleteOwnerMenu(menuId: Int): Result<Unit> = suspendRunCatching {
+        ownerMenuRemoteDataSource.deleteOwnerMenu(menuId)
+    }
 
     override suspend fun createOwnerMenuCategory(
         shopId: Int,
         name: String
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.createOwnerMenuCategory(
-                shopId,
-                CreateOwnerMenuCategoryRequest(name)
-            )
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerMenuRemoteDataSource.createOwnerMenuCategory(
+            shopId,
+            CreateOwnerMenuCategoryRequest(name)
+        )
+    }
 
     override suspend fun updateOwnerMenuCategory(
         categoryId: Int,
         name: String
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.updateOwnerMenuCategory(
-                categoryId,
-                ModifyOwnerMenuCategoryRequest(categoryId, name)
-            )
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerMenuRemoteDataSource.updateOwnerMenuCategory(
+            categoryId,
+            ModifyOwnerMenuCategoryRequest(categoryId, name)
+        )
+    }
 
-    override suspend fun deleteOwnerMenuCategory(categoryId: Int): Result<Unit> =
-        suspendRunCatching {
-            ownerMenuRemoteDataSource.deleteOwnerMenuCategory(categoryId)
-        }
+    override suspend fun deleteOwnerMenuCategory(categoryId: Int): Result<Unit> = suspendRunCatching {
+        ownerMenuRemoteDataSource.deleteOwnerMenuCategory(categoryId)
+    }
 }

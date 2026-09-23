@@ -23,34 +23,29 @@ class AuthRepositoryImpl(
     override suspend fun signIn(
         phoneNumber: String,
         password: String
-    ): Result<AuthTokens> =
-        suspendRunCatching {
-            authRemoteDataSource.signIn(OwnerLoginRequest(phoneNumber, password)).toAuthTokens()
-        }
+    ): Result<AuthTokens> = suspendRunCatching {
+        authRemoteDataSource.signIn(OwnerLoginRequest(phoneNumber, password)).toAuthTokens()
+    }
 
-    override suspend fun deleteOwner(): Result<Unit> =
-        suspendRunCatching {
-            authRemoteDataSource.deleteOwner()
-        }
+    override suspend fun deleteOwner(): Result<Unit> = suspendRunCatching {
+        authRemoteDataSource.deleteOwner()
+    }
 
-    override suspend fun sendPasswordResetSms(phoneNumber: String): Result<Unit> =
-        suspendRunCatching {
-            authRemoteDataSource.sendPasswordResetSms(PasswordResetPhoneRequest(phoneNumber))
-        }
+    override suspend fun sendPasswordResetSms(phoneNumber: String): Result<Unit> = suspendRunCatching {
+        authRemoteDataSource.sendPasswordResetSms(PasswordResetPhoneRequest(phoneNumber))
+    }
 
     override suspend fun verifyPasswordResetSms(
         phoneNumber: String,
         code: String
-    ): Result<Unit> =
-        suspendRunCatching {
-            authRemoteDataSource.verifyPasswordResetSms(PasswordResetCodeRequest(phoneNumber, code))
-        }
+    ): Result<Unit> = suspendRunCatching {
+        authRemoteDataSource.verifyPasswordResetSms(PasswordResetCodeRequest(phoneNumber, code))
+    }
 
     override suspend fun resetPassword(
         phoneNumber: String,
         password: String
-    ): Result<Unit> =
-        suspendRunCatching {
-            authRemoteDataSource.resetPassword(PasswordResetRequest(phoneNumber, password))
-        }
+    ): Result<Unit> = suspendRunCatching {
+        authRemoteDataSource.resetPassword(PasswordResetRequest(phoneNumber, password))
+    }
 }

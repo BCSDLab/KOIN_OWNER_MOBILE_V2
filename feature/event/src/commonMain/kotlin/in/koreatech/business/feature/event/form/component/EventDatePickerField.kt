@@ -51,8 +51,7 @@ internal fun EventDatePickerField(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
                 .border(
@@ -66,8 +65,7 @@ internal fun EventDatePickerField(
             Text(
                 text = value.ifEmpty { placeholder },
                 style = KoinTheme.typography.regular14,
-                color =
-                if (value.isEmpty()) {
+                color = if (value.isEmpty()) {
                     KoinTheme.colors.neutral400
                 } else {
                     KoinTheme.colors.neutral800
@@ -77,17 +75,14 @@ internal fun EventDatePickerField(
     }
     if (showDatePicker) {
         val minimumDateMillis = minimumDate?.let(::dateToEpochMillis)
-        val datePickerState =
-            rememberDatePickerState(
-                initialSelectedDateMillis = dateToEpochMillis(value),
-                selectableDates =
-                remember(minimumDateMillis) {
-                    object : SelectableDates {
-                        override fun isSelectableDate(utcTimeMillis: Long): Boolean =
-                            minimumDateMillis == null || utcTimeMillis >= minimumDateMillis
-                    }
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = dateToEpochMillis(value),
+            selectableDates = remember(minimumDateMillis) {
+                object : SelectableDates {
+                    override fun isSelectableDate(utcTimeMillis: Long): Boolean = minimumDateMillis == null || utcTimeMillis >= minimumDateMillis
                 }
-            )
+            }
+        )
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {

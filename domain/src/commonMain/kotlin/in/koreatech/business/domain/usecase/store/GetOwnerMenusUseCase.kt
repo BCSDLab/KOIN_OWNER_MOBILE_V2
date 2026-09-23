@@ -10,8 +10,7 @@ import kotlinx.coroutines.flow.flow
 class GetOwnerMenusUseCase(
     private val repository: OwnerMenuRepository
 ) {
-    operator fun invoke(shopId: Int): Flow<Result<List<OwnerMenuCategory>>> =
-        flow {
-            emit(repository.getOwnerMenus(shopId))
-        }
+    operator fun invoke(shopId: Int): Flow<Result<List<OwnerMenuCategory>>> = flow {
+        emit(repository.getOwnerMenus(shopId))
+    }
 }

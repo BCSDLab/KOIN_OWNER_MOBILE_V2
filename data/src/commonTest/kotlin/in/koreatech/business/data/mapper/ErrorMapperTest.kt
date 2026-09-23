@@ -8,23 +8,21 @@ import kotlin.test.assertEquals
 class ErrorMapperTest {
     @Test
     fun errorResponsePreservesServerErrorInformation() {
-        val exception =
-            ErrorResponse(
-                code = "INVALID_REQUEST",
-                message = "입력값이 올바르지 않습니다.",
-                errorTraceId = "trace-id",
-                fieldErrors =
-                listOf(
-                    FieldErrorResponse(
-                        field = "phone",
-                        message = "전화번호 형식이 올바르지 않습니다.",
-                        constraint = "Pattern"
-                    )
+        val exception = ErrorResponse(
+            code = "INVALID_REQUEST",
+            message = "입력값이 올바르지 않습니다.",
+            errorTraceId = "trace-id",
+            fieldErrors = listOf(
+                FieldErrorResponse(
+                    field = "phone",
+                    message = "전화번호 형식이 올바르지 않습니다.",
+                    constraint = "Pattern"
                 )
-            ).toApiException(
-                statusCode = 400,
-                fallbackMessage = "Bad Request"
             )
+        ).toApiException(
+            statusCode = 400,
+            fallbackMessage = "Bad Request"
+        )
 
         assertEquals(400, exception.statusCode)
         assertEquals("INVALID_REQUEST", exception.code)

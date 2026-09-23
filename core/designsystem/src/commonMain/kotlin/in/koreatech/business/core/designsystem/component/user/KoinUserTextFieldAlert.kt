@@ -14,11 +14,10 @@ fun KoinUserTextFieldAlert(
     text: String,
     state: AlertState
 ) {
-    val color =
-        when (state) {
-            AlertState.Error -> KoinTheme.colors.danger600
-            AlertState.Warning -> KoinTheme.colors.primary600
-            AlertState.Success -> KoinTheme.colors.success700
-        }
+    val color = when (state) {
+        AlertState.Error -> KoinTheme.colors.danger600
+        AlertState.Warning -> KoinTheme.colors.primary600
+        AlertState.Success -> KoinTheme.colors.success700
+    }
     Text(text = text, modifier = Modifier.padding(horizontal = 4.dp), style = KoinTheme.typography.regular12, color = color)
 }

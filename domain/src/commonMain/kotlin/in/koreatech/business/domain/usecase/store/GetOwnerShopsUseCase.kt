@@ -10,8 +10,7 @@ import kotlinx.coroutines.flow.flow
 class GetOwnerShopsUseCase(
     private val repository: OwnerShopRepository
 ) {
-    operator fun invoke(): Flow<Result<List<OwnerShop>>> =
-        flow {
-            emit(repository.getOwnerShops())
-        }
+    operator fun invoke(): Flow<Result<List<OwnerShop>>> = flow {
+        emit(repository.getOwnerShops())
+    }
 }

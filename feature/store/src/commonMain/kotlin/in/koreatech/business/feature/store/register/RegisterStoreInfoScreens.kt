@@ -33,9 +33,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
-import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.SignupCheckBox
@@ -103,11 +103,10 @@ internal fun RegisterStoreBasicInfoScreen(
     onNext: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val openImagePicker =
-        rememberImageFilePicker(
-            onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
-            onFailure = { onImageSelectionFailed() }
-        )
+    val openImagePicker = rememberImageFilePicker(
+        onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
+        onFailure = { onImageSelectionFailed() }
+    )
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = KoinTheme.colors.neutral75,
@@ -120,8 +119,7 @@ internal fun RegisterStoreBasicInfoScreen(
         }
     ) { paddingValues ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
@@ -152,8 +150,7 @@ internal fun RegisterStoreBasicInfoScreen(
                 enabled = !state.isUploading && state.imageUrls.size < 5,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
-                colors =
-                ButtonDefaults.buttonColors(
+                colors = ButtonDefaults.buttonColors(
                     containerColor = KoinTheme.colors.primary100,
                     contentColor = KoinTheme.colors.primary600
                 )
@@ -205,16 +202,15 @@ internal fun RegisterStoreDetailInfoScreen(
     onNext: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val weekdayLabels =
-        mapOf(
-            RegisterStoreDay.Monday to stringResource(Res.string.weekday_monday),
-            RegisterStoreDay.Tuesday to stringResource(Res.string.weekday_tuesday),
-            RegisterStoreDay.Wednesday to stringResource(Res.string.weekday_wednesday),
-            RegisterStoreDay.Thursday to stringResource(Res.string.weekday_thursday),
-            RegisterStoreDay.Friday to stringResource(Res.string.weekday_friday),
-            RegisterStoreDay.Saturday to stringResource(Res.string.weekday_saturday),
-            RegisterStoreDay.Sunday to stringResource(Res.string.weekday_sunday)
-        )
+    val weekdayLabels = mapOf(
+        RegisterStoreDay.Monday to stringResource(Res.string.weekday_monday),
+        RegisterStoreDay.Tuesday to stringResource(Res.string.weekday_tuesday),
+        RegisterStoreDay.Wednesday to stringResource(Res.string.weekday_wednesday),
+        RegisterStoreDay.Thursday to stringResource(Res.string.weekday_thursday),
+        RegisterStoreDay.Friday to stringResource(Res.string.weekday_friday),
+        RegisterStoreDay.Saturday to stringResource(Res.string.weekday_saturday),
+        RegisterStoreDay.Sunday to stringResource(Res.string.weekday_sunday)
+    )
     val closedAllDay = stringResource(Res.string.register_store_closed_all_day)
     var showOperatingTimeDialog by remember { mutableStateOf(false) }
     var editingOperatingTimeIndex by remember { mutableStateOf<Int?>(null) }
@@ -234,18 +230,16 @@ internal fun RegisterStoreDetailInfoScreen(
                         RegisterStoreDay.entries.forEach { day ->
                             val selected = day in selectedDays
                             Box(
-                                modifier =
-                                Modifier
+                                modifier = Modifier
                                     .size(36.dp)
                                     .clip(RoundedCornerShape(12.dp))
                                     .background(if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral100)
                                     .noRippleClickable {
-                                        selectedDays =
-                                            if (selected) {
-                                                (selectedDays - day).toImmutableSet()
-                                            } else {
-                                                (selectedDays + day).toImmutableSet()
-                                            }
+                                        selectedDays = if (selected) {
+                                            (selectedDays - day).toImmutableSet()
+                                        } else {
+                                            (selectedDays + day).toImmutableSet()
+                                        }
                                         if (selectedDays.isEmpty()) is24Hours = false
                                     },
                                 contentAlignment = Alignment.Center
@@ -290,25 +284,22 @@ internal fun RegisterStoreDetailInfoScreen(
             },
             confirmButton = {
                 TextButton(
-                    enabled =
-                    selectedDays.isEmpty() || is24Hours ||
+                    enabled = selectedDays.isEmpty() || is24Hours ||
                         (openingTimeInput.isValidTimeInput() && closingTimeInput.isValidTimeInput()),
                     onClick = {
-                        val updatedOperatingTimes =
-                            state.operatingTimes
-                                .filterIndexed { index, _ -> index != editingOperatingTimeIndex }
-                                .mapNotNull { operatingTime ->
-                                    val remainingDays = (operatingTime.days - selectedDays).toImmutableSet()
-                                    operatingTime.copy(days = remainingDays).takeIf { remainingDays.isNotEmpty() }
-                                }.toMutableList()
+                        val updatedOperatingTimes = state.operatingTimes
+                            .filterIndexed { index, _ -> index != editingOperatingTimeIndex }
+                            .mapNotNull { operatingTime ->
+                                val remainingDays = (operatingTime.days - selectedDays).toImmutableSet()
+                                operatingTime.copy(days = remainingDays).takeIf { remainingDays.isNotEmpty() }
+                            }.toMutableList()
                         if (selectedDays.isNotEmpty()) {
-                            updatedOperatingTimes +=
-                                RegisterStoreOperatingTime(
-                                    days = selectedDays,
-                                    openingTime = openingTimeInput.toTimeText(),
-                                    closingTime = closingTimeInput.toTimeText(),
-                                    is24Hours = is24Hours
-                                )
+                            updatedOperatingTimes += RegisterStoreOperatingTime(
+                                days = selectedDays,
+                                openingTime = openingTimeInput.toTimeText(),
+                                closingTime = closingTimeInput.toTimeText(),
+                                is24Hours = is24Hours
+                            )
                         }
                         onOperatingTimesChange(updatedOperatingTimes.toImmutableList())
                         showOperatingTimeDialog = false
@@ -338,8 +329,7 @@ internal fun RegisterStoreDetailInfoScreen(
         }
     ) { paddingValues ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
@@ -376,8 +366,7 @@ internal fun RegisterStoreDetailInfoScreen(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 state.operatingTimes.forEachIndexed { index, operatingTime ->
                     Row(
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(16.dp))
                             .background(KoinTheme.colors.neutral0)
@@ -425,16 +414,14 @@ internal fun RegisterStoreDetailInfoScreen(
                         editingOperatingTimeIndex = null
                         openingTimeInput = DEFAULT_OPENING_TIME.filter(Char::isDigit)
                         closingTimeInput = DEFAULT_CLOSING_TIME.filter(Char::isDigit)
-                        selectedDays =
-                            (RegisterStoreDay.entries - state.operatingTimes.flatMap { it.days })
-                                .toImmutableSet()
+                        selectedDays = (RegisterStoreDay.entries - state.operatingTimes.flatMap { it.days })
+                            .toImmutableSet()
                         is24Hours = false
                         showOperatingTimeDialog = true
                     },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
-                    colors =
-                    ButtonDefaults.buttonColors(
+                    colors = ButtonDefaults.buttonColors(
                         containerColor = KoinTheme.colors.primary100,
                         contentColor = KoinTheme.colors.primary600
                     )

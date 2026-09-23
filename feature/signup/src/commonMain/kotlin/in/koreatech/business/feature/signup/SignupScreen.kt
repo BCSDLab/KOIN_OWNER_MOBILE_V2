@@ -51,22 +51,20 @@ private sealed interface SignupRoute : NavKey {
     data object Complete : SignupRoute
 }
 
-private val signupSavedStateConfiguration =
-    SavedStateConfiguration {
-        serializersModule =
-            SerializersModule {
-                polymorphic(NavKey::class) {
-                    subclass(SignupRoute.Terms::class)
-                    subclass(SignupRoute.Account::class)
-                    subclass(SignupRoute.Password::class)
-                    subclass(SignupRoute.Business::class)
-                    subclass(SignupRoute.Store::class)
-                    subclass(SignupRoute.StoreSearch::class)
-                    subclass(SignupRoute.Attachments::class)
-                    subclass(SignupRoute.Complete::class)
-                }
-            }
+private val signupSavedStateConfiguration = SavedStateConfiguration {
+    serializersModule = SerializersModule {
+        polymorphic(NavKey::class) {
+            subclass(SignupRoute.Terms::class)
+            subclass(SignupRoute.Account::class)
+            subclass(SignupRoute.Password::class)
+            subclass(SignupRoute.Business::class)
+            subclass(SignupRoute.Store::class)
+            subclass(SignupRoute.StoreSearch::class)
+            subclass(SignupRoute.Attachments::class)
+            subclass(SignupRoute.Complete::class)
+        }
     }
+}
 
 @Composable
 fun SignupScreen(
@@ -171,8 +169,7 @@ internal fun SignupScreenImpl(
             modifier = modifier,
             backStack = backStack,
             onBack = onBack,
-            entryProvider =
-            entryProvider {
+            entryProvider = entryProvider {
                 entry<SignupRoute.Terms> {
                     SignUpTermScreen(
                         state = state,

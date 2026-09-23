@@ -20,33 +20,28 @@ import `in`.koreatech.business.domain.repository.OwnerShopRepository
 class OwnerShopRepositoryImpl(
     private val ownerShopRemoteDataSource: OwnerShopRemoteDataSource
 ) : OwnerShopRepository {
-    override suspend fun getOwnerShops(): Result<List<OwnerShop>> =
-        suspendRunCatching {
-            ownerShopRemoteDataSource.getOwnerShops().shops.map { summary ->
-                ownerShopRemoteDataSource.getOwnerShop(summary.id).toOwnerShop(summary)
-            }
+    override suspend fun getOwnerShops(): Result<List<OwnerShop>> = suspendRunCatching {
+        ownerShopRemoteDataSource.getOwnerShops().shops.map { summary ->
+            ownerShopRemoteDataSource.getOwnerShop(summary.id).toOwnerShop(summary)
         }
+    }
 
-    override suspend fun getOwnerShop(shopId: Int): Result<OwnerShop> =
-        suspendRunCatching {
-            ownerShopRemoteDataSource.getOwnerShop(shopId).toOwnerShop()
-        }
+    override suspend fun getOwnerShop(shopId: Int): Result<OwnerShop> = suspendRunCatching {
+        ownerShopRemoteDataSource.getOwnerShop(shopId).toOwnerShop()
+    }
 
-    override suspend fun getShopCategories(): Result<List<ShopCategory>> =
-        suspendRunCatching {
-            ownerShopRemoteDataSource.getShopCategories().categories.map { it.toShopCategory() }
-        }
+    override suspend fun getShopCategories(): Result<List<ShopCategory>> = suspendRunCatching {
+        ownerShopRemoteDataSource.getShopCategories().categories.map { it.toShopCategory() }
+    }
 
-    override suspend fun createOwnerShop(shop: OwnerShopForm): Result<Unit> =
-        suspendRunCatching {
-            ownerShopRemoteDataSource.createOwnerShop(shop.toOwnerShopRequest())
-        }
+    override suspend fun createOwnerShop(shop: OwnerShopForm): Result<Unit> = suspendRunCatching {
+        ownerShopRemoteDataSource.createOwnerShop(shop.toOwnerShopRequest())
+    }
 
     override suspend fun updateOwnerShop(
         shopId: Int,
         shop: OwnerShopForm
-    ): Result<Unit> =
-        suspendRunCatching {
-            ownerShopRemoteDataSource.updateOwnerShop(shopId, shop.toOwnerShopRequest())
-        }
+    ): Result<Unit> = suspendRunCatching {
+        ownerShopRemoteDataSource.updateOwnerShop(shopId, shop.toOwnerShopRequest())
+    }
 }

@@ -20,12 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.component.user.AlertState
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressHeader
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.user.KoinUserTextFieldAlert
-import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_delete
 import `in`.koreatech.business.core.designsystem.generated.resources.error_business_number_check
@@ -57,11 +57,10 @@ internal fun SignUpAttachmentScreen(
     navigateToNextScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val openImagePicker =
-        rememberImageFilePicker(
-            onImagePicked = { onUploadFile(it.name, it.contentType, it.bytes) },
-            onFailure = { onFileSelectionFailed() }
-        )
+    val openImagePicker = rememberImageFilePicker(
+        onImagePicked = { onUploadFile(it.name, it.contentType, it.bytes) },
+        onFailure = { onFileSelectionFailed() }
+    )
 
     Scaffold(
         modifier = modifier,
@@ -74,8 +73,7 @@ internal fun SignUpAttachmentScreen(
         containerColor = KoinTheme.colors.neutral75
     ) { contentPadding ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
                 .imePadding()
@@ -131,8 +129,7 @@ internal fun SignUpAttachmentScreen(
             state.error?.let { error ->
                 Spacer(modifier = Modifier.height(8.dp))
                 KoinUserTextFieldAlert(
-                    text =
-                    when (error) {
+                    text = when (error) {
                         SignupError.PhoneVerificationRequired ->
                             stringResource(
                                 Res.string.error_phone_verification_required

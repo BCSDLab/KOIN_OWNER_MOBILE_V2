@@ -64,19 +64,17 @@ internal fun ManagedShopCard(
     val categoryNotRegistered = stringResource(Res.string.home_category_not_registered)
     val none = stringResource(Res.string.common_none)
     val closed = stringResource(Res.string.operating_time_closed)
-    val dayNames =
-        mapOf(
-            "MONDAY" to stringResource(Res.string.weekday_monday),
-            "TUESDAY" to stringResource(Res.string.weekday_tuesday),
-            "WEDNESDAY" to stringResource(Res.string.weekday_wednesday),
-            "THURSDAY" to stringResource(Res.string.weekday_thursday),
-            "FRIDAY" to stringResource(Res.string.weekday_friday),
-            "SATURDAY" to stringResource(Res.string.weekday_saturday),
-            "SUNDAY" to stringResource(Res.string.weekday_sunday)
-        )
+    val dayNames = mapOf(
+        "MONDAY" to stringResource(Res.string.weekday_monday),
+        "TUESDAY" to stringResource(Res.string.weekday_tuesday),
+        "WEDNESDAY" to stringResource(Res.string.weekday_wednesday),
+        "THURSDAY" to stringResource(Res.string.weekday_thursday),
+        "FRIDAY" to stringResource(Res.string.weekday_friday),
+        "SATURDAY" to stringResource(Res.string.weekday_saturday),
+        "SUNDAY" to stringResource(Res.string.weekday_sunday)
+    )
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .managedShopCard()
             .noRippleClickable(onClick = onClick)
@@ -126,8 +124,7 @@ internal fun ManagedShopCard(
         }
         HomeDetailRow(
             label = stringResource(Res.string.home_available),
-            value =
-            listOfNotNull(
+            value = listOfNotNull(
                 delivery.takeIf { shop.isDeliveryAvailable },
                 card.takeIf { shop.isCardAvailable },
                 bankTransfer.takeIf { shop.isBankTransferAvailable }
@@ -179,8 +176,7 @@ private fun HomeDetailRow(
 @Composable
 private fun EventChip(modifier: Modifier = Modifier) {
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .clip(RoundedCornerShape(10.dp))
             .background(KoinTheme.colors.primary100)
             .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -200,8 +196,7 @@ private fun ShopBadge(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .size(40.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(KoinTheme.colors.primary100),
@@ -226,9 +221,8 @@ private fun HomeArrow(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Modifier.managedShopCard(): Modifier =
-    border(
-        width = 0.5.dp,
-        color = KoinTheme.colors.neutral250,
-        shape = RoundedCornerShape(16.dp)
-    ).clip(RoundedCornerShape(16.dp)).background(Color.White)
+private fun Modifier.managedShopCard(): Modifier = border(
+    width = 0.5.dp,
+    color = KoinTheme.colors.neutral250,
+    shape = RoundedCornerShape(16.dp)
+).clip(RoundedCornerShape(16.dp)).background(Color.White)

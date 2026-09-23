@@ -40,8 +40,7 @@ fun KoinSelectableChipGroup(
                 text = item.text,
                 style = KoinTheme.typography.medium14,
                 color = if (selected) Color.White else KoinTheme.colors.neutral600,
-                modifier =
-                Modifier
+                modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
                     .background(if (selected) KoinTheme.colors.primary500 else Color.White)
                     .border(

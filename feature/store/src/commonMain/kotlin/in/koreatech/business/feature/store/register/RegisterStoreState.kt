@@ -13,15 +13,14 @@ data class RegisterStoreState(
     val address: String = "",
     val phoneNumber: String = "",
     val deliveryFee: String = "",
-    val operatingTimes: ImmutableList<RegisterStoreOperatingTime> =
-        persistentListOf(
-            RegisterStoreOperatingTime(
-                days = RegisterStoreDay.entries.toImmutableSet(),
-                openingTime = "09:00",
-                closingTime = "22:00",
-                is24Hours = false
-            )
-        ),
+    val operatingTimes: ImmutableList<RegisterStoreOperatingTime> = persistentListOf(
+        RegisterStoreOperatingTime(
+            days = RegisterStoreDay.entries.toImmutableSet(),
+            openingTime = "09:00",
+            closingTime = "22:00",
+            is24Hours = false
+        )
+    ),
     val otherInfo: String = "",
     val isDeliveryAvailable: Boolean = false,
     val isCardAvailable: Boolean = false,

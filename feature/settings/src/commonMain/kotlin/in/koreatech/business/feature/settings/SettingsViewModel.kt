@@ -21,38 +21,34 @@ class SettingsViewModel(
 ) : ViewModel(), OrbitContainerHost<SettingsState, SettingsState, SettingsSideEffect> {
     override val container = orbitContainer<SettingsState, SettingsSideEffect>(SettingsState())
 
-    fun signOut() =
-        intent {
-            signOutUseCase()
-        }
+    fun signOut() = intent {
+        signOutUseCase()
+    }
 
-    fun showDeleteOwnerDialog() =
-        blockingIntent {
-            reduce { state.copy(isDeleteOwnerDialogVisible = true) }
-        }
+    fun showDeleteOwnerDialog() = blockingIntent {
+        reduce { state.copy(isDeleteOwnerDialogVisible = true) }
+    }
 
-    fun dismissDeleteOwnerDialog() =
-        blockingIntent {
-            if (!state.isDeletingOwner) {
-                reduce { state.copy(isDeleteOwnerDialogVisible = false) }
-            }
+    fun dismissDeleteOwnerDialog() = blockingIntent {
+        if (!state.isDeletingOwner) {
+            reduce { state.copy(isDeleteOwnerDialogVisible = false) }
         }
+    }
 
-    fun deleteOwner() =
-        intent {
-            if (state.isDeletingOwner) return@intent
-            reduce { state.copy(isDeletingOwner = true) }
-            deleteOwnerUseCase()
-                .onSuccess {
-                    reduce {
-                        state.copy(
-                            isDeleteOwnerDialogVisible = false,
-                            isDeletingOwner = false
-                        )
-                    }
-                }.onFailure {
-                    reduce { state.copy(isDeletingOwner = false) }
-                    postSideEffect(SettingsSideEffect.DeleteOwnerFailed)
+    fun deleteOwner() = intent {
+        if (state.isDeletingOwner) return@intent
+        reduce { state.copy(isDeletingOwner = true) }
+        deleteOwnerUseCase()
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        isDeleteOwnerDialogVisible = false,
+                        isDeletingOwner = false
+                    )
                 }
-        }
+            }.onFailure {
+                reduce { state.copy(isDeletingOwner = false) }
+                postSideEffect(SettingsSideEffect.DeleteOwnerFailed)
+            }
+    }
 }

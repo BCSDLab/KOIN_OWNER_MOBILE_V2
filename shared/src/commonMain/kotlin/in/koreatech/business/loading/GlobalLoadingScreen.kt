@@ -12,8 +12,7 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 @Composable
 fun GlobalLoadingScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxSize()
             .background(KoinTheme.colors.neutral75),
         contentAlignment = Alignment.Center

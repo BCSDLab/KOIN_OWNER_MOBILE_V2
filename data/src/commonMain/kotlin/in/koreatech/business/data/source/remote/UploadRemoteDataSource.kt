@@ -24,12 +24,11 @@ class UploadRemoteDataSource(
         domain: String,
         request: UploadUrlRequest,
         authorizationToken: String?
-    ): UploadUrlResponse =
-        httpClient
-            .post("$domain/upload/url") {
-                authorizationToken?.let(::bearerAuth)
-                setBody(request)
-            }.body()
+    ): UploadUrlResponse = httpClient
+        .post("$domain/upload/url") {
+            authorizationToken?.let(::bearerAuth)
+            setBody(request)
+        }.body()
 
     suspend fun uploadFile(
         url: String,

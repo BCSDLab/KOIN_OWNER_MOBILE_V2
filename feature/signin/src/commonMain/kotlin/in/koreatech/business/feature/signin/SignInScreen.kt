@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_koin
@@ -45,7 +46,6 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_sig
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_in_submit
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
-import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -96,8 +96,7 @@ fun SignInScreenImpl(
 
     Scaffold(modifier = modifier, containerColor = KoinTheme.colors.neutral0) { paddingValues ->
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .padding(horizontal = 40.dp)
@@ -128,13 +127,11 @@ fun SignInScreenImpl(
                     value = loginId,
                     onValueChange = setLoginId,
                     hint = stringResource(Res.string.sign_in_id_hint),
-                    keyboardOptions =
-                    KeyboardOptions(
+                    keyboardOptions = KeyboardOptions(
                         keyboardType = if (loginId.all(Char::isDigit)) KeyboardType.Phone else KeyboardType.Text
                     ),
                     visualTransformation = KRPhoneNumberVisualTransformation(),
-                    suffix =
-                    if (loginId.isNotEmpty()) {
+                    suffix = if (loginId.isNotEmpty()) {
                         {
                             Text(
                                 text = "×",
@@ -157,8 +154,7 @@ fun SignInScreenImpl(
                     hint = stringResource(Res.string.sign_in_password_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     visualTransformation = PasswordVisualTransformation(mask = '●'),
-                    suffix =
-                    if (password.isNotEmpty()) {
+                    suffix = if (password.isNotEmpty()) {
                         {
                             Text(
                                 text = "◉",

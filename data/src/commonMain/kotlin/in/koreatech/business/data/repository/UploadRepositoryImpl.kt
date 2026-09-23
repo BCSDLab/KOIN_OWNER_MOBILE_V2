@@ -23,23 +23,21 @@ class UploadRepositoryImpl(
         contentType: String,
         fileName: String,
         authorizationToken: String?
-    ): Result<PreSignedUrl> =
-        suspendRunCatching {
-            uploadRemoteDataSource
-                .getUploadUrl(
-                    domain = domain,
-                    request = UploadUrlRequest(contentLength, contentType, fileName),
-                    authorizationToken = authorizationToken
-                ).toPreSignedUrl()
-        }
+    ): Result<PreSignedUrl> = suspendRunCatching {
+        uploadRemoteDataSource
+            .getUploadUrl(
+                domain = domain,
+                request = UploadUrlRequest(contentLength, contentType, fileName),
+                authorizationToken = authorizationToken
+            ).toPreSignedUrl()
+    }
 
     override suspend fun uploadFile(
         url: String,
         bytes: ByteArray,
         mediaType: String,
         mediaSize: Long
-    ): Result<Unit> =
-        suspendRunCatching {
-            uploadRemoteDataSource.uploadFile(url, bytes, mediaType, mediaSize)
-        }
+    ): Result<Unit> = suspendRunCatching {
+        uploadRemoteDataSource.uploadFile(url, bytes, mediaType, mediaSize)
+    }
 }

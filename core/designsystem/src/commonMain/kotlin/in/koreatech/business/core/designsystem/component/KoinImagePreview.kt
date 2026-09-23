@@ -33,8 +33,7 @@ fun KoinImagePreview(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp))
             .background(KoinTheme.colors.neutral100)
@@ -67,8 +66,7 @@ fun KoinImagePreview(
             }
         )
         Box(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(6.dp)
                 .size(24.dp)

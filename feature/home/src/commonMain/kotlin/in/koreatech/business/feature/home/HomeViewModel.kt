@@ -19,8 +19,7 @@ import org.orbitmvi.orbit.viewmodel.orbitContainer
 class HomeViewModel(
     private val getSelectedShopUseCase: GetSelectedShopUseCase
 ) : ViewModel(), OrbitContainerHost<HomeState, HomeState, HomeSideEffect> {
-    override val container =
-        orbitContainer<HomeState, HomeSideEffect>(HomeState(), onCreate = { loadShop() })
+    override val container = orbitContainer<HomeState, HomeSideEffect>(HomeState(), onCreate = { loadShop() })
 
     private var hasResumed = false
 
@@ -34,18 +33,17 @@ class HomeViewModel(
 
     fun loadShops() = intent { loadShop() }
 
-    private suspend fun loadShop() =
-        subIntent {
-            getSelectedShopUseCase()
-                .onStart { reduce { state.copy(isLoading = true) } }
-                .onEach { result ->
-                    result
-                        .onSuccess { shop ->
-                            reduce { state.copy(shop = shop, isLoading = false) }
-                        }.onFailure {
-                            reduce { state.copy(isLoading = false) }
-                            postSideEffect(HomeSideEffect.ShopLoadFailed)
-                        }
-                }.collect()
-        }
+    private suspend fun loadShop() = subIntent {
+        getSelectedShopUseCase()
+            .onStart { reduce { state.copy(isLoading = true) } }
+            .onEach { result ->
+                result
+                    .onSuccess { shop ->
+                        reduce { state.copy(shop = shop, isLoading = false) }
+                    }.onFailure {
+                        reduce { state.copy(isLoading = false) }
+                        postSideEffect(HomeSideEffect.ShopLoadFailed)
+                    }
+            }.collect()
+    }
 }

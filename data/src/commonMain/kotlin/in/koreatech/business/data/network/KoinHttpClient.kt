@@ -28,82 +28,79 @@ import kotlinx.serialization.json.Json
 
 internal expect val koinHttpLogger: Logger
 
-private val networkJson =
-    Json {
-        ignoreUnknownKeys = true
-        explicitNulls = false
-    }
+private val networkJson = Json {
+    ignoreUnknownKeys = true
+    explicitNulls = false
+}
 
 private val baseUrl = Url(BuildKonfig.BASE_URL)
 
-internal fun createKoinHttpClient(tokenLocalDataSource: TokenLocalDataSource) =
-    HttpClient {
-        expectSuccess = true
+internal fun createKoinHttpClient(tokenLocalDataSource: TokenLocalDataSource) = HttpClient {
+    expectSuccess = true
 
-        HttpResponseValidator {
-            handleResponseExceptionWithRequest { cause, _ ->
-                val responseException = cause as? ResponseException
-                if (responseException == null) {
-                    if (cause is IOException) throw NetworkException(cause)
-                    return@handleResponseExceptionWithRequest
-                }
-                if (responseException.response.status == HttpStatusCode.Unauthorized) {
-                    tokenLocalDataSource.clearTokens()
-                }
-                val errorResponse =
-                    runCatching {
-                        networkJson.decodeFromString<ErrorResponse>(responseException.response.bodyAsText())
-                    }.getOrNull()
-                throw errorResponse?.toApiException(
-                    statusCode = responseException.response.status.value,
-                    fallbackMessage = responseException.response.status.description
-                ) ?: ApiException(
-                    statusCode = responseException.response.status.value,
-                    code = null,
-                    message = responseException.response.status.description,
-                    errorTraceId = null,
-                    fieldErrors = emptyList()
-                )
+    HttpResponseValidator {
+        handleResponseExceptionWithRequest { cause, _ ->
+            val responseException = cause as? ResponseException
+            if (responseException == null) {
+                if (cause is IOException) throw NetworkException(cause)
+                return@handleResponseExceptionWithRequest
             }
-        }
-
-        install(ContentNegotiation) {
-            json(
-                networkJson
+            if (responseException.response.status == HttpStatusCode.Unauthorized) {
+                tokenLocalDataSource.clearTokens()
+            }
+            val errorResponse = runCatching {
+                networkJson.decodeFromString<ErrorResponse>(responseException.response.bodyAsText())
+            }.getOrNull()
+            throw errorResponse?.toApiException(
+                statusCode = responseException.response.status.value,
+                fallbackMessage = responseException.response.status.description
+            ) ?: ApiException(
+                statusCode = responseException.response.status.value,
+                code = null,
+                message = responseException.response.status.description,
+                errorTraceId = null,
+                fieldErrors = emptyList()
             )
         }
+    }
 
-        install(Auth) {
-            bearer {
-                cacheTokens = false
-                loadTokens {
-                    tokenLocalDataSource.getAccessToken()?.let { accessToken ->
-                        BearerTokens(
-                            accessToken = accessToken,
-                            refreshToken = tokenLocalDataSource.getRefreshToken().orEmpty()
-                        )
-                    }
-                }
-                sendWithoutRequest { request ->
-                    request.url.host == baseUrl.host &&
-                        request.headers[HttpHeaders.Authorization] == null
+    install(ContentNegotiation) {
+        json(
+            networkJson
+        )
+    }
+
+    install(Auth) {
+        bearer {
+            cacheTokens = false
+            loadTokens {
+                tokenLocalDataSource.getAccessToken()?.let { accessToken ->
+                    BearerTokens(
+                        accessToken = accessToken,
+                        refreshToken = tokenLocalDataSource.getRefreshToken().orEmpty()
+                    )
                 }
             }
-        }
-
-        install(Logging) {
-            logger = koinHttpLogger
-            level = LogLevel.ALL
-            sanitizeHeader { header ->
-                header == HttpHeaders.Authorization ||
-                    header == HttpHeaders.Cookie ||
-                    header == HttpHeaders.SetCookie
+            sendWithoutRequest { request ->
+                request.url.host == baseUrl.host &&
+                    request.headers[HttpHeaders.Authorization] == null
             }
-        }
-
-        install(DefaultRequest) {
-            url(BuildKonfig.BASE_URL)
-            header(HttpHeaders.Accept, ContentType.Application.Json)
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
         }
     }
+
+    install(Logging) {
+        logger = koinHttpLogger
+        level = LogLevel.ALL
+        sanitizeHeader { header ->
+            header == HttpHeaders.Authorization ||
+                header == HttpHeaders.Cookie ||
+                header == HttpHeaders.SetCookie
+        }
+    }
+
+    install(DefaultRequest) {
+        url(BuildKonfig.BASE_URL)
+        header(HttpHeaders.Accept, ContentType.Application.Json)
+        header(HttpHeaders.ContentType, ContentType.Application.Json)
+    }
+}
