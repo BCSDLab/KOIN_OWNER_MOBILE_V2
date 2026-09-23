@@ -45,6 +45,7 @@ import `in`.koreatech.business.core.designsystem.component.progress.KoinProgress
 import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
+import `in`.koreatech.business.core.util.CurrencyVisualTransformation
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
 import `in`.koreatech.business.core.designsystem.generated.resources.common_cancel
@@ -373,7 +374,9 @@ internal fun RegisterStoreDetailInfoScreen(
                 stringResource(Res.string.register_store_delivery_fee),
                 state.deliveryFee,
                 stringResource(Res.string.register_store_delivery_fee_hint),
-                KeyboardType.Number
+                KeyboardType.Number,
+                visualTransformation = CurrencyVisualTransformation(),
+                suffix = { Text("원", style = KoinTheme.typography.regular14, color = KoinTheme.colors.neutral600) }
             ) { onDeliveryFeeChange(it) }
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
@@ -496,6 +499,7 @@ private fun RegisterStoreField(
     hint: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    suffix: (@Composable androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
     Text(title, style = KoinTheme.typography.medium16)
@@ -505,6 +509,7 @@ private fun RegisterStoreField(
         onValueChange = onValueChange,
         hint = hint,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        visualTransformation = visualTransformation
+        visualTransformation = visualTransformation,
+        suffix = suffix
     )
 }

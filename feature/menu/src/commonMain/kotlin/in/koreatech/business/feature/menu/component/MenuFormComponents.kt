@@ -27,6 +27,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.menu_option
 import `in`.koreatech.business.core.designsystem.generated.resources.menu_price
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import `in`.koreatech.business.core.util.CurrencyVisualTransformation
 import `in`.koreatech.business.domain.model.store.OwnerMenuCategoryOption
 import `in`.koreatech.business.feature.menu.form.EditableMenuPrice
 import org.jetbrains.compose.resources.stringResource
@@ -116,6 +117,7 @@ internal fun MenuOptionPriceRow(
                 onValueChange = onPriceChange,
                 placeholder = stringResource(Res.string.menu_price),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                visualTransformation = CurrencyVisualTransformation(),
                 suffix = {
                     Text(
                         text = stringResource(Res.string.common_won),

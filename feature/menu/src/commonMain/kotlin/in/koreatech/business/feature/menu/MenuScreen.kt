@@ -84,6 +84,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.menu_shop_r
 import `in`.koreatech.business.core.designsystem.generated.resources.menu_title
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import `in`.koreatech.business.core.util.toCurrencyText
 import `in`.koreatech.business.domain.model.store.OwnerMenu
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -565,7 +566,7 @@ private fun MenuCard(
                     .joinToString(" · ") { price ->
                         listOfNotNull(
                             price.option,
-                            "${price.price}$won"
+                            "${price.price.toCurrencyText()}$won"
                         ).joinToString(" ")
                     }.ifBlank { stringResource(Res.string.menu_price_not_registered) },
                 style = KoinTheme.typography.medium14,
