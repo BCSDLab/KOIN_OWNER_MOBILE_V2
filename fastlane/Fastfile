@@ -1,0 +1,141 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build the Android release app bundle"
+  lane :release do |options|
+    version_name = options[:version_name] || release_version
+    version_code = options[:version_code] || base_version_code(version_name)
+    gradle(
+      task: ":androidApp:bundleRelease",
+      project_dir: ".",
+      print_command: false,
+      properties: {
+        "android.injected.version.name" => version_name,
+        "android.injected.version.code" => version_code,
+        "android.injected.signing.store.file" => required_env("ANDROID_KEYSTORE_PATH"),
+        "android.injected.signing.store.password" => required_env("ANDROID_KEYSTORE_PASSWORD"),
+        "android.injected.signing.key.alias" => required_env("ANDROID_KEY_ALIAS"),
+        "android.injected.signing.key.password" => required_env("ANDROID_KEY_PASSWORD")
+      }
+    )
+  end
+
+  desc "Upload the Android release app bundle to the internal track"
+  lane :deploy do
+    version_name = release_version
+    json_key_data = required_env("GOOGLE_PLAY_JSON_KEY")
+    existing_codes = google_play_track_version_codes(
+      track: "internal",
+      json_key_data: json_key_data
+    )
+    version_code = next_android_version_code(version_name, existing_codes)
+    release(version_name: version_name, version_code: version_code)
+    upload_to_play_store(
+      track: "internal",
+      package_name: "in.koreatech.business",
+      json_key_data: json_key_data,
+      aab: lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
+
+platform :ios do
+  desc "Build the iOS release archive"
+  lane :build do |options|
+    version_name = options[:version_name] || release_version
+    version_code = options[:version_code] || base_version_code(version_name)
+    team_id = ios_config("TEAM_ID")
+    build_app(
+      project: "iosApp/iosApp.xcodeproj",
+      scheme: "iosApp",
+      configuration: "Release",
+      export_method: "app-store",
+      export_team_id: team_id,
+      xcargs: [
+        "TEAM_ID=#{team_id}",
+        "PRODUCT_BUNDLE_IDENTIFIER=#{ios_config('PRODUCT_BUNDLE_IDENTIFIER')}",
+        "MARKETING_VERSION=#{version_name}",
+        "CURRENT_PROJECT_VERSION=#{version_code}"
+      ].join(" ")
+    )
+  end
+
+  desc "Upload the iOS release archive to TestFlight"
+  lane :deploy do
+    version_name = release_version
+    api_key = app_store_connect_api_key(
+      key_id: required_env("APP_STORE_CONNECT_KEY_ID"),
+      issuer_id: required_env("APP_STORE_CONNECT_ISSUER_ID"),
+      key_content: required_env("APP_STORE_CONNECT_KEY_BASE64"),
+      is_key_content_base64: true
+    )
+    base_code = base_version_code(version_name)
+    latest_code = latest_testflight_build_number(
+      api_key: api_key,
+      app_identifier: ios_config("PRODUCT_BUNDLE_IDENTIFIER"),
+      version: version_name,
+      initial_build_number: base_code - 1
+    )
+    version_code = next_testflight_version_code(version_name, latest_code)
+    build(version_name: version_name, version_code: version_code)
+    upload_to_testflight(
+      api_key: api_key
+    )
+  end
+end
+
+def required_env(name)
+  value = ENV[name]
+  UI.user_error!("Missing required environment variable: #{name}") if value.to_s.empty?
+  value
+end
+
+def ios_config(name)
+  config_file = File.expand_path("../iosApp/Configuration/Config.xcconfig", __dir__)
+  value = File.foreach(config_file)
+              .find { |line| line.match?(/^#{Regexp.escape(name)}\s*=/) }
+              &.split("=", 2)
+              &.last
+              &.strip
+  UI.user_error!("#{name} is missing from Config.xcconfig") if value.to_s.empty?
+  value
+end
+
+def release_version
+  version_file = File.expand_path("../version.properties", __dir__)
+  version = File.foreach(version_file)
+                .find { |line| line.start_with?("VERSION_NAME=") }
+                &.split("=", 2)
+                &.last
+                &.strip
+  UI.user_error!("VERSION_NAME is missing from version.properties") if version.to_s.empty?
+  parts = version.split(".")
+  UI.user_error!("VERSION_NAME must use major.minor.patch format") unless parts.length == 3
+  UI.user_error!("VERSION_NAME must contain only numbers") unless parts.all? { |part| part.match?(/\A\d+\z/) }
+  UI.user_error!("VERSION_NAME minor and patch must be between 0 and 99") unless parts.drop(1).all? { |part| part.to_i.between?(0, 99) }
+  version
+end
+
+def base_version_code(version)
+  major, minor, patch = version.split(".").map(&:to_i)
+  major * 1_000_000 + minor * 10_000 + patch * 100
+end
+
+def next_android_version_code(version, existing_codes)
+  base_code = base_version_code(version)
+  release_codes = existing_codes.select { |code| (code / 100) * 100 == base_code }
+  internal_code = release_codes.empty? ? 0 : (release_codes.max % 100) + 1
+  UI.user_error!("Exceeded max internal builds (99) for version #{version}") if internal_code > 99
+  base_code + internal_code
+end
+
+def next_testflight_version_code(version, latest_code)
+  base_code = base_version_code(version)
+  next_code = latest_code < base_code ? base_code : latest_code + 1
+  UI.user_error!("Unexpected TestFlight build number #{latest_code} for version #{version}") if (next_code / 100) * 100 != base_code
+  UI.user_error!("Exceeded max internal builds (99) for version #{version}") if next_code > base_code + 99
+  next_code
+end
