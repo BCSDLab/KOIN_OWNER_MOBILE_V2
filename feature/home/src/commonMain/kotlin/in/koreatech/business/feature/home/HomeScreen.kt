@@ -163,12 +163,16 @@ private fun HomeTopBar(
             contentDescription = stringResource(Res.string.common_koin),
             modifier = Modifier.width(63.dp).height(21.dp)
         )
+        /**
+         * Disable notification screen for now
+         * TODO: Implement notification when FCM ready
         Spacer(modifier = Modifier.weight(1f))
         Image(
             imageVector = vectorResource(Res.drawable.ic_rebrand_notification),
             contentDescription = stringResource(Res.string.home_notification),
             modifier = Modifier.size(24.dp).noRippleClickable(onClick = onNotificationClick)
         )
+        **/
     }
 }
 
