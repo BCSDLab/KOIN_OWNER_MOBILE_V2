@@ -208,7 +208,7 @@ private fun OrderDetailContent(
                 )
                 DetailRow(
                     stringResource(Res.string.order_discount),
-                    stringResource(Res.string.common_won_format, order.payment.discountAmount.toCurrencyText())
+                    stringResource(Res.string.common_won_format, "-${order.payment.discountAmount.toCurrencyText()}")
                 )
                 HorizontalDivider(color = KoinTheme.colors.neutral300)
                 DetailRow(
