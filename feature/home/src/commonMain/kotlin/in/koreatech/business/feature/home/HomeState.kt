@@ -1,8 +1,8 @@
 package `in`.koreatech.business.feature.home
 
-import `in`.koreatech.business.domain.model.store.OwnerShop
+import `in`.koreatech.business.feature.home.model.HomeShop
 
 data class HomeState(
-    val shop: OwnerShop? = null,
+    val shop: HomeShop? = null,
     val isLoading: Boolean = false
 )

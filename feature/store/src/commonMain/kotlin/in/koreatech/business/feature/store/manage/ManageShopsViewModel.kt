@@ -9,6 +9,7 @@ import `in`.koreatech.business.core.di.AppScope
 import `in`.koreatech.business.domain.usecase.store.GetOwnerShopsUseCase
 import `in`.koreatech.business.domain.usecase.store.ObserveSelectedShopIdUseCase
 import `in`.koreatech.business.domain.usecase.store.SetSelectedShopUseCase
+import `in`.koreatech.business.feature.store.manage.model.toManageShopItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
@@ -63,7 +64,12 @@ class ManageShopsViewModel(
                             ?.takeIf { shopId -> shops.any { it.id == shopId } }
                             ?: shops.firstOrNull()?.id
                         setSelectedShopUseCase(selectedShopId)
-                        reduce { state.copy(shops = shops.toImmutableList(), isLoading = false) }
+                        reduce {
+                            state.copy(
+                                shops = shops.map { it.toManageShopItem() }.toImmutableList(),
+                                isLoading = false
+                            )
+                        }
                     }.onFailure {
                         reduce { state.copy(isLoading = false) }
                         postSideEffect(ManageShopsSideEffect.ShopLoadFailed)

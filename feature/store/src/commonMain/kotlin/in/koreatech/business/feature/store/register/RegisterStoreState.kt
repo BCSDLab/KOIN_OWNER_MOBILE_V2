@@ -1,18 +1,18 @@
 package `in`.koreatech.business.feature.store.register
 
-import `in`.koreatech.business.domain.model.address.AddressSearchResult
-import `in`.koreatech.business.domain.model.store.ShopCategory
+import `in`.koreatech.business.feature.store.register.model.RegisterStoreAddress
+import `in`.koreatech.business.feature.store.register.model.RegisterStoreCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableSet
 
 data class RegisterStoreState(
     val shopId: Int? = null,
-    val categories: ImmutableList<ShopCategory> = persistentListOf(),
+    val categories: ImmutableList<RegisterStoreCategory> = persistentListOf(),
     val selectedCategoryId: Int? = null,
     val storeName: String = "",
     val address: String = "",
-    val addressSearchResults: ImmutableList<AddressSearchResult> = persistentListOf(),
+    val addressSearchResults: ImmutableList<RegisterStoreAddress> = persistentListOf(),
     val hasAddressSearchResult: Boolean = false,
     val isAddressSearching: Boolean = false,
     val isAddressSearchError: Boolean = false,

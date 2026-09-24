@@ -26,6 +26,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.terms_marke
 import `in`.koreatech.business.core.designsystem.generated.resources.terms_privacy
 import `in`.koreatech.business.core.designsystem.generated.resources.terms_service
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import kotlinx.collections.immutable.toImmutableList
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -70,7 +71,7 @@ fun TermsScreenImpl(
         KoinSelectableChipGroup(
             items = state.terms.mapIndexed { index, term ->
                 KoinSelectableItem(index, term.type.title())
-            },
+            }.toImmutableList(),
             selectedItemId = state.selectedIndex,
             onItemClick = onTermClick,
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)

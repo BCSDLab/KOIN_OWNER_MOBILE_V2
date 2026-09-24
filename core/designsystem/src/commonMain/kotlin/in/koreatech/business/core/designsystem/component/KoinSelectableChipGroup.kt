@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import kotlinx.collections.immutable.ImmutableList
 
 data class KoinSelectableItem(
     val id: Int,
@@ -25,7 +26,7 @@ data class KoinSelectableItem(
 
 @Composable
 fun KoinSelectableChipGroup(
-    items: List<KoinSelectableItem>,
+    items: ImmutableList<KoinSelectableItem>,
     selectedItemId: Int?,
     onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier

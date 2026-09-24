@@ -12,6 +12,8 @@ import `in`.koreatech.business.domain.usecase.store.DeleteOwnerMenuUseCase
 import `in`.koreatech.business.domain.usecase.store.GetOwnerMenusUseCase
 import `in`.koreatech.business.domain.usecase.store.ObserveSelectedShopUseCase
 import `in`.koreatech.business.domain.usecase.store.UpdateOwnerMenuCategoryUseCase
+import `in`.koreatech.business.feature.menu.model.MenuShopUiModel
+import `in`.koreatech.business.feature.menu.model.toMenuCategoryUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
@@ -176,7 +178,7 @@ class MenuViewModel(
             .onSuccess {
                 reduce {
                     state.copy(
-                        categories = it.toImmutableList(),
+                        categories = it.map { category -> category.toMenuCategoryUiModel() }.toImmutableList(),
                         isCategoryEditorVisible = false,
                         categoryEditorId = null,
                         categoryName = "",
@@ -195,7 +197,7 @@ class MenuViewModel(
             .onSuccess {
                 reduce {
                     state.copy(
-                        categories = it.toImmutableList(),
+                        categories = it.map { category -> category.toMenuCategoryUiModel() }.toImmutableList(),
                         deleteCategoryId = null,
                         deleteCategoryName = null,
                         isDeletingCategory = false
@@ -213,7 +215,7 @@ class MenuViewModel(
             .onSuccess { menus ->
                 reduce {
                     state.copy(
-                        categories = menus.toImmutableList(),
+                        categories = menus.map { it.toMenuCategoryUiModel() }.toImmutableList(),
                         isDeleting = false,
                         deleteMenuId = null,
                         deleteMenuName = null
@@ -232,7 +234,12 @@ class MenuViewModel(
                 .onEach { result ->
                     result
                         .onSuccess {
-                            reduce { state.copy(categories = it.toImmutableList(), isLoading = false) }
+                            reduce {
+                                state.copy(
+                                    categories = it.map { category -> category.toMenuCategoryUiModel() }.toImmutableList(),
+                                    isLoading = false
+                                )
+                            }
                         }.onFailure {
                             reduce { state.copy(isLoading = false) }
                             postSideEffect(MenuSideEffect.ShowError(MenuError.MenuLoad))
@@ -249,7 +256,12 @@ class MenuViewModel(
             .onEach { result ->
                 result
                     .onSuccess {
-                        reduce { state.copy(categories = it.toImmutableList(), isRefreshing = false) }
+                        reduce {
+                            state.copy(
+                                categories = it.map { category -> category.toMenuCategoryUiModel() }.toImmutableList(),
+                                isRefreshing = false
+                            )
+                        }
                     }.onFailure {
                         reduce { state.copy(isRefreshing = false) }
                         postSideEffect(MenuSideEffect.ShowError(MenuError.MenuReload))
@@ -261,7 +273,17 @@ class MenuViewModel(
         observeSelectedShopUseCase().collectLatest { result ->
             result
                 .onSuccess { shop ->
-                    reduce { state.copy(shop = shop, categories = persistentListOf()) }
+                    reduce {
+                        state.copy(
+                            shop = shop?.let {
+                                MenuShopUiModel(
+                                    id = it.id,
+                                    name = it.name
+                                )
+                            },
+                            categories = persistentListOf()
+                        )
+                    }
                     shop?.id?.let { shopId ->
                         getOwnerMenusUseCase(shopId)
                             .onStart { reduce { state.copy(isLoading = true) } }
@@ -270,7 +292,7 @@ class MenuViewModel(
                                     .onSuccess { menus ->
                                         reduce {
                                             state.copy(
-                                                categories = menus.toImmutableList(),
+                                                categories = menus.map { it.toMenuCategoryUiModel() }.toImmutableList(),
                                                 isLoading = false
                                             )
                                         }

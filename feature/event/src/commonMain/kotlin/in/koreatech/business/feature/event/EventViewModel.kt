@@ -6,9 +6,12 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import `in`.koreatech.business.core.di.AppScope
+import `in`.koreatech.business.domain.model.store.OwnerEvent
 import `in`.koreatech.business.domain.usecase.store.DeleteOwnerEventUseCase
 import `in`.koreatech.business.domain.usecase.store.GetOwnerEventsUseCase
 import `in`.koreatech.business.domain.usecase.store.ObserveSelectedShopUseCase
+import `in`.koreatech.business.feature.event.model.EventShopUiModel
+import `in`.koreatech.business.feature.event.model.toEventUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
@@ -46,7 +49,7 @@ class EventViewModel(
                 .onEach { result ->
                     result
                         .onSuccess {
-                            reduce { state.copy(events = it.toImmutableList(), isLoading = false) }
+                            reduce { state.copy(events = it.map(OwnerEvent::toEventUiModel).toImmutableList(), isLoading = false) }
                         }.onFailure {
                             reduce { state.copy(isLoading = false) }
                             postSideEffect(EventSideEffect.EventLoadFailed)
@@ -110,7 +113,7 @@ class EventViewModel(
             .onEach { result ->
                 result
                     .onSuccess {
-                        reduce { state.copy(events = it.toImmutableList(), isRefreshing = false) }
+                        reduce { state.copy(events = it.map(OwnerEvent::toEventUiModel).toImmutableList(), isRefreshing = false) }
                     }.onFailure {
                         reduce { state.copy(isRefreshing = false) }
                         postSideEffect(EventSideEffect.EventReloadFailed)
@@ -122,7 +125,17 @@ class EventViewModel(
         observeSelectedShopUseCase().collectLatest { result ->
             result
                 .onSuccess { shop ->
-                    reduce { state.copy(shop = shop, events = persistentListOf()) }
+                    reduce {
+                        state.copy(
+                            shop = shop?.let {
+                                EventShopUiModel(
+                                    id = it.id,
+                                    name = it.name
+                                )
+                            },
+                            events = persistentListOf()
+                        )
+                    }
                     shop?.id?.let { shopId ->
                         getOwnerEventsUseCase(shopId)
                             .onStart { reduce { state.copy(isLoading = true) } }
@@ -131,7 +144,7 @@ class EventViewModel(
                                     .onSuccess { events ->
                                         reduce {
                                             state.copy(
-                                                events = events.toImmutableList(),
+                                                events = events.map(OwnerEvent::toEventUiModel).toImmutableList(),
                                                 isLoading = false
                                             )
                                         }

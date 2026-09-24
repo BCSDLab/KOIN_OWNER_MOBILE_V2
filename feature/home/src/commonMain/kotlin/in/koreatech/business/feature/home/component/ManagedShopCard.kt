@@ -51,13 +51,13 @@ import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.toCurrencyText
 import `in`.koreatech.business.core.util.toKRPhoneNumber
-import `in`.koreatech.business.domain.model.store.OwnerShop
+import `in`.koreatech.business.feature.home.model.HomeShop
 import `in`.koreatech.business.feature.home.util.toDisplayText
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun ManagedShopCard(
-    shop: OwnerShop,
+    shop: HomeShop,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

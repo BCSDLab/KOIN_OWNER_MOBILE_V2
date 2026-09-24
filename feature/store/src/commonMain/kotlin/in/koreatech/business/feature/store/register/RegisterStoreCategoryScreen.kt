@@ -35,14 +35,14 @@ import `in`.koreatech.business.core.designsystem.generated.resources.register_st
 import `in`.koreatech.business.core.designsystem.generated.resources.register_store_category_step
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import `in`.koreatech.business.domain.model.store.ShopCategory
+import `in`.koreatech.business.feature.store.register.model.RegisterStoreCategory
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun RegisterStoreCategoryScreen(
     title: String,
-    categories: ImmutableList<ShopCategory>,
+    categories: ImmutableList<RegisterStoreCategory>,
     selectedCategoryId: Int?,
     onCategorySelect: (Int) -> Unit,
     onBack: () -> Unit,

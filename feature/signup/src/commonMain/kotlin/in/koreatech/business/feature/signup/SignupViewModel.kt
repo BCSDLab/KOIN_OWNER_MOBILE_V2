@@ -8,7 +8,6 @@ import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import `in`.koreatech.business.core.di.AppScope
 import `in`.koreatech.business.core.term.TermsContentProvider
 import `in`.koreatech.business.domain.error.signup.PhoneNumberAlreadyExistsException
-import `in`.koreatech.business.domain.model.store.AttachStore
 import `in`.koreatech.business.domain.model.upload.PreSignedUrlDomain
 import `in`.koreatech.business.domain.usecase.presignedurl.UploadImageUseCase
 import `in`.koreatech.business.domain.usecase.signup.CheckCompanyNumberUseCase
@@ -20,6 +19,8 @@ import `in`.koreatech.business.domain.util.formatBusinessNumber
 import `in`.koreatech.business.domain.util.isValidPhoneNumber
 import `in`.koreatech.business.feature.signup.mapper.toOwnerRegistration
 import `in`.koreatech.business.feature.signup.mapper.toStoreUrl
+import `in`.koreatech.business.feature.signup.model.SignupAttachment
+import `in`.koreatech.business.feature.signup.model.toSignupStoreSearchResult
 import `in`.koreatech.business.feature.signup.verification.PhoneNumberVerificationState
 import `in`.koreatech.business.feature.signup.verification.VerificationCodeState
 import kotlinx.collections.immutable.persistentListOf
@@ -166,7 +167,7 @@ class SignupViewModel(
                     .onSuccess { stores ->
                         reduce {
                             state.copy(
-                                storeSearchResults = stores.toImmutableList(),
+                                storeSearchResults = stores.map { it.toSignupStoreSearchResult() }.toImmutableList(),
                                 isSearchingStores = false
                             )
                         }
@@ -220,7 +221,13 @@ class SignupViewModel(
             reduce {
                 state.copy(
                     isUploading = false,
-                    selectedImages = (state.selectedImages + AttachStore(resultUrl, fileName)).toImmutableList(),
+                    selectedImages = state.selectedImages
+                        .plus(
+                            SignupAttachment(
+                                url = resultUrl,
+                                title = fileName
+                            )
+                        ).toImmutableList(),
                     fileInfo = (state.fileInfo + resultUrl.toStoreUrl(fileName, mediaType, bytes.size.toLong())).toImmutableList()
                 )
             }

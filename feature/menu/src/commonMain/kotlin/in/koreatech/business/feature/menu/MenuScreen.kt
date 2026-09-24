@@ -85,7 +85,8 @@ import `in`.koreatech.business.core.designsystem.generated.resources.menu_title
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.toCurrencyText
-import `in`.koreatech.business.domain.model.store.OwnerMenu
+import `in`.koreatech.business.feature.menu.model.MenuUiModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -276,7 +277,7 @@ fun MenuScreenImpl(
             else ->
                 Column(modifier = Modifier.fillMaxSize()) {
                     KoinSelectableChipGroup(
-                        items = state.categories.map { KoinSelectableItem(it.id, it.name) },
+                        items = state.categories.map { KoinSelectableItem(it.id, it.name) }.toImmutableList(),
                         selectedItemId = selectedCategoryId,
                         onItemClick = { categoryId ->
                             categoryStartIndices[categoryId]?.let { itemIndex ->
@@ -523,7 +524,7 @@ private fun MenuCategoryDialogs(
 
 @Composable
 private fun MenuCard(
-    menu: OwnerMenu,
+    menu: MenuUiModel,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {

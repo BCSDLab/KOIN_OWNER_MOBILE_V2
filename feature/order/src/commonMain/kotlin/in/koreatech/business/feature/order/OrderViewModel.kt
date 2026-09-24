@@ -10,6 +10,7 @@ import `in`.koreatech.business.domain.model.order.OwnerOrderCategory
 import `in`.koreatech.business.domain.usecase.order.GetOwnerOrderableShopsUseCase
 import `in`.koreatech.business.domain.usecase.order.GetOwnerOrdersUseCase
 import `in`.koreatech.business.domain.usecase.store.ObserveSelectedShopIdUseCase
+import `in`.koreatech.business.feature.order.model.toOrderUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
@@ -54,7 +55,14 @@ class OrderViewModel(
         }
         reduce { state.copy(isLoading = true, hasError = false) }
         getOrdersUseCase(orderableShopId, category)
-            .onSuccess { reduce { state.copy(orders = it.toImmutableList(), isLoading = false) } }
+            .onSuccess {
+                reduce {
+                    state.copy(
+                        orders = it.map { order -> order.toOrderUiModel() }.toImmutableList(),
+                        isLoading = false
+                    )
+                }
+            }
             .onFailure { reduce { state.copy(isLoading = false, hasError = true) } }
     }
 }

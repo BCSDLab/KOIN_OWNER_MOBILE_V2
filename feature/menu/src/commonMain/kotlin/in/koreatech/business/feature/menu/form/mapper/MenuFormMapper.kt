@@ -6,13 +6,14 @@ import `in`.koreatech.business.domain.model.store.OwnerMenuForm
 import `in`.koreatech.business.domain.model.store.OwnerMenuPrice
 import `in`.koreatech.business.feature.menu.form.EditableMenuPrice
 import `in`.koreatech.business.feature.menu.form.MenuFormState
+import `in`.koreatech.business.feature.menu.form.model.toMenuFormCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 
 internal fun MenuFormState.withCategories(categories: List<OwnerMenuCategoryOption>) = copy(
-    categories = categories.toImmutableList(),
+    categories = categories.map { it.toMenuFormCategory() }.toImmutableList(),
     isLoading = false,
     error = null
 )
@@ -21,7 +22,7 @@ internal fun MenuFormState.withMenuDetail(
     categories: List<OwnerMenuCategoryOption>,
     detail: OwnerMenuDetail
 ) = copy(
-    categories = categories.toImmutableList(),
+    categories = categories.map { it.toMenuFormCategory() }.toImmutableList(),
     selectedCategoryIds = detail.categoryIds.toImmutableSet(),
     name = detail.name,
     description = detail.description,

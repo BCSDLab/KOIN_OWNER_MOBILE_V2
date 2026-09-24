@@ -43,7 +43,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.manage_shop
 import `in`.koreatech.business.core.designsystem.generated.resources.manage_shops_title
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import `in`.koreatech.business.domain.model.store.OwnerShop
+import `in`.koreatech.business.feature.store.manage.model.ManageShopItem
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -122,7 +122,7 @@ fun ManageShopsScreenImpl(
                 contentPadding = PaddingValues(24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(state.shops, key = OwnerShop::id) { shop ->
+                items(state.shops, key = ManageShopItem::id) { shop ->
                     ManageShopItem(
                         shop = shop,
                         selected = state.selectedShopId == shop.id,
@@ -171,7 +171,7 @@ private fun ManageShopsLoadingContent(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ManageShopItem(
-    shop: OwnerShop,
+    shop: ManageShopItem,
     selected: Boolean,
     onClick: () -> Unit,
     onEdit: () -> Unit,

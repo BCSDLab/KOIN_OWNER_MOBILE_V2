@@ -7,12 +7,13 @@ import `in`.koreatech.business.domain.model.store.ShopCategory
 import `in`.koreatech.business.feature.store.register.RegisterStoreDay
 import `in`.koreatech.business.feature.store.register.RegisterStoreOperatingTime
 import `in`.koreatech.business.feature.store.register.RegisterStoreState
+import `in`.koreatech.business.feature.store.register.model.toRegisterStoreCategory
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 
 internal fun OwnerShop.toRegisterStoreState(categories: List<ShopCategory>): RegisterStoreState = RegisterStoreState(
     shopId = id,
-    categories = categories.toImmutableList(),
+    categories = categories.map { it.toRegisterStoreCategory() }.toImmutableList(),
     selectedCategoryId = categoryIds.firstOrNull(),
     storeName = name,
     address = address.orEmpty(),

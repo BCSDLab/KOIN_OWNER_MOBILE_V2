@@ -7,6 +7,7 @@ import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import `in`.koreatech.business.core.di.AppScope
 import `in`.koreatech.business.domain.usecase.store.GetSelectedShopUseCase
+import `in`.koreatech.business.feature.home.model.toHomeShop
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -39,7 +40,7 @@ class HomeViewModel(
             .onEach { result ->
                 result
                     .onSuccess { shop ->
-                        reduce { state.copy(shop = shop, isLoading = false) }
+                        reduce { state.copy(shop = shop?.toHomeShop(), isLoading = false) }
                     }.onFailure {
                         reduce { state.copy(isLoading = false) }
                         postSideEffect(HomeSideEffect.ShopLoadFailed)

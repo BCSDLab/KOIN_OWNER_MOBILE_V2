@@ -1,13 +1,13 @@
 package `in`.koreatech.business.feature.menu
 
-import `in`.koreatech.business.domain.model.store.OwnerMenuCategory
-import `in`.koreatech.business.domain.model.store.OwnerShop
+import `in`.koreatech.business.feature.menu.model.MenuCategoryUiModel
+import `in`.koreatech.business.feature.menu.model.MenuShopUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class MenuState(
-    val shop: OwnerShop? = null,
-    val categories: ImmutableList<OwnerMenuCategory> = persistentListOf(),
+    val shop: MenuShopUiModel? = null,
+    val categories: ImmutableList<MenuCategoryUiModel> = persistentListOf(),
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val isFabMenuExpanded: Boolean = false,

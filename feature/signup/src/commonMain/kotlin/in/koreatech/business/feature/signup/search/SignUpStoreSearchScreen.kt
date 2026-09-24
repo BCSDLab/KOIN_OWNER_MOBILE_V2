@@ -38,9 +38,9 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_sto
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_store_search_hint
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import `in`.koreatech.business.domain.model.store.StoreSearchResult
 import `in`.koreatech.business.feature.signup.SignupError
 import `in`.koreatech.business.feature.signup.SignupState
+import `in`.koreatech.business.feature.signup.model.SignupStoreSearchResult
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -112,7 +112,7 @@ internal fun SignUpStoreSearchScreen(
                         ) {
                             items(
                                 items = state.storeSearchResults,
-                                key = StoreSearchResult::id
+                                key = SignupStoreSearchResult::id
                             ) { store ->
                                 StoreSearchItem(
                                     store = store,
@@ -145,7 +145,7 @@ internal fun SignUpStoreSearchScreen(
 
 @Composable
 private fun StoreSearchItem(
-    store: StoreSearchResult,
+    store: SignupStoreSearchResult,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier

@@ -100,7 +100,7 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.file.rememberImageFilePicker
 import `in`.koreatech.business.core.util.CurrencyVisualTransformation
 import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
-import `in`.koreatech.business.domain.model.address.AddressSearchResult
+import `in`.koreatech.business.feature.store.register.model.RegisterStoreAddress
 import `in`.koreatech.business.feature.store.register.util.isValidTimeInput
 import `in`.koreatech.business.feature.store.register.util.toTimeText
 import kotlinx.collections.immutable.ImmutableList
@@ -228,12 +228,12 @@ internal fun RegisterStoreBasicInfoScreen(
 
 @Composable
 private fun RegisterStoreAddressSearchDialog(
-    results: ImmutableList<AddressSearchResult>,
+    results: ImmutableList<RegisterStoreAddress>,
     hasSearchResult: Boolean,
     isSearching: Boolean,
     isError: Boolean,
     onSearch: (String) -> Unit,
-    onSelect: (AddressSearchResult) -> Unit,
+    onSelect: (RegisterStoreAddress) -> Unit,
     onDismiss: () -> Unit
 ) {
     var keyword by remember { mutableStateOf("") }
@@ -296,7 +296,7 @@ private fun AddressSearchMessage(message: String) {
 
 @Composable
 private fun AddressSearchItem(
-    address: AddressSearchResult,
+    address: RegisterStoreAddress,
     onClick: () -> Unit
 ) {
     Column(

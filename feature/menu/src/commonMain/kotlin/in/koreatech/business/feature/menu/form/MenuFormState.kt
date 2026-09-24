@@ -1,6 +1,6 @@
 package `in`.koreatech.business.feature.menu.form
 
-import `in`.koreatech.business.domain.model.store.OwnerMenuCategoryOption
+import `in`.koreatech.business.feature.menu.form.model.MenuFormCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentSetOf
 data class MenuFormState(
     val shopId: Int,
     val menuId: Int?,
-    val categories: ImmutableList<OwnerMenuCategoryOption> = persistentListOf(),
+    val categories: ImmutableList<MenuFormCategory> = persistentListOf(),
     val selectedCategoryIds: ImmutableSet<Int> = persistentSetOf(),
     val name: String = "",
     val description: String = "",

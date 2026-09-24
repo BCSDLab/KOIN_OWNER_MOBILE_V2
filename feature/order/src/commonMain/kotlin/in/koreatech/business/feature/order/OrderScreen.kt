@@ -48,8 +48,9 @@ import `in`.koreatech.business.core.designsystem.generated.resources.order_type_
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.toCurrencyText
-import `in`.koreatech.business.domain.model.order.OwnerOrder
 import `in`.koreatech.business.domain.model.order.OwnerOrderCategory
+import `in`.koreatech.business.feature.order.model.OrderUiModel
+import kotlinx.collections.immutable.toImmutableList
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -132,7 +133,7 @@ private fun OrderCategoryTabs(selected: OwnerOrderCategory, onSelect: (OwnerOrde
     KoinSelectableChipGroup(
         items = categories.mapIndexed { index, category ->
             KoinSelectableItem(index, stringResource(category.label))
-        },
+        }.toImmutableList(),
         selectedItemId = categories.indexOf(selected),
         onItemClick = { index -> categories.getOrNull(index)?.let(onSelect) },
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
@@ -140,7 +141,7 @@ private fun OrderCategoryTabs(selected: OwnerOrderCategory, onSelect: (OwnerOrde
 }
 
 @Composable
-private fun OrderCard(order: OwnerOrder, onClick: () -> Unit) {
+private fun OrderCard(order: OrderUiModel, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -197,10 +198,10 @@ internal val OwnerOrderCategory.label: StringResource
         OwnerOrderCategory.COMPLETED -> Res.string.order_status_completed
     }
 
-internal val OwnerOrder.typeLabel: StringResource
+internal val OrderUiModel.typeLabel: StringResource
     get() = if (type == "DELIVERY") Res.string.order_type_delivery else Res.string.order_type_takeout
 
-internal val OwnerOrder.statusLabel: StringResource
+internal val OrderUiModel.statusLabel: StringResource
     get() = when (status) {
         "CONFIRMING" -> Res.string.order_status_new
         "COOKING" -> Res.string.order_status_cooking

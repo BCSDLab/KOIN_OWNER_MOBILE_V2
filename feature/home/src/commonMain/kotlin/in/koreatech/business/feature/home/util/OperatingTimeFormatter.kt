@@ -1,8 +1,8 @@
 package `in`.koreatech.business.feature.home.util
 
-import `in`.koreatech.business.domain.model.store.OperatingTime
+import `in`.koreatech.business.feature.home.model.HomeOperatingTime
 
-internal fun OperatingTime.toDisplayText(
+internal fun HomeOperatingTime.toDisplayText(
     dayNames: Map<String, String>,
     closedText: String
 ): String {

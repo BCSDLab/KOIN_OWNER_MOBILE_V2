@@ -1,8 +1,8 @@
 package `in`.koreatech.business.feature.signup
 
-import `in`.koreatech.business.domain.model.store.AttachStore
-import `in`.koreatech.business.domain.model.store.StoreSearchResult
-import `in`.koreatech.business.domain.model.store.StoreUrl
+import `in`.koreatech.business.feature.signup.model.SignupAttachment
+import `in`.koreatech.business.feature.signup.model.SignupStoreSearchResult
+import `in`.koreatech.business.feature.signup.model.SignupStoreUrl
 import `in`.koreatech.business.feature.signup.verification.PhoneNumberVerificationState
 import `in`.koreatech.business.feature.signup.verification.VerificationCodeState
 import kotlinx.collections.immutable.ImmutableList
@@ -21,11 +21,11 @@ data class SignupState(
     val storeName: String = "",
     val storePhoneNumber: String = "",
     val storeSearchQuery: String = "",
-    val storeSearchResults: ImmutableList<StoreSearchResult> = persistentListOf(),
+    val storeSearchResults: ImmutableList<SignupStoreSearchResult> = persistentListOf(),
     val selectedStoreId: Int? = null,
     val isSearchingStores: Boolean = false,
-    val selectedImages: ImmutableList<AttachStore> = persistentListOf(),
-    val fileInfo: ImmutableList<StoreUrl> = persistentListOf(),
+    val selectedImages: ImmutableList<SignupAttachment> = persistentListOf(),
+    val fileInfo: ImmutableList<SignupStoreUrl> = persistentListOf(),
     val privacyTerm: String = "",
     val koinTerm: String = "",
     val marketingTerm: String = "",

@@ -28,14 +28,16 @@ import `in`.koreatech.business.core.designsystem.generated.resources.menu_price
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.CurrencyVisualTransformation
-import `in`.koreatech.business.domain.model.store.OwnerMenuCategoryOption
 import `in`.koreatech.business.feature.menu.form.EditableMenuPrice
+import `in`.koreatech.business.feature.menu.form.model.MenuFormCategory
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun MenuCategorySelector(
-    categories: List<OwnerMenuCategoryOption>,
-    selectedIds: Set<Int>,
+    categories: ImmutableList<MenuFormCategory>,
+    selectedIds: ImmutableSet<Int>,
     onCategoryClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {

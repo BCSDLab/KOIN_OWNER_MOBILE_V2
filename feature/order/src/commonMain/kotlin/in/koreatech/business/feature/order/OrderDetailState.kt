@@ -1,9 +1,9 @@
 package `in`.koreatech.business.feature.order
 
-import `in`.koreatech.business.domain.model.order.OwnerOrderDetail
+import `in`.koreatech.business.feature.order.model.OrderDetailUiModel
 
 data class OrderDetailState(
-    val order: OwnerOrderDetail? = null,
+    val order: OrderDetailUiModel? = null,
     val isLoading: Boolean = true,
     val hasError: Boolean = false
 )

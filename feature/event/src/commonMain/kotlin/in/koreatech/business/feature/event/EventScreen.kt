@@ -62,7 +62,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.event_shop_
 import `in`.koreatech.business.core.designsystem.generated.resources.event_title
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import `in`.koreatech.business.domain.model.store.OwnerEvent
+import `in`.koreatech.business.feature.event.model.EventUiModel
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -281,7 +281,7 @@ private fun EventLoadingContent() {
 
 @Composable
 private fun EventCard(
-    event: OwnerEvent,
+    event: EventUiModel,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {

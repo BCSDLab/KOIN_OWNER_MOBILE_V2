@@ -11,6 +11,8 @@ import `in`.koreatech.business.domain.usecase.store.GetShopCategoriesUseCase
 import `in`.koreatech.business.domain.usecase.store.SaveOwnerShopUseCase
 import `in`.koreatech.business.feature.store.register.mapper.toOwnerShopForm
 import `in`.koreatech.business.feature.store.register.mapper.toRegisterStoreState
+import `in`.koreatech.business.feature.store.register.model.toRegisterStoreAddress
+import `in`.koreatech.business.feature.store.register.model.toRegisterStoreCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -40,7 +42,7 @@ class RegisterStoreViewModel internal constructor(
         val shop = loadShop()
             .getOrElse { return@subIntent showLoadError() }
         val loadedState = shop?.toRegisterStoreState(categories)
-            ?: state.copy(categories = categories.toImmutableList())
+            ?: state.copy(categories = categories.map { it.toRegisterStoreCategory() }.toImmutableList())
         reduce { loadedState.copy(isLoading = false, error = null) }
     }
 
@@ -83,7 +85,7 @@ class RegisterStoreViewModel internal constructor(
             .onSuccess { addresses ->
                 reduce {
                     state.copy(
-                        addressSearchResults = addresses.toImmutableList(),
+                        addressSearchResults = addresses.map { it.toRegisterStoreAddress() }.toImmutableList(),
                         hasAddressSearchResult = true,
                         isAddressSearching = false
                     )

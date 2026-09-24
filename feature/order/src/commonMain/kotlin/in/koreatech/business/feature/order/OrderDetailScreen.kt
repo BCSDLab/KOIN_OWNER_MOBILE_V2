@@ -52,7 +52,10 @@ import `in`.koreatech.business.core.designsystem.generated.resources.order_total
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.toCurrencyText
 import `in`.koreatech.business.core.util.toKRPhoneNumber
-import `in`.koreatech.business.domain.model.order.OwnerOrderDetail
+import `in`.koreatech.business.feature.order.model.OrderDetailUiModel
+import `in`.koreatech.business.feature.order.model.OrderUiModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -96,24 +99,24 @@ private fun OrderDetailLoadingContent(modifier: Modifier = Modifier) {
         contentPadding = PaddingValues(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item { DetailSectionSkeleton(titleWidth = 144.dp, rowWidths = listOf(180.dp, 120.dp)) }
+        item { DetailSectionSkeleton(titleWidth = 144.dp, rowWidths = persistentListOf(180.dp, 120.dp)) }
         item { Box(modifier = Modifier.width(88.dp).height(22.dp).skeleton()) }
         items(2) {
             DetailSectionSkeleton(
                 titleWidth = 156.dp,
-                rowWidths = listOf(112.dp, 196.dp, 72.dp)
+                rowWidths = persistentListOf(112.dp, 196.dp, 72.dp)
             )
         }
         item { Box(modifier = Modifier.width(104.dp).height(22.dp).skeleton()) }
         item {
             DetailSectionSkeleton(
-                rowWidths = listOf(128.dp, 152.dp, 220.dp, 184.dp)
+                rowWidths = persistentListOf(128.dp, 152.dp, 220.dp, 184.dp)
             )
         }
         item { Box(modifier = Modifier.width(88.dp).height(22.dp).skeleton()) }
         item {
             DetailSectionSkeleton(
-                rowWidths = listOf(112.dp, 96.dp, 104.dp, 136.dp)
+                rowWidths = persistentListOf(112.dp, 96.dp, 104.dp, 136.dp)
             )
         }
     }
@@ -122,7 +125,7 @@ private fun OrderDetailLoadingContent(modifier: Modifier = Modifier) {
 @Composable
 private fun DetailSectionSkeleton(
     titleWidth: Dp? = null,
-    rowWidths: List<Dp>
+    rowWidths: ImmutableList<Dp>
 ) {
     Column(
         modifier = Modifier.fillMaxWidth().background(KoinTheme.colors.neutral100, KoinTheme.shapes.small).padding(16.dp),
@@ -144,7 +147,7 @@ private fun DetailSectionSkeleton(
 
 @Composable
 private fun OrderDetailContent(
-    order: OwnerOrderDetail,
+    order: OrderDetailUiModel,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -268,12 +271,11 @@ private fun DetailRow(
 @Composable
 private fun String?.orNone() = if (isNullOrBlank()) stringResource(Res.string.common_none) else this
 
-private fun OwnerOrderDetail.toSummary() = `in`.koreatech.business.domain.model.order.OwnerOrder(
+private fun OrderDetailUiModel.toSummary() = OrderUiModel(
     id,
     number,
     type,
     status,
     orderedAt,
-    null,
     payment.totalPrice
 )
