@@ -49,6 +49,8 @@ import `in`.koreatech.business.core.designsystem.generated.resources.weekday_tue
 import `in`.koreatech.business.core.designsystem.generated.resources.weekday_wednesday
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
+import `in`.koreatech.business.core.util.toCurrencyText
+import `in`.koreatech.business.core.util.toKRPhoneNumber
 import `in`.koreatech.business.domain.model.store.OwnerShop
 import `in`.koreatech.business.feature.home.util.toDisplayText
 import org.jetbrains.compose.resources.stringResource
@@ -112,7 +114,7 @@ internal fun ManagedShopCard(
             HomeDetailRow(stringResource(Res.string.home_address), it)
         }
         shop.phone?.takeIf(String::isNotBlank)?.let {
-            HomeDetailRow(stringResource(Res.string.home_phone), it)
+            HomeDetailRow(stringResource(Res.string.home_phone), it.toKRPhoneNumber())
         }
         shop.description?.takeIf(String::isNotBlank)?.let {
             HomeDetailRow(stringResource(Res.string.home_information), it)
@@ -134,7 +136,7 @@ internal fun ManagedShopCard(
         if (shop.isDeliveryAvailable) {
             HomeDetailRow(
                 label = stringResource(Res.string.home_delivery_fee),
-                value = stringResource(Res.string.common_won_format, shop.deliveryPrice)
+                value = stringResource(Res.string.common_won_format, shop.deliveryPrice.toCurrencyText())
             )
         }
         if (!shop.bank.isNullOrBlank() || !shop.accountNumber.isNullOrBlank()) {
