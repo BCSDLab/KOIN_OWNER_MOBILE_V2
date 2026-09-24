@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class OrderState(
+    val shopName: String? = null,
     val orderableShopId: Int? = null,
     val category: OwnerOrderCategory = OwnerOrderCategory.NEW,
     val orders: ImmutableList<OrderUiModel> = persistentListOf(),

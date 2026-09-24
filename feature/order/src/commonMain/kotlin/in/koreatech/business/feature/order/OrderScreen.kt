@@ -66,26 +66,57 @@ fun OrderScreen(
         modifier = modifier.fillMaxSize(),
         containerColor = KoinTheme.colors.neutral75,
         topBar = {
-            KoinScreenTitle(
-                text = stringResource(Res.string.order_title),
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)
-            )
+            Column {
+                KoinScreenTitle(
+                    text = stringResource(Res.string.order_title),
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)
+                )
+                state.shopName?.let { shopName ->
+                    Text(
+                        text = shopName,
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        style = KoinTheme.typography.medium14,
+                        color = KoinTheme.colors.neutral600
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     ) { paddingValues ->
         Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-            OrderCategoryTabs(state.category, viewModel::selectCategory)
             when {
                 state.isLoading -> OrderLoadingContent()
                 state.hasError -> KoinErrorContent(stringResource(Res.string.order_load_error), viewModel::retry)
                 state.orderableShopId == null -> KoinEmptyContent(stringResource(Res.string.order_shop_unavailable))
-                state.orders.isEmpty() -> KoinEmptyContent(stringResource(Res.string.order_empty))
                 else -> LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(24.dp),
+                    contentPadding = PaddingValues(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(state.orders, key = { it.id }) { order ->
-                        OrderCard(order) { onOrderClick(requireNotNull(state.orderableShopId), order.id) }
+                    stickyHeader {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(KoinTheme.colors.neutral75)
+                        ) {
+                            OrderCategoryTabs(state.category, viewModel::selectCategory)
+                        }
+                    }
+                    if (state.orders.isEmpty()) {
+                        item {
+                            KoinEmptyContent(
+                                message = stringResource(Res.string.order_empty),
+                                modifier = Modifier.fillParentMaxSize()
+                            )
+                        }
+                    } else {
+                        items(state.orders, key = { it.id }) { order ->
+                            OrderCard(
+                                order = order,
+                                modifier = Modifier.padding(horizontal = 24.dp),
+                                onClick = { onOrderClick(requireNotNull(state.orderableShopId), order.id) }
+                            )
+                        }
                     }
                 }
             }
@@ -141,9 +172,13 @@ private fun OrderCategoryTabs(selected: OwnerOrderCategory, onSelect: (OwnerOrde
 }
 
 @Composable
-private fun OrderCard(order: OrderUiModel, onClick: () -> Unit) {
+private fun OrderCard(
+    order: OrderUiModel,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(KoinTheme.colors.neutral100)

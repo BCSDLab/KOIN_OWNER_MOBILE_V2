@@ -9,7 +9,7 @@ import `in`.koreatech.business.core.di.AppScope
 import `in`.koreatech.business.domain.model.order.OwnerOrderCategory
 import `in`.koreatech.business.domain.usecase.order.GetOwnerOrderableShopsUseCase
 import `in`.koreatech.business.domain.usecase.order.GetOwnerOrdersUseCase
-import `in`.koreatech.business.domain.usecase.store.ObserveSelectedShopIdUseCase
+import `in`.koreatech.business.domain.usecase.store.ObserveSelectedShopUseCase
 import `in`.koreatech.business.feature.order.model.toOrderUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -21,7 +21,7 @@ import org.orbitmvi.orbit.viewmodel.orbitContainer
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
 class OrderViewModel(
-    private val observeSelectedShopIdUseCase: ObserveSelectedShopIdUseCase,
+    private val observeSelectedShopUseCase: ObserveSelectedShopUseCase,
     private val getOrderableShopsUseCase: GetOwnerOrderableShopsUseCase,
     private val getOrdersUseCase: GetOwnerOrdersUseCase
 ) : ViewModel(), OrbitContainerHost<OrderState, OrderState, Nothing> {
@@ -30,12 +30,17 @@ class OrderViewModel(
     }
 
     private suspend fun observeShop() = subIntent {
-        observeSelectedShopIdUseCase().collectLatest { result ->
+        observeSelectedShopUseCase().collectLatest { result ->
+            result.onFailure {
+                reduce { state.copy(isLoading = false, hasError = true) }
+                return@collectLatest
+            }
+            val shop = result.getOrNull()
             val orderableShopId = getOrderableShopsUseCase().getOrElse {
                 reduce { state.copy(isLoading = false, hasError = true) }
                 return@collectLatest
-            }.firstOrNull { it.shopId == result }?.id
-            reduce { state.copy(orderableShopId = orderableShopId) }
+            }.firstOrNull { it.shopId == shop?.id }?.id
+            reduce { state.copy(shopName = shop?.name, orderableShopId = orderableShopId) }
             loadOrders(orderableShopId, state.category)
         }
     }
