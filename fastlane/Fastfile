@@ -5,6 +5,7 @@ platform :android do
   lane :release do |options|
     version_name = options[:version_name] || release_version
     version_code = options[:version_code] || base_version_code(version_name)
+    buildkonfig_flavor = options[:buildkonfig_flavor] || "release"
     set_android_version(version_name, version_code)
     gradle(
       task: ":androidApp:bundleRelease",
@@ -14,13 +15,18 @@ platform :android do
         "android.injected.signing.store.file" => required_env("ANDROID_KEYSTORE_PATH"),
         "android.injected.signing.store.password" => required_env("ANDROID_KEYSTORE_PASSWORD"),
         "android.injected.signing.key.alias" => required_env("ANDROID_KEY_ALIAS"),
-        "android.injected.signing.key.password" => required_env("ANDROID_KEY_PASSWORD")
+        "android.injected.signing.key.password" => required_env("ANDROID_KEY_PASSWORD"),
+        "buildkonfig.flavor" => buildkonfig_flavor
       }
     )
   end
 
-  desc "Upload the Android release app bundle to the internal track"
+  desc "Upload the Android production app bundle to the internal track"
   lane :deploy do
+    deploy_android(buildkonfig_flavor: "release")
+  end
+
+  private_lane :deploy_android do |options|
     version_name = release_version
     json_key_data = required_env("GOOGLE_PLAY_JSON_KEY")
     existing_codes = google_play_track_version_codes(
@@ -28,7 +34,11 @@ platform :android do
       json_key_data: json_key_data
     )
     version_code = next_android_version_code(version_name, existing_codes)
-    release(version_name: version_name, version_code: version_code)
+    release(
+      version_name: version_name,
+      version_code: version_code,
+      buildkonfig_flavor: options[:buildkonfig_flavor]
+    )
     upload_to_play_store(
       track: "internal",
       package_name: "in.koreatech.business",
@@ -46,6 +56,7 @@ platform :ios do
   lane :build do |options|
     version_name = options[:version_name] || release_version
     version_code = options[:version_code] || base_version_code(version_name)
+    buildkonfig_flavor = options[:buildkonfig_flavor] || "release"
     team_id = ios_config("TEAM_ID")
     app_identifier = ios_config("PRODUCT_BUNDLE_IDENTIFIER")
     provisioning_profile = required_env("IOS_PROVISIONING_PROFILE_NAME")
@@ -67,14 +78,24 @@ platform :ios do
         "PRODUCT_BUNDLE_IDENTIFIER=#{app_identifier}",
         "MARKETING_VERSION=#{version_name}",
         "CURRENT_PROJECT_VERSION=#{version_code}",
+        "BUILD_KONFIG_FLAVOR=#{buildkonfig_flavor}",
         "CODE_SIGN_STYLE=Manual",
         "PROVISIONING_PROFILE_SPECIFIER='#{provisioning_profile}'"
       ].join(" ")
     )
   end
 
-  desc "Upload the iOS release archive to TestFlight"
+  desc "Upload the iOS production archive to TestFlight"
   lane :deploy do
+    deploy_ios(buildkonfig_flavor: "release")
+  end
+
+  desc "Upload the iOS stage archive to TestFlight"
+  lane :deploy_stage do
+    deploy_ios(buildkonfig_flavor: "debug")
+  end
+
+  private_lane :deploy_ios do |options|
     version_name = release_version
     api_key = app_store_connect_api_key(
       key_id: required_env("APP_STORE_CONNECT_KEY_ID"),
@@ -90,7 +111,11 @@ platform :ios do
       initial_build_number: base_code - 1
     )
     version_code = next_testflight_version_code(version_name, latest_code)
-    build(version_name: version_name, version_code: version_code)
+    build(
+      version_name: version_name,
+      version_code: version_code,
+      buildkonfig_flavor: options[:buildkonfig_flavor]
+    )
     upload_to_testflight(
       api_key: api_key
     )

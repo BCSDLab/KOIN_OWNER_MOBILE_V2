@@ -2,6 +2,15 @@ name: iOS Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: API environment
+        required: true
+        default: stage
+        type: choice
+        options:
+          - stage
+          - production
 
 permissions:
   contents: read
@@ -69,12 +78,21 @@ jobs:
           echo "IOS_PROVISIONING_PROFILE_NAME=$PROFILE_NAME" >> "$GITHUB_ENV"
           echo "IOS_PROVISIONING_PROFILE_PATH=$PROFILE_DIRECTORY/$PROFILE_UUID.mobileprovision" >> "$GITHUB_ENV"
 
-      - name: Deploy to TestFlight
+      - name: Deploy production to TestFlight
+        if: ${{ inputs.environment == 'production' }}
         env:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_BASE64 }}
         run: bundle exec fastlane ios deploy
+
+      - name: Deploy stage to TestFlight
+        if: ${{ inputs.environment == 'stage' }}
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_BASE64 }}
+        run: bundle exec fastlane ios deploy_stage
 
       - name: Clean up signing credentials
         if: ${{ always() }}
