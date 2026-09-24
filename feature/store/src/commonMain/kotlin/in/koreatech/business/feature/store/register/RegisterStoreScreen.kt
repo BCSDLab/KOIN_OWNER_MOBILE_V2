@@ -135,7 +135,15 @@ fun RegisterStoreScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         when {
-            state.isLoading -> RegisterStoreLoadingContent()
+            state.isLoading ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = KoinTheme.colors.neutral75
+                ) { paddingValues ->
+                    RegisterStoreLoadingContent(
+                        modifier = Modifier.fillMaxSize().padding(paddingValues)
+                    )
+                }
             state.error == RegisterStoreError.Load ->
                 KoinErrorContent(
                     message = stringResource(Res.string.error_shop_load),
@@ -184,9 +192,9 @@ private fun registerStoreViewModel(shopId: Int?): RegisterStoreViewModel {
 }
 
 @Composable
-private fun RegisterStoreLoadingContent() {
+private fun RegisterStoreLoadingContent(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
+        modifier = modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Box(modifier = Modifier.fillMaxWidth(0.45f).height(28.dp).skeleton())
