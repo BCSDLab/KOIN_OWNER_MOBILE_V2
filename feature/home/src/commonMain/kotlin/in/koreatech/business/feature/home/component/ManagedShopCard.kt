@@ -172,10 +172,7 @@ internal fun ManagedShopCardSkeleton(modifier: Modifier = Modifier) {
         }
         Spacer(modifier = Modifier.height(16.dp))
         repeat(4) {
-            Row(modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) {
-                Box(modifier = Modifier.width(72.dp).height(14.dp).skeleton())
-                Box(modifier = Modifier.fillMaxWidth().height(14.dp).skeleton())
-            }
+            Box(modifier = Modifier.padding(top = 6.dp).fillMaxWidth().height(14.dp).skeleton())
         }
     }
 }
