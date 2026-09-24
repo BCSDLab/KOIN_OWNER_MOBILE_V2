@@ -2,7 +2,6 @@ package `in`.koreatech.business.feature.store.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,8 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import `in`.koreatech.business.core.designsystem.component.KoinImageThumbnail
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
@@ -93,19 +93,12 @@ internal fun RegisterStoreCategoryScreen(
                                     .padding(vertical = 16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clip(RoundedCornerShape(12.dp))
-                                        .background(if (selected) KoinTheme.colors.primary500 else KoinTheme.colors.neutral100),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        category.name.take(1),
-                                        style = KoinTheme.typography.bold15,
-                                        color = if (selected) Color.White else KoinTheme.colors.neutral600
-                                    )
-                                }
+                                KoinImageThumbnail(
+                                    imageUrl = category.imageUrl,
+                                    contentDescription = category.name,
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier.size(40.dp)
+                                )
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     category.name,

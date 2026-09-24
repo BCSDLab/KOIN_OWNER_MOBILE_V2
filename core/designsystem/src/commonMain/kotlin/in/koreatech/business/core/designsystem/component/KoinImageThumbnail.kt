@@ -21,6 +21,7 @@ import org.jetbrains.compose.resources.stringResource
 fun KoinImageThumbnail(
     imageUrl: String?,
     contentDescription: String,
+    contentScale: ContentScale = ContentScale.Crop,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -35,7 +36,7 @@ fun KoinImageThumbnail(
             SubcomposeAsyncImage(
                 model = imageUrl,
                 contentDescription = contentDescription,
-                contentScale = ContentScale.Crop,
+                contentScale = contentScale,
                 modifier = Modifier.fillMaxSize(),
                 loading = { Box(modifier = Modifier.fillMaxSize().skeleton(shape = RoundedCornerShape(8.dp))) },
                 error = { KoinImageThumbnailPlaceholder() }

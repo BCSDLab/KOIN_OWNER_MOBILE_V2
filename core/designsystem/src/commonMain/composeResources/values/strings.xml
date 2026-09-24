@@ -247,15 +247,6 @@
     <string name="register_store_category_step">카테고리 선택</string>
     <string name="register_store_category_input">매장 카테고리를 선택해주세요</string>
     <string name="register_store_category_description">매장과 가장 가까운 카테고리를 선택하세요.</string>
-    <string name="store_category_korean">한식</string>
-    <string name="store_category_chinese">중식</string>
-    <string name="store_category_japanese">일식</string>
-    <string name="store_category_western">양식</string>
-    <string name="store_category_chicken">치킨</string>
-    <string name="store_category_pizza">피자</string>
-    <string name="store_category_snack">분식</string>
-    <string name="store_category_cafe">카페</string>
-    <string name="store_category_other">기타</string>
     <string name="register_store_basic_step">기본 정보 입력</string>
     <string name="register_store_image_input">매장 사진을 등록해주세요</string>
     <string name="register_store_image_add">대표 사진 추가</string>
