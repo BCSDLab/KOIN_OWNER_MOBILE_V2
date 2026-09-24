@@ -38,10 +38,12 @@ import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.bottom_navigation_event
 import `in`.koreatech.business.core.designsystem.generated.resources.bottom_navigation_home
 import `in`.koreatech.business.core.designsystem.generated.resources.bottom_navigation_menu
+import `in`.koreatech.business.core.designsystem.generated.resources.bottom_navigation_order
 import `in`.koreatech.business.core.designsystem.generated.resources.bottom_navigation_settings
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_bottom_event
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_bottom_home
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_bottom_menu
+import `in`.koreatech.business.core.designsystem.generated.resources.ic_bottom_order
 import `in`.koreatech.business.core.designsystem.generated.resources.ic_bottom_settings
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.navigation.MainNavigationEntryProvider
@@ -65,6 +67,7 @@ private val mainTabItems = listOf(
     MainTabItem(MainTab.Home, Screen.Home, Res.string.bottom_navigation_home, Res.drawable.ic_bottom_home),
     MainTabItem(MainTab.Menu, Screen.Menu, Res.string.bottom_navigation_menu, Res.drawable.ic_bottom_menu),
     MainTabItem(MainTab.Event, Screen.Event, Res.string.bottom_navigation_event, Res.drawable.ic_bottom_event),
+    MainTabItem(MainTab.Order, Screen.Order, Res.string.bottom_navigation_order, Res.drawable.ic_bottom_order),
     MainTabItem(MainTab.Settings, Screen.Settings, Res.string.bottom_navigation_settings, Res.drawable.ic_bottom_settings)
 )
 
@@ -74,6 +77,7 @@ fun MainNavigation(viewModel: MainNavigationViewModel = metroViewModel()) {
         MainTab.Home to rememberNavBackStack(screenSavedStateConfiguration, Screen.Home),
         MainTab.Menu to rememberNavBackStack(screenSavedStateConfiguration, Screen.Menu),
         MainTab.Event to rememberNavBackStack(screenSavedStateConfiguration, Screen.Event),
+        MainTab.Order to rememberNavBackStack(screenSavedStateConfiguration, Screen.Order),
         MainTab.Settings to rememberNavBackStack(screenSavedStateConfiguration, Screen.Settings)
     )
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(MainTab.Home.ordinal) }

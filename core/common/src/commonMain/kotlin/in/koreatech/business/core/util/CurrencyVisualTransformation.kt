@@ -25,5 +25,3 @@ class CurrencyVisualTransformation : VisualTransformation {
         return TransformedText(AnnotatedString(formatted), mapping)
     }
 }
-
-fun Int.toCurrencyText(): String = toString().reversed().chunked(3).joinToString(",").reversed()

@@ -31,6 +31,13 @@ sealed interface Screen : NavKey {
 
     @Serializable data object Event : Screen
 
+    @Serializable data object Order : Screen
+
+    @Serializable data class OrderDetail(
+        val orderableShopId: Int,
+        val orderId: Int
+    ) : Screen
+
     @Serializable data class EventCreate(
         val shopId: Int
     ) : Screen
@@ -65,6 +72,8 @@ val screenSavedStateConfiguration = SavedStateConfiguration {
             subclass(Screen.MenuCreate::class)
             subclass(Screen.MenuEdit::class)
             subclass(Screen.Event::class)
+            subclass(Screen.Order::class)
+            subclass(Screen.OrderDetail::class)
             subclass(Screen.EventCreate::class)
             subclass(Screen.EventEdit::class)
             subclass(Screen.Settings::class)

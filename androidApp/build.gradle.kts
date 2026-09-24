@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":feature:event"))
     implementation(project(":feature:home"))
     implementation(project(":feature:menu"))
+    implementation(project(":feature:order"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:signin"))
     implementation(project(":feature:signup"))

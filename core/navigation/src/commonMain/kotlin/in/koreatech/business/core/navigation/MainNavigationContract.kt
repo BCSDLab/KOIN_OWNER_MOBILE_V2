@@ -7,6 +7,7 @@ enum class MainTab {
     Home,
     Menu,
     Event,
+    Order,
     Settings
 }
 
