@@ -12,6 +12,7 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.ResponseException
+import io.ktor.client.plugins.expectSuccess
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -22,11 +23,13 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
@@ -53,19 +56,7 @@ internal fun createKoinHttpClient(tokenLocalDataSource: TokenLocalDataSource) = 
             if (responseException.response.status == HttpStatusCode.Unauthorized) {
                 tokenLocalDataSource.clearTokens()
             }
-            val errorResponse = runCatching {
-                networkJson.decodeFromString<ErrorResponse>(responseException.response.bodyAsText())
-            }.getOrNull()
-            throw errorResponse?.toApiException(
-                statusCode = responseException.response.status.value,
-                fallbackMessage = responseException.response.status.description
-            ) ?: ApiException(
-                statusCode = responseException.response.status.value,
-                code = null,
-                message = responseException.response.status.description,
-                errorTraceId = null,
-                fieldErrors = emptyList()
-            )
+            throw responseException.response.toApiException()
         }
     }
 
@@ -92,10 +83,17 @@ internal fun createKoinHttpClient(tokenLocalDataSource: TokenLocalDataSource) = 
             }
             refreshTokens {
                 val refreshToken = tokenLocalDataSource.getRefreshToken() ?: return@refreshTokens null
-                val newToken = client.post("user/refresh") {
+                val refreshResponse = client.post("user/refresh") {
+                    this.expectSuccess = false
                     markAsRefreshTokenRequest()
                     setBody(RefreshTokenRequest(refreshToken))
-                }.body<OwnerLoginResponse>()
+                }
+                if (!refreshResponse.status.isSuccess()) {
+                    tokenLocalDataSource.clearTokens()
+                    return@refreshTokens null
+                }
+
+                val newToken = refreshResponse.body<OwnerLoginResponse>()
                 tokenLocalDataSource.saveTokens(newToken.accessToken, newToken.refreshToken)
 
                 BearerTokens(newToken.accessToken, newToken.refreshToken)
@@ -118,4 +116,20 @@ internal fun createKoinHttpClient(tokenLocalDataSource: TokenLocalDataSource) = 
         header(HttpHeaders.Accept, ContentType.Application.Json)
         header(HttpHeaders.ContentType, ContentType.Application.Json)
     }
+}
+
+private suspend fun HttpResponse.toApiException(): ApiException {
+    val errorResponse = runCatching {
+        networkJson.decodeFromString<ErrorResponse>(bodyAsText())
+    }.getOrNull()
+    return errorResponse?.toApiException(
+        statusCode = status.value,
+        fallbackMessage = status.description
+    ) ?: ApiException(
+        statusCode = status.value,
+        code = null,
+        message = status.description,
+        errorTraceId = null,
+        fieldErrors = emptyList()
+    )
 }
