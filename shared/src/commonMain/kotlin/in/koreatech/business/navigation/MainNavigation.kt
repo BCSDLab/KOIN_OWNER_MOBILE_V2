@@ -85,6 +85,7 @@ fun MainNavigation(viewModel: MainNavigationViewModel = metroViewModel()) {
     val currentBackStack = requireNotNull(backStacks[selectedTab.tab])
 
     Scaffold(
+        containerColor = KoinTheme.colors.neutral75,
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(WindowInsets.statusBars),
         bottomBar = {
             if (currentBackStack.lastOrNull() == selectedTab.screen) {
