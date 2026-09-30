@@ -2,6 +2,15 @@ name: Android Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Deployment environment
+        required: true
+        default: stage
+        type: choice
+        options:
+          - stage
+          - production
 
 permissions:
   contents: read
@@ -12,7 +21,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy Android to Internal Track
+    name: Deploy Android (${{ inputs.environment }})
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,11 +50,19 @@ jobs:
           restore-keys: konan-${{ runner.os }}-
 
       - name: Restore Android keystore
+        if: ${{ inputs.environment == 'production' }}
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
 
-      - name: Deploy to Google Play
+      - name: Restore Firebase service account
+        if: ${{ inputs.environment == 'stage' }}
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 }}
+        run: echo "$FIREBASE_SERVICE_ACCOUNT_JSON_BASE64" | base64 --decode > "$RUNNER_TEMP/firebase-service-account.json"
+
+      - name: Deploy production to Google Play
+        if: ${{ inputs.environment == 'production' }}
         env:
           ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/release.keystore
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -53,3 +70,18 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
         run: bundle exec fastlane android deploy
+
+      - name: Deploy stage to Firebase App Distribution
+        if: ${{ inputs.environment == 'stage' }}
+        env:
+          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          FIREBASE_SERVICE_ACCOUNT_PATH: ${{ runner.temp }}/firebase-service-account.json
+          FIREBASE_TESTER_GROUPS: ${{ secrets.FIREBASE_TESTER_GROUPS }}
+          FIREBASE_RELEASE_NOTES: GitHub Actions build ${{ github.run_number }} (${{ github.sha }})
+        run: bundle exec fastlane android deploy_stage
+
+      - name: Clean up credentials
+        if: ${{ always() }}
+        run: |
+          rm -f "$RUNNER_TEMP/release.keystore"
+          rm -f "$RUNNER_TEMP/firebase-service-account.json"

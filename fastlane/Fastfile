@@ -26,6 +26,28 @@ platform :android do
     deploy_android(buildkonfig_flavor: "release")
   end
 
+  desc "Upload the Android stage APK to Firebase App Distribution"
+  lane :deploy_stage do
+    version_name = release_version
+    version_code = base_version_code(version_name)
+    set_android_version(version_name, version_code)
+    gradle(
+      task: ":androidApp:assembleDebug",
+      project_dir: ".",
+      properties: {
+        "buildkonfig.flavor" => "debug"
+      }
+    )
+    firebase_app_distribution(
+      app: required_env("FIREBASE_ANDROID_APP_ID"),
+      android_artifact_type: "APK",
+      android_artifact_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+      service_credentials_file: required_env("FIREBASE_SERVICE_ACCOUNT_PATH"),
+      groups: required_env("FIREBASE_TESTER_GROUPS"),
+      release_notes: ENV["FIREBASE_RELEASE_NOTES"]
+    )
+  end
+
   private_lane :deploy_android do |options|
     version_name = release_version
     json_key_data = required_env("GOOGLE_PLAY_JSON_KEY")
