@@ -52,7 +52,7 @@ internal fun SignUpPasswordScreen(
     val isPasswordValid = state.password.length in 6..18
     val isPasswordEqual = state.password == state.passwordConfirmation
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         topBar = {
             KoinTopAppBar(
                 title = { Text(stringResource(Res.string.sign_up_title), style = KoinTheme.typography.medium18) },
@@ -65,7 +65,6 @@ internal fun SignUpPasswordScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
-                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)

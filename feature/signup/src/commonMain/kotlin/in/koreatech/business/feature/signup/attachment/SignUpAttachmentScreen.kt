@@ -23,9 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
-import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldAlert
 import `in`.koreatech.business.core.designsystem.component.textfield.TextFieldAlertState
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
@@ -66,7 +66,7 @@ internal fun SignUpAttachmentScreen(
     )
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         topBar = {
             KoinTopAppBar(
                 title = { Text(stringResource(Res.string.sign_up_title), style = KoinTheme.typography.medium18) },
@@ -79,7 +79,6 @@ internal fun SignUpAttachmentScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
-                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)

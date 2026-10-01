@@ -81,7 +81,7 @@ fun MenuFormScreen(
     val state by viewModel.collectAsState()
     viewModel.collectSideEffect { if (it == MenuFormSideEffect.Saved) onSaved() }
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().imePadding(),
         topBar = {
             KoinTopAppBar(
                 title = {
@@ -155,7 +155,9 @@ fun MenuFormScreenImpl(
         return
     }
     Column(
-        modifier = modifier.imePadding().verticalScroll(rememberScrollState()).padding(24.dp),
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         KoinUnderlineTextField(

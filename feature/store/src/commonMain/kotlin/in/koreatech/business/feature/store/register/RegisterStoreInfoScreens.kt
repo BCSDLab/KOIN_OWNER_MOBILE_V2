@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,8 +50,8 @@ import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextFiel
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
-import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
 import `in`.koreatech.business.core.designsystem.generated.resources.common_add_symbol
@@ -145,7 +146,7 @@ internal fun RegisterStoreBasicInfoScreen(
         )
     }
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().imePadding(),
         containerColor = KoinTheme.colors.neutral75,
         topBar = {
             KoinTopAppBar(
@@ -471,7 +472,7 @@ internal fun RegisterStoreDetailInfoScreen(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().imePadding(),
         containerColor = KoinTheme.colors.neutral75,
         topBar = {
             KoinTopAppBar(

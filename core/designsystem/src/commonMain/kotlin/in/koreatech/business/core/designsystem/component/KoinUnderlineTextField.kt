@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldDecorator
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -79,6 +80,30 @@ fun KoinUnderlineTextField(
             it()
             Spacer(Modifier.height(8.dp))
         }
+        val decorator = TextFieldDecorator { innerTextField ->
+            Column(modifier = Modifier.width(IntrinsicSize.Min)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (singleLine) Modifier.height(44.dp) else Modifier.heightIn(min = 96.dp))
+                        .padding(horizontal = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        if (textFieldState.text.isEmpty()) {
+                            Text(
+                                hint ?: placeholder,
+                                style = textStyle,
+                                color = KoinTheme.colors.neutral400
+                            )
+                        }
+                        innerTextField()
+                    }
+                    suffix?.invoke(this)
+                }
+                HorizontalDivider(color = KoinTheme.colors.neutral400)
+            }
+        }
         BasicTextField(
             state = textFieldState,
             modifier = Modifier.fillMaxWidth(),
@@ -93,30 +118,7 @@ fun KoinUnderlineTextField(
             } else {
                 TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
             },
-            decorator = { innerTextField ->
-                Column(modifier = Modifier.width(IntrinsicSize.Min)) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .then(if (singleLine) Modifier.height(44.dp) else Modifier.heightIn(min = 96.dp))
-                            .padding(horizontal = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(modifier = Modifier.weight(1f)) {
-                            if (textFieldState.text.isEmpty()) {
-                                Text(
-                                    hint ?: placeholder,
-                                    style = textStyle,
-                                    color = KoinTheme.colors.neutral400
-                                )
-                            }
-                            innerTextField()
-                        }
-                        suffix?.invoke(this)
-                    }
-                    HorizontalDivider(color = KoinTheme.colors.neutral400)
-                }
-            }
+            decorator = decorator
         )
     }
 }

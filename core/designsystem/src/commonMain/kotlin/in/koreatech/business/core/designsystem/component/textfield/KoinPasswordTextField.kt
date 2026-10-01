@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,16 +28,16 @@ fun KoinPasswordTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
-    val outputTransformation = remember(passwordVisible) {
-        if (passwordVisible) {
-            null
-        } else {
-            OutputTransformation {
-                replace(0, length, PASSWORD_MASK.toString().repeat(length))
+    val currentPasswordVisible by rememberUpdatedState(passwordVisible)
+    val outputTransformation = remember {
+        OutputTransformation {
+            if (!currentPasswordVisible) {
+                for (index in length - 1 downTo 0) {
+                    replace(index, index + 1, PASSWORD_MASK.toString())
+                }
             }
         }
     }
-
     KoinUnderlineTextField(
         value = value,
         onValueChange = onValueChange,

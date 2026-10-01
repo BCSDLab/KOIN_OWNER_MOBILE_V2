@@ -1,12 +1,12 @@
 package `in`.koreatech.business.feature.event.form
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -73,7 +73,7 @@ fun EventFormScreen(
     val state by viewModel.collectAsState()
     viewModel.collectSideEffect { onSaved() }
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().imePadding(),
         topBar = {
             KoinTopAppBar(
                 title = {
@@ -142,7 +142,6 @@ fun EventFormScreenImpl(
     }
     Column(
         modifier = modifier
-            .imePadding()
             .verticalScroll(rememberScrollState())
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)

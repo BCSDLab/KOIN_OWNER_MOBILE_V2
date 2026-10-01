@@ -92,7 +92,7 @@ private fun PasswordResetScreenImpl(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().imePadding(),
         topBar = {
             KoinTopAppBar(
                 title = {
@@ -145,7 +145,6 @@ private fun PasswordResetVerificationContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .imePadding()
             .verticalScroll(rememberScrollState())
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -197,7 +196,6 @@ private fun PasswordResetPasswordContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .imePadding()
             .verticalScroll(rememberScrollState())
             .padding(24.dp)
     ) {

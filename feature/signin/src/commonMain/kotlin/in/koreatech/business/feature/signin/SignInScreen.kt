@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -93,15 +94,18 @@ fun SignInScreenImpl(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val phoneNumberOutputTransformation = remember { KRPhoneNumberOutputTransformation() }
 
-    Scaffold(modifier = modifier, containerColor = KoinTheme.colors.neutral0) { paddingValues ->
+    Scaffold(
+        modifier = modifier.imePadding(),
+        containerColor = KoinTheme.colors.neutral0
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .padding(horizontal = 40.dp)
-                .verticalScroll(scrollState)
-                .imePadding(),
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Spacer(modifier = Modifier.height(82.dp))
@@ -128,10 +132,10 @@ fun SignInScreenImpl(
                     onValueChange = setLoginId,
                     hint = stringResource(Res.string.sign_in_id_hint),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = if (loginId.all(Char::isDigit)) KeyboardType.Phone else KeyboardType.Text
+                        keyboardType = KeyboardType.Phone
                     ),
                     maxLength = 11,
-                    outputTransformation = KRPhoneNumberOutputTransformation(),
+                    outputTransformation = phoneNumberOutputTransformation,
                     suffix = if (loginId.isNotEmpty()) {
                         {
                             Text(

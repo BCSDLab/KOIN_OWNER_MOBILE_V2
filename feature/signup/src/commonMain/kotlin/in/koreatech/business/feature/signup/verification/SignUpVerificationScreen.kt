@@ -63,7 +63,7 @@ internal fun SignUpVerificationScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         topBar = {
             KoinTopAppBar(
                 title = {
@@ -81,7 +81,6 @@ internal fun SignUpVerificationScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
-                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
