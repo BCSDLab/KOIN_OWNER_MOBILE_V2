@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -289,7 +290,7 @@ private fun EventCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(Color.White)
+            .background(if (event.isExpired) KoinTheme.colors.neutral200 else Color.White)
             .border(
                 width = 0.5.dp,
                 color = KoinTheme.colors.neutral300,
@@ -300,19 +301,19 @@ private fun EventCard(
         KoinImageThumbnail(
             imageUrl = event.imageUrls.firstOrNull(),
             contentDescription = stringResource(Res.string.event_image_description, 1),
-            modifier = Modifier.size(88.dp)
+            modifier = Modifier.size(88.dp).alpha(if (event.isExpired) 0.5f else 1f)
         )
         Spacer(modifier = Modifier.width(14.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = event.title,
                 style = KoinTheme.typography.medium16,
-                color = KoinTheme.colors.neutral800
+                color = if (event.isExpired) KoinTheme.colors.neutral400 else KoinTheme.colors.neutral800
             )
             Text(
                 text = event.content,
                 style = KoinTheme.typography.regular13,
-                color = KoinTheme.colors.neutral600
+                color = if (event.isExpired) KoinTheme.colors.neutral400 else KoinTheme.colors.neutral600
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
@@ -322,7 +323,7 @@ private fun EventCard(
                     event.endDate
                 ),
                 style = KoinTheme.typography.regular12,
-                color = KoinTheme.colors.primary500
+                color = if (event.isExpired) KoinTheme.colors.neutral400 else KoinTheme.colors.primary500
             )
             Spacer(modifier = Modifier.height(10.dp))
             Row(
@@ -332,13 +333,13 @@ private fun EventCard(
                 Text(
                     text = stringResource(Res.string.common_edit),
                     style = KoinTheme.typography.medium13,
-                    color = KoinTheme.colors.primary500,
+                    color = if (event.isExpired) KoinTheme.colors.neutral400 else KoinTheme.colors.primary500,
                     modifier = Modifier.noRippleClickable(onClick = onEdit)
                 )
                 Text(
                     text = stringResource(Res.string.common_delete),
                     style = KoinTheme.typography.medium13,
-                    color = KoinTheme.colors.danger600,
+                    color = if (event.isExpired) KoinTheme.colors.neutral400 else KoinTheme.colors.danger600,
                     modifier = Modifier.noRippleClickable(onClick = onDelete)
                 )
             }
