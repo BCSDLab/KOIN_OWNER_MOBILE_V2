@@ -10,8 +10,11 @@ data class EventFormState(
     val startDate: String = "",
     val endDate: String = "",
     val imageUrls: ImmutableList<String> = persistentListOf(),
+    val pendingImageCount: Int = 0,
     val isLoading: Boolean = false,
-    val isUploading: Boolean = false,
     val isSaving: Boolean = false,
     val error: EventFormError? = null
-)
+) {
+    val isUploading: Boolean
+        get() = pendingImageCount > 0
+}

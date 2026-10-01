@@ -1,6 +1,7 @@
 package `in`.koreatech.business.feature.event.form
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -45,7 +47,6 @@ import `in`.koreatech.business.core.designsystem.generated.resources.event_form_
 import `in`.koreatech.business.core.designsystem.generated.resources.event_image_add
 import `in`.koreatech.business.core.designsystem.generated.resources.event_image_count
 import `in`.koreatech.business.core.designsystem.generated.resources.event_image_description
-import `in`.koreatech.business.core.designsystem.generated.resources.event_image_uploading
 import `in`.koreatech.business.core.designsystem.generated.resources.event_save
 import `in`.koreatech.business.core.designsystem.generated.resources.event_saving
 import `in`.koreatech.business.core.designsystem.generated.resources.event_title_input
@@ -130,6 +131,7 @@ fun EventFormScreenImpl(
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val imageCount = state.imageUrls.size + state.pendingImageCount
     val openImagePicker = rememberImageFilePicker(
         onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
         onFailure = { onImageSelectionFailed() }
@@ -177,10 +179,10 @@ fun EventFormScreenImpl(
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
-                text = stringResource(Res.string.event_image_count, state.imageUrls.size),
+                text = stringResource(Res.string.event_image_count, imageCount),
                 style = KoinTheme.typography.medium15
             )
-            if (state.imageUrls.isNotEmpty()) {
+            if (imageCount > 0) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     state.imageUrls.forEachIndexed { index, imageUrl ->
                         KoinImagePreview(
@@ -193,27 +195,29 @@ fun EventFormScreenImpl(
                             modifier = Modifier.weight(1f)
                         )
                     }
-                    repeat(3 - state.imageUrls.size) {
+                    repeat(state.pendingImageCount) {
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .skeleton(shape = RoundedCornerShape(8.dp))
+                        )
+                    }
+                    repeat(3 - imageCount) {
                         Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
             Button(
                 onClick = openImagePicker,
-                enabled = state.imageUrls.size < 3 && !state.isUploading,
+                enabled = imageCount < 3,
                 modifier = Modifier.fillMaxWidth(),
                 colors = secondaryButtonColors(),
                 shape = KoinTheme.shapes.large,
                 contentPadding = PaddingValues(8.dp)
             ) {
                 Text(
-                    text = stringResource(
-                        if (state.isUploading) {
-                            Res.string.event_image_uploading
-                        } else {
-                            Res.string.event_image_add
-                        }
-                    ),
+                    text = stringResource(Res.string.event_image_add),
                     style = KoinTheme.typography.regular14
                 )
             }

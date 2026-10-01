@@ -78,8 +78,13 @@ class EventFormViewModel internal constructor(
         contentType: String,
         bytes: ByteArray
     ) = intent {
-        if (state.isUploading || state.imageUrls.size >= MAX_IMAGE_COUNT) return@intent
-        reduce { state.copy(isUploading = true, error = null) }
+        if (state.imageUrls.size + state.pendingImageCount >= MAX_IMAGE_COUNT) return@intent
+        reduce {
+            state.copy(
+                pendingImageCount = state.pendingImageCount + 1,
+                error = null
+            )
+        }
         uploadImageUseCase(
             domain = PreSignedUrlDomain.MARKET,
             contentLength = bytes.size.toLong(),
@@ -90,11 +95,16 @@ class EventFormViewModel internal constructor(
             reduce {
                 state.copy(
                     imageUrls = (state.imageUrls + url).toImmutableList(),
-                    isUploading = false
+                    pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0)
                 )
             }
         }.onFailure {
-            reduce { state.copy(isUploading = false, error = EventFormError.ImageUpload) }
+            reduce {
+                state.copy(
+                    pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0),
+                    error = EventFormError.ImageUpload
+                )
+            }
         }
     }
 

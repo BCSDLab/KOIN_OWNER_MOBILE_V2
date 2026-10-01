@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,6 +49,7 @@ import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextFiel
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.selection.KoinCheckBox
 import `in`.koreatech.business.core.designsystem.component.topbar.KoinTopAppBar
 import `in`.koreatech.business.core.designsystem.generated.resources.Res
@@ -122,6 +124,7 @@ internal fun RegisterStoreBasicInfoScreen(
     onNext: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val imageCount = state.imageUrls.size + state.pendingImageCount
     var showAddressSearchDialog by remember { mutableStateOf(false) }
     val openImagePicker = rememberImageFilePicker(
         onImagePicked = { onUploadImage(it.name, it.contentType, it.bytes) },
@@ -165,7 +168,7 @@ internal fun RegisterStoreBasicInfoScreen(
             Spacer(Modifier.height(48.dp))
             Text(stringResource(Res.string.register_store_image_input), style = KoinTheme.typography.medium16)
             Spacer(Modifier.height(12.dp))
-            if (state.imageUrls.isNotEmpty()) {
+            if (imageCount > 0) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     state.imageUrls.forEachIndexed { index, imageUrl ->
                         KoinImagePreview(
@@ -175,13 +178,21 @@ internal fun RegisterStoreBasicInfoScreen(
                             modifier = Modifier.weight(1f)
                         )
                     }
-                    repeat(5 - state.imageUrls.size) { Spacer(modifier = Modifier.weight(1f)) }
+                    repeat(state.pendingImageCount) {
+                        Box(
+                            Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .skeleton(shape = RoundedCornerShape(8.dp))
+                        )
+                    }
+                    repeat(5 - imageCount) { Spacer(modifier = Modifier.weight(1f)) }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
             Button(
                 onClick = openImagePicker,
-                enabled = !state.isUploading && state.imageUrls.size < 5,
+                enabled = imageCount < 5,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(

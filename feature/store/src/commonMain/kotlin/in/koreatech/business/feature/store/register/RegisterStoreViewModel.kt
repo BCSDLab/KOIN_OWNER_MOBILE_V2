@@ -138,8 +138,8 @@ class RegisterStoreViewModel internal constructor(
         contentType: String,
         bytes: ByteArray
     ) = intent {
-        if (state.isUploading || state.imageUrls.size >= MAX_IMAGE_COUNT) return@intent
-        reduce { state.copy(isUploading = true) }
+        if (state.imageUrls.size + state.pendingImageCount >= MAX_IMAGE_COUNT) return@intent
+        reduce { state.copy(pendingImageCount = state.pendingImageCount + 1) }
         val result = uploadImageUseCase(
             domain = PreSignedUrlDomain.MARKET,
             contentLength = bytes.size.toLong(),
@@ -156,13 +156,13 @@ class RegisterStoreViewModel internal constructor(
         reduce {
             state.copy(
                 imageUrls = (state.imageUrls + url).toImmutableList(),
-                isUploading = false
+                pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0)
             )
         }
     }
 
     private suspend fun showImageUploadError() = subIntent {
-        reduce { state.copy(isUploading = false) }
+        reduce { state.copy(pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0)) }
         postSideEffect(RegisterStoreSideEffect.ShowError(RegisterStoreError.ImageUpload))
     }
 

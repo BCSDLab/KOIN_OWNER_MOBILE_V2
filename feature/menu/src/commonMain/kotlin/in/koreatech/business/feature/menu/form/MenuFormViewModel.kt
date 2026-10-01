@@ -110,8 +110,8 @@ class MenuFormViewModel internal constructor(
         contentType: String,
         bytes: ByteArray
     ) = intent {
-        if (state.isUploading || state.imageUrls.size >= 3) return@intent
-        reduce { state.copy(isUploading = true, error = null) }
+        if (state.imageUrls.size + state.pendingImageCount >= MAX_IMAGE_COUNT) return@intent
+        reduce { state.copy(pendingImageCount = state.pendingImageCount + 1, error = null) }
         uploadImageUseCase(
             domain = PreSignedUrlDomain.MARKET,
             contentLength = bytes.size.toLong(),
@@ -122,11 +122,16 @@ class MenuFormViewModel internal constructor(
             reduce {
                 state.copy(
                     imageUrls = (state.imageUrls + url).toImmutableList(),
-                    isUploading = false
+                    pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0)
                 )
             }
         }.onFailure {
-            reduce { state.copy(isUploading = false, error = MenuFormError.ImageUpload) }
+            reduce {
+                state.copy(
+                    pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0),
+                    error = MenuFormError.ImageUpload
+                )
+            }
         }
     }
 
@@ -168,6 +173,7 @@ class MenuFormViewModel internal constructor(
     }
 
     companion object {
+        private const val MAX_IMAGE_COUNT = 3
         internal const val SHOP_ID_KEY = "shopId"
         internal const val MENU_ID_KEY = "menuId"
     }

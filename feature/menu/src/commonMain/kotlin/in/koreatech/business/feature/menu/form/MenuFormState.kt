@@ -17,10 +17,11 @@ data class MenuFormState(
     val singlePrice: String = "",
     val optionPrices: ImmutableList<EditableMenuPrice> = persistentListOf(EditableMenuPrice()),
     val imageUrls: ImmutableList<String> = persistentListOf(),
+    val pendingImageCount: Int = 0,
     val isLoading: Boolean = true,
-    val isUploading: Boolean = false,
     val isSaving: Boolean = false,
     val error: MenuFormError? = null
 ) {
     val isEdit: Boolean get() = menuId != null
+    val isUploading: Boolean get() = pendingImageCount > 0
 }

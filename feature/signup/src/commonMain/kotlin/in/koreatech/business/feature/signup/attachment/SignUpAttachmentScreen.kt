@@ -2,6 +2,7 @@ package `in`.koreatech.business.feature.signup.attachment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -21,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.button.primaryButtonColors
+import `in`.koreatech.business.core.designsystem.component.skeleton
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressHeader
 import `in`.koreatech.business.core.designsystem.component.progress.KoinProgressIndicator
 import `in`.koreatech.business.core.designsystem.component.textfield.KoinTextFieldAlert
@@ -37,7 +40,6 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_att
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_attachment_guide
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_attachment_input
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_attachment_step
-import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_attachment_uploading
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_store_search_error
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_submit
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_title
@@ -57,6 +59,7 @@ internal fun SignUpAttachmentScreen(
     navigateToNextScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val attachmentCount = state.selectedImages.size + state.pendingImageCount
     val openImagePicker = rememberImageFilePicker(
         onImagePicked = { onUploadFile(it.name, it.contentType, it.bytes) },
         onFailure = { onFileSelectionFailed() }
@@ -94,7 +97,7 @@ internal fun SignUpAttachmentScreen(
                     color = KoinTheme.colors.neutral500
                 )
                 Text(
-                    stringResource(Res.string.sign_up_attachment_count, state.selectedImages.size),
+                    stringResource(Res.string.sign_up_attachment_count, attachmentCount),
                     style = KoinTheme.typography.regular12,
                     color = KoinTheme.colors.primary500
                 )
@@ -113,16 +116,25 @@ internal fun SignUpAttachmentScreen(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }
+            repeat(state.pendingImageCount) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp)
+                        .skeleton(shape = RoundedCornerShape(8.dp))
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = state.selectedImages.size < 5 && !state.isUploading,
+                enabled = attachmentCount < 5,
                 onClick = openImagePicker,
                 shape = KoinTheme.shapes.small,
                 colors = primaryButtonColors(),
                 contentPadding = PaddingValues(vertical = 12.dp)
             ) {
                 Text(
-                    stringResource(if (state.isUploading) Res.string.sign_up_attachment_uploading else Res.string.sign_up_attachment_add),
+                    stringResource(Res.string.sign_up_attachment_add),
                     style = KoinTheme.typography.medium15
                 )
             }

@@ -204,12 +204,12 @@ class SignupViewModel(
         mediaType: String,
         bytes: ByteArray
     ) = intent {
-        if (state.fileInfo.size >= 5 || state.isUploading) return@intent
+        if (state.fileInfo.size + state.pendingImageCount >= MAX_ATTACHMENT_COUNT) return@intent
         val verificationToken = state.verificationToken ?: run {
             reduce { state.copy(error = SignupError.PhoneVerificationRequired) }
             return@intent
         }
-        reduce { state.copy(isUploading = true, error = null) }
+        reduce { state.copy(pendingImageCount = state.pendingImageCount + 1, error = null) }
         uploadImageUseCase(
             domain = PreSignedUrlDomain.OWNERS,
             contentLength = bytes.size.toLong(),
@@ -220,7 +220,7 @@ class SignupViewModel(
         ).onSuccess { resultUrl ->
             reduce {
                 state.copy(
-                    isUploading = false,
+                    pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0),
                     selectedImages = state.selectedImages
                         .plus(
                             SignupAttachment(
@@ -234,7 +234,7 @@ class SignupViewModel(
         }.onFailure { error ->
             reduce {
                 state.copy(
-                    isUploading = false,
+                    pendingImageCount = (state.pendingImageCount - 1).coerceAtLeast(0),
                     error = error.message?.let(SignupError::Dynamic) ?: SignupError.FileUpload
                 )
             }
@@ -366,6 +366,7 @@ class SignupViewModel(
     }
 
     private companion object {
+        const val MAX_ATTACHMENT_COUNT = 5
         const val STORE_SEARCH_DEBOUNCE_MILLIS = 300L
     }
 }

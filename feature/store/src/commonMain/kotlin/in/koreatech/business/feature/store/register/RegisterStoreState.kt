@@ -31,8 +31,8 @@ data class RegisterStoreState(
     val isCardAvailable: Boolean = false,
     val isBankTransferAvailable: Boolean = false,
     val imageUrls: ImmutableList<String> = persistentListOf(),
+    val pendingImageCount: Int = 0,
     val isLoading: Boolean = true,
-    val isUploading: Boolean = false,
     val isSaving: Boolean = false,
     val error: RegisterStoreError? = null
 ) {
@@ -44,4 +44,7 @@ data class RegisterStoreState(
 
     val isDetailInfoValid: Boolean
         get() = phoneNumber.isNotBlank() && deliveryFee.isNotBlank() && otherInfo.isNotBlank()
+
+    val isUploading: Boolean
+        get() = pendingImageCount > 0
 }

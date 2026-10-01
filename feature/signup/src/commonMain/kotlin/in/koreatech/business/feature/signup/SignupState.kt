@@ -26,12 +26,12 @@ data class SignupState(
     val isSearchingStores: Boolean = false,
     val selectedImages: ImmutableList<SignupAttachment> = persistentListOf(),
     val fileInfo: ImmutableList<SignupStoreUrl> = persistentListOf(),
+    val pendingImageCount: Int = 0,
     val privacyTerm: String = "",
     val koinTerm: String = "",
     val marketingTerm: String = "",
     val error: SignupError? = null,
     val isLoading: Boolean = false,
-    val isUploading: Boolean = false,
     val isVerificationCodeSent: Boolean = false,
     val phoneNumberVerificationState: PhoneNumberVerificationState = PhoneNumberVerificationState.None,
     val verificationCodeState: VerificationCodeState = VerificationCodeState.None,
@@ -39,4 +39,7 @@ data class SignupState(
 ) {
     val termsAgreed: Boolean
         get() = agreedToService && agreedToPrivacy && agreedToMarketing
+
+    val isUploading: Boolean
+        get() = pendingImageCount > 0
 }
