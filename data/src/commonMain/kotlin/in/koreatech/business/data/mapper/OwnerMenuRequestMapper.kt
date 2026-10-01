@@ -5,7 +5,7 @@ import `in`.koreatech.business.data.request.store.OwnerMenuRequest
 import `in`.koreatech.business.domain.model.store.OwnerMenuForm
 
 internal fun OwnerMenuForm.toOwnerMenuRequest(): OwnerMenuRequest {
-    val isSingle = prices.singleOrNull()?.option == null
+    val isSingle = prices.singleOrNull()?.let { it.option == null } ?: false
     return OwnerMenuRequest(
         categoryIds = categoryIds,
         description = description,

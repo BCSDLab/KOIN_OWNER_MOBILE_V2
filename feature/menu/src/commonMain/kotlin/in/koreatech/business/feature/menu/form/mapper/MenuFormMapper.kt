@@ -26,7 +26,7 @@ internal fun MenuFormState.withMenuDetail(
     selectedCategoryIds = detail.categoryIds.toImmutableSet(),
     name = detail.name,
     description = detail.description,
-    isSinglePrice = detail.prices.singleOrNull()?.option == null,
+    isSinglePrice = detail.prices.singleOrNull()?.let { it.option == null } ?: false,
     singlePrice = detail.prices
         .singleOrNull()
         ?.price
@@ -49,7 +49,9 @@ internal fun MenuFormState.toOwnerMenuPrices(): ImmutableList<OwnerMenuPrice>? =
         .mapNotNull { price ->
             price.price.toIntOrNull()?.let { OwnerMenuPrice(price.option.trim(), it) }
         }.takeIf { prices ->
-            prices.size == optionPrices.size && prices.all { it.option?.isNotBlank() == true }
+            prices.size >= 2 &&
+                prices.size == optionPrices.size &&
+                prices.all { it.option?.isNotBlank() == true }
         }?.toImmutableList()
 }
 

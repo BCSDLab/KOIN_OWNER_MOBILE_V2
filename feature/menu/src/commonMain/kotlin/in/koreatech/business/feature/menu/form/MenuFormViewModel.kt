@@ -63,7 +63,7 @@ class MenuFormViewModel internal constructor(
     }
 
     fun setSinglePrice(single: Boolean) = blockingIntent {
-        reduce { state.copy(isSinglePrice = single, error = null) }
+        reduce { state.withPriceMode(single) }
     }
 
     fun updateSinglePrice(value: String) = blockingIntent {
@@ -75,7 +75,7 @@ class MenuFormViewModel internal constructor(
     }
 
     fun deleteOption(index: Int) = blockingIntent {
-        if (state.optionPrices.size > 1) {
+        if (state.optionPrices.size > 2) {
             reduce {
                 state.copy(optionPrices = state.optionPrices.filterIndexed { i, _ -> i != index }.toImmutableList())
             }
@@ -172,3 +172,17 @@ class MenuFormViewModel internal constructor(
         internal const val MENU_ID_KEY = "menuId"
     }
 }
+
+private fun MenuFormState.withPriceMode(single: Boolean): MenuFormState = copy(
+    isSinglePrice = single,
+    optionPrices = if (single) {
+        optionPrices
+    } else {
+        optionPrices
+            .plus(List((MINIMUM_OPTION_PRICE_COUNT - optionPrices.size).coerceAtLeast(0)) { EditableMenuPrice() })
+            .toImmutableList()
+    },
+    error = null
+)
+
+private const val MINIMUM_OPTION_PRICE_COUNT = 2
