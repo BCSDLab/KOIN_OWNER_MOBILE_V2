@@ -17,8 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -41,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinImagePreview
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
@@ -98,8 +98,8 @@ import `in`.koreatech.business.core.designsystem.generated.resources.weekday_wed
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.file.rememberImageFilePicker
-import `in`.koreatech.business.core.util.CurrencyVisualTransformation
-import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
+import `in`.koreatech.business.core.util.CurrencyOutputTransformation
+import `in`.koreatech.business.core.util.KRPhoneNumberOutputTransformation
 import `in`.koreatech.business.feature.store.register.model.RegisterStoreAddress
 import `in`.koreatech.business.feature.store.register.util.isValidTimeInput
 import `in`.koreatech.business.feature.store.register.util.toTimeText
@@ -248,7 +248,7 @@ private fun RegisterStoreAddressSearchDialog(
                     onValueChange = { keyword = it },
                     hint = stringResource(Res.string.register_store_address_search_hint),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(onSearch = { search() }),
+                    onKeyboardAction = KeyboardActionHandler { search() },
                     suffix = {
                         TextButton(onClick = search, enabled = keyword.isNotBlank() && !isSearching) {
                             Text(stringResource(Res.string.register_store_address_search_button))
@@ -488,7 +488,7 @@ internal fun RegisterStoreDetailInfoScreen(
                 KeyboardType.Phone,
                 onValueChange = { onPhoneNumberChange(it) },
                 maxLength = 11,
-                visualTransformation = KRPhoneNumberVisualTransformation()
+                outputTransformation = KRPhoneNumberOutputTransformation()
             )
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
@@ -496,7 +496,7 @@ internal fun RegisterStoreDetailInfoScreen(
                 state.deliveryFee,
                 stringResource(Res.string.register_store_delivery_fee_hint),
                 KeyboardType.Number,
-                visualTransformation = CurrencyVisualTransformation(),
+                outputTransformation = CurrencyOutputTransformation(),
                 suffix = {
                     Text(
                         text = stringResource(Res.string.common_won),
@@ -658,7 +658,7 @@ private fun RegisterStoreField(
     keyboardType: KeyboardType = KeyboardType.Text,
     maxLength: Int = Int.MAX_VALUE,
     readOnly: Boolean = false,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    outputTransformation: OutputTransformation? = null,
     suffix: (@Composable androidx.compose.foundation.layout.RowScope.() -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
@@ -671,7 +671,7 @@ private fun RegisterStoreField(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         maxLength = maxLength,
         readOnly = readOnly,
-        visualTransformation = visualTransformation,
+        outputTransformation = outputTransformation,
         suffix = suffix
     )
 }

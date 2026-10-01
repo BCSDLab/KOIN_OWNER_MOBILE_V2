@@ -49,7 +49,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_ver
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_verification_resend
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_verification_send
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import `in`.koreatech.business.core.util.KRPhoneNumberVisualTransformation
+import `in`.koreatech.business.core.util.KRPhoneNumberOutputTransformation
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -170,7 +170,7 @@ private fun PasswordResetVerificationContent(
             onButtonClick = onSendCode,
             maxLength = 11,
             buttonEnabled = !state.isLoading && state.phoneNumber.isNotBlank(),
-            visualTransformation = KRPhoneNumberVisualTransformation()
+            outputTransformation = KRPhoneNumberOutputTransformation()
         )
         KoinTextFieldWithButton(
             value = state.code,

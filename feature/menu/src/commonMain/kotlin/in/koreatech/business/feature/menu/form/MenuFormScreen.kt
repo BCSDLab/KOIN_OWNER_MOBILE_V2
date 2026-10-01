@@ -60,7 +60,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.menu_single
 import `in`.koreatech.business.core.designsystem.noRippleClickable
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.file.rememberImageFilePicker
-import `in`.koreatech.business.core.util.CurrencyVisualTransformation
+import `in`.koreatech.business.core.util.CurrencyOutputTransformation
 import `in`.koreatech.business.core.viewmodel.rememberSavedStateViewModelCreationExtras
 import `in`.koreatech.business.feature.menu.component.MenuCategorySelector
 import `in`.koreatech.business.feature.menu.component.MenuOptionPriceRow
@@ -187,7 +187,7 @@ fun MenuFormScreenImpl(
                     onValueChange = onPriceChange,
                     placeholder = stringResource(Res.string.menu_price_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    visualTransformation = CurrencyVisualTransformation(),
+                    outputTransformation = CurrencyOutputTransformation(),
                     suffix = {
                         Text(
                             text = stringResource(Res.string.common_won),

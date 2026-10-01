@@ -31,7 +31,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_bus
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_business_step
 import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_title
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
-import `in`.koreatech.business.core.util.BusinessNumberVisualTransformation
+import `in`.koreatech.business.core.util.BusinessNumberOutputTransformation
 import `in`.koreatech.business.feature.signup.SignupState
 import org.jetbrains.compose.resources.stringResource
 
@@ -75,7 +75,7 @@ internal fun SignUpBusinessNumberScreen(
                     hint = stringResource(Res.string.sign_up_business_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                     maxLength = 10,
-                    visualTransformation = BusinessNumberVisualTransformation()
+                    outputTransformation = BusinessNumberOutputTransformation()
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))

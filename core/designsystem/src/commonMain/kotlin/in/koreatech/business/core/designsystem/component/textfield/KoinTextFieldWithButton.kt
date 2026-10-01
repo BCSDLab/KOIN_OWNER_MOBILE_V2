@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Text
@@ -18,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.component.KoinUnderlineTextField
@@ -35,7 +35,7 @@ fun KoinTextFieldWithButton(
     onButtonClick: () -> Unit,
     buttonEnabled: Boolean,
     maxLength: Int = Int.MAX_VALUE,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    outputTransformation: OutputTransformation? = null
 ) {
     Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically) {
         KoinUnderlineTextField(
@@ -45,7 +45,7 @@ fun KoinTextFieldWithButton(
             hint = hint,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = ImeAction.Done),
             maxLength = maxLength,
-            visualTransformation = visualTransformation
+            outputTransformation = outputTransformation
         )
         Spacer(modifier = Modifier.width(16.dp))
         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {

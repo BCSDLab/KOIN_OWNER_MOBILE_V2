@@ -18,6 +18,7 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets.commonMain.dependencies {
+        implementation(libs.compose.foundation)
         implementation(libs.compose.runtime)
         implementation(libs.compose.ui)
         implementation(libs.androidx.lifecycle.viewmodelCompose)

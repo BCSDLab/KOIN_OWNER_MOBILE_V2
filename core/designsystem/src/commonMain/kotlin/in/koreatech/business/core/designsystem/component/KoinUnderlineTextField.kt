@@ -12,15 +12,27 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.foundation.text.input.then
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
@@ -32,8 +44,8 @@ fun KoinUnderlineTextField(
     placeholder: String = "",
     hint: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onKeyboardAction: KeyboardActionHandler? = null,
+    outputTransformation: OutputTransformation? = null,
     textStyle: TextStyle = KoinTheme.typography.regular14,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
@@ -42,23 +54,46 @@ fun KoinUnderlineTextField(
     title: (@Composable () -> Unit)? = null,
     suffix: (@Composable RowScope.() -> Unit)? = null
 ) {
+    val textFieldState = rememberTextFieldState(value)
+    val currentValue by rememberUpdatedState(value)
+    val currentOnValueChange by rememberUpdatedState(onValueChange)
+    val inputTransformation = remember(maxLength, keyboardOptions.keyboardType) {
+        inputTransformation(maxLength, keyboardOptions.keyboardType)
+    }
+
+    LaunchedEffect(textFieldState) {
+        snapshotFlow { textFieldState.text.toString() }.collect { text ->
+            if (text != currentValue) {
+                currentOnValueChange(text)
+            }
+        }
+    }
+    LaunchedEffect(value) {
+        if (textFieldState.text.toString() != value) {
+            textFieldState.setTextAndPlaceCursorAtEnd(value)
+        }
+    }
+
     Column(modifier = modifier) {
         title?.let {
             it()
             Spacer(Modifier.height(8.dp))
         }
         BasicTextField(
-            value = value,
-            onValueChange = { onValueChange(it.take(maxLength)) },
+            state = textFieldState,
             modifier = Modifier.fillMaxWidth(),
             textStyle = textStyle.copy(color = KoinTheme.colors.neutral800),
             keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
+            onKeyboardAction = onKeyboardAction,
+            inputTransformation = inputTransformation,
+            outputTransformation = outputTransformation,
             readOnly = readOnly,
-            singleLine = singleLine,
-            visualTransformation = visualTransformation,
-            maxLines = maxLines,
-            decorationBox = { innerTextField ->
+            lineLimits = if (singleLine) {
+                TextFieldLineLimits.SingleLine
+            } else {
+                TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
+            },
+            decorator = { innerTextField ->
                 Column(modifier = Modifier.width(IntrinsicSize.Min)) {
                     Row(
                         modifier = Modifier
@@ -68,7 +103,7 @@ fun KoinUnderlineTextField(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Box(modifier = Modifier.weight(1f)) {
-                            if (value.isEmpty()) {
+                            if (textFieldState.text.isEmpty()) {
                                 Text(
                                     hint ?: placeholder,
                                     style = textStyle,
@@ -83,5 +118,24 @@ fun KoinUnderlineTextField(
                 }
             }
         )
+    }
+}
+
+private fun inputTransformation(
+    maxLength: Int,
+    keyboardType: KeyboardType
+): InputTransformation? {
+    val digitsOnly = DIGITS_ONLY_INPUT_TRANSFORMATION.takeIf { keyboardType == KeyboardType.Number }
+    val lengthLimit = InputTransformation.maxLength(maxLength).takeIf { maxLength != Int.MAX_VALUE }
+    return when {
+        digitsOnly != null && lengthLimit != null -> digitsOnly.then(lengthLimit)
+        digitsOnly != null -> digitsOnly
+        else -> lengthLimit
+    }
+}
+
+private val DIGITS_ONLY_INPUT_TRANSFORMATION = InputTransformation {
+    for (index in length - 1 downTo 0) {
+        if (!charAt(index).isDigit()) replace(index, index + 1, "")
     }
 }
