@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.menu
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -58,12 +59,12 @@ class MenuViewModel(
     }
 
     fun openCreateCategory() = blockingIntent {
+        state.categoryNameTextFieldState.setTextAndPlaceCursorAtEnd("")
         reduce {
             state.copy(
                 isFabMenuExpanded = false,
                 isCategoryEditorVisible = true,
-                categoryEditorId = null,
-                categoryName = ""
+                categoryEditorId = null
             )
         }
     }
@@ -72,26 +73,26 @@ class MenuViewModel(
         categoryId: Int,
         categoryName: String
     ) = blockingIntent {
+        state.categoryNameTextFieldState.setTextAndPlaceCursorAtEnd(categoryName)
         reduce {
             state.copy(
                 isCategoryEditorVisible = true,
-                categoryEditorId = categoryId,
-                categoryName = categoryName
+                categoryEditorId = categoryId
             )
         }
     }
 
     fun updateCategoryName(value: String) = blockingIntent {
-        reduce { state.copy(categoryName = value.take(20)) }
+        state.categoryNameTextFieldState.setTextAndPlaceCursorAtEnd(value.take(20))
     }
 
     fun dismissCategoryEditor() = blockingIntent {
         if (!state.isSavingCategory) {
+            state.categoryNameTextFieldState.setTextAndPlaceCursorAtEnd("")
             reduce {
                 state.copy(
                     isCategoryEditorVisible = false,
-                    categoryEditorId = null,
-                    categoryName = ""
+                    categoryEditorId = null
                 )
             }
         }
@@ -176,12 +177,12 @@ class MenuViewModel(
         getOwnerMenusUseCase(shopId)
             .first()
             .onSuccess {
+                state.categoryNameTextFieldState.setTextAndPlaceCursorAtEnd("")
                 reduce {
                     state.copy(
                         categories = it.map { category -> category.toMenuCategoryUiModel() }.toImmutableList(),
                         isCategoryEditorVisible = false,
                         categoryEditorId = null,
-                        categoryName = "",
                         isSavingCategory = false
                     )
                 }

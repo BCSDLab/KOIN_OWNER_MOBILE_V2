@@ -77,8 +77,7 @@ internal fun SignUpPasswordScreen(
                 Text(text = stringResource(Res.string.sign_up_password_input), style = KoinTheme.typography.medium16)
                 Spacer(modifier = Modifier.height(16.dp))
                 KoinPasswordTextField(
-                    value = state.password,
-                    onValueChange = onPasswordChange,
+                    state = state.passwordTextFieldState,
                     hint = stringResource(Res.string.sign_up_password_hint),
                     maxLength = 18,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next)
@@ -89,8 +88,7 @@ internal fun SignUpPasswordScreen(
                 if (isPasswordValid) {
                     Spacer(modifier = Modifier.height(16.dp))
                     KoinPasswordTextField(
-                        value = state.passwordConfirmation,
-                        onValueChange = onPasswordConfirmChange,
+                        state = state.passwordConfirmationTextFieldState,
                         hint = stringResource(Res.string.sign_up_password_confirm_hint),
                         maxLength = 18,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done)

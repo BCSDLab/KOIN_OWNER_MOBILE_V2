@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.signin
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -20,11 +21,13 @@ class SignInViewModel(
     override val container = orbitContainer<SignInState, SignInSideEffect>(SignInState())
 
     fun updatePhoneNumber(value: String) = blockingIntent {
-        reduce { state.copy(phoneNumber = value.filter(Char::isDigit), error = null) }
+        state.phoneNumberTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit))
+        reduce { state.copy(error = null) }
     }
 
     fun updatePassword(value: String) = blockingIntent {
-        reduce { state.copy(password = value, error = null) }
+        state.passwordTextFieldState.setTextAndPlaceCursorAtEnd(value)
+        reduce { state.copy(error = null) }
     }
 
     fun signIn() = intent {

@@ -109,14 +109,12 @@ internal fun MenuOptionPriceRow(
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             KoinUnderlineTextField(
-                value = value.option,
-                onValueChange = onOptionChange,
+                state = value.optionTextFieldState,
                 placeholder = stringResource(Res.string.menu_option_name_hint),
                 modifier = Modifier.weight(1f)
             )
             KoinUnderlineTextField(
-                value = value.price,
-                onValueChange = onPriceChange,
+                state = value.priceTextFieldState,
                 placeholder = stringResource(Res.string.menu_price),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 outputTransformation = CurrencyOutputTransformation(),

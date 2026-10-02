@@ -161,9 +161,8 @@ fun MenuFormScreenImpl(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         KoinUnderlineTextField(
+            state = state.nameTextFieldState,
             title = { Text(stringResource(Res.string.menu_name), style = KoinTheme.typography.medium15) },
-            value = state.name,
-            onValueChange = onNameChange,
             placeholder = stringResource(Res.string.menu_name_hint)
         )
         MenuCategorySelector(state.categories, state.selectedCategoryIds, onCategoryClick)
@@ -187,8 +186,7 @@ fun MenuFormScreenImpl(
             }
             if (state.isSinglePrice) {
                 KoinUnderlineTextField(
-                    value = state.singlePrice,
-                    onValueChange = onPriceChange,
+                    state = state.singlePriceTextFieldState,
                     placeholder = stringResource(Res.string.menu_price_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     outputTransformation = CurrencyOutputTransformation(),
@@ -219,9 +217,8 @@ fun MenuFormScreenImpl(
             }
         }
         KoinUnderlineTextField(
+            state = state.descriptionTextFieldState,
             title = { Text(stringResource(Res.string.menu_description), style = KoinTheme.typography.medium15) },
-            value = state.description,
-            onValueChange = onDescriptionChange,
             placeholder = stringResource(Res.string.menu_description_hint),
             singleLine = false
         )

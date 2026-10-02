@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.feature.signup.SignupError
 import `in`.koreatech.business.feature.signup.SignupState
 import `in`.koreatech.business.feature.signup.model.SignupStoreSearchResult
+import kotlinx.coroutines.flow.drop
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -55,6 +57,11 @@ internal fun SignUpStoreSearchScreen(
 ) {
     LaunchedEffect(Unit) {
         onLoad()
+    }
+    LaunchedEffect(state.storeSearchQueryTextFieldState) {
+        snapshotFlow { state.storeSearchQuery }
+            .drop(1)
+            .collect(onQueryChange)
     }
 
     Scaffold(
@@ -81,8 +88,7 @@ internal fun SignUpStoreSearchScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             KoinUnderlineTextField(
-                value = state.storeSearchQuery,
-                onValueChange = onQueryChange,
+                state = state.storeSearchQueryTextFieldState,
                 hint = stringResource(Res.string.sign_up_store_search_hint)
             )
             Spacer(modifier = Modifier.height(16.dp))

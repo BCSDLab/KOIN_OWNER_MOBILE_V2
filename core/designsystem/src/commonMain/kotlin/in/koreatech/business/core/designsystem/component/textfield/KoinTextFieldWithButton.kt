@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Text
@@ -27,11 +28,10 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
 @Composable
 fun KoinTextFieldWithButton(
-    value: String,
+    state: TextFieldState,
     hint: String,
     buttonText: String,
     keyboardType: KeyboardType,
-    onValueChange: (String) -> Unit,
     onButtonClick: () -> Unit,
     buttonEnabled: Boolean,
     maxLength: Int = Int.MAX_VALUE,
@@ -39,8 +39,7 @@ fun KoinTextFieldWithButton(
 ) {
     Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically) {
         KoinUnderlineTextField(
-            value = value,
-            onValueChange = onValueChange,
+            state = state,
             modifier = Modifier.weight(1f),
             hint = hint,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = ImeAction.Done),

@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.store.register
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import `in`.koreatech.business.domain.model.store.OwnerShop
@@ -69,9 +70,13 @@ class RegisterStoreViewModel internal constructor(
         postSideEffect(RegisterStoreSideEffect.NavigateToBasicInfo)
     }
 
-    fun onStoreNameChanged(value: String) = blockingIntent { reduce { state.copy(storeName = value) } }
+    fun onStoreNameChanged(value: String) = blockingIntent {
+        state.storeNameTextFieldState.setTextAndPlaceCursorAtEnd(value)
+    }
 
-    fun onAddressSelected(value: String) = blockingIntent { reduce { state.copy(address = value) } }
+    fun onAddressSelected(value: String) = blockingIntent {
+        state.addressTextFieldState.setTextAndPlaceCursorAtEnd(value)
+    }
 
     fun searchAddress(keyword: String) = intent {
         if (keyword.isBlank() || state.isAddressSearching) return@intent
@@ -108,14 +113,16 @@ class RegisterStoreViewModel internal constructor(
     }
 
     fun onPhoneNumberChanged(value: String) = blockingIntent {
-        reduce { state.copy(phoneNumber = value.filter(Char::isDigit).take(11)) }
+        state.phoneNumberTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit).take(11))
     }
 
     fun onDeliveryFeeChanged(value: String) = blockingIntent {
-        reduce { state.copy(deliveryFee = value.filter(Char::isDigit)) }
+        state.deliveryFeeTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit))
     }
 
-    fun onOtherInfoChanged(value: String) = blockingIntent { reduce { state.copy(otherInfo = value) } }
+    fun onOtherInfoChanged(value: String) = blockingIntent {
+        state.otherInfoTextFieldState.setTextAndPlaceCursorAtEnd(value)
+    }
 
     fun onDeliveryAvailabilityChanged(value: Boolean) = blockingIntent {
         reduce { state.copy(isDeliveryAvailable = value) }

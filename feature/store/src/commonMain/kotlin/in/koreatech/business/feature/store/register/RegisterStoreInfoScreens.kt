@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -133,6 +134,7 @@ internal fun RegisterStoreBasicInfoScreen(
     )
     if (showAddressSearchDialog) {
         RegisterStoreAddressSearchDialog(
+            textFieldState = state.addressSearchTextFieldState,
             results = state.addressSearchResults,
             hasSearchResult = state.hasAddressSearchResult,
             isSearching = state.isAddressSearching,
@@ -205,6 +207,7 @@ internal fun RegisterStoreBasicInfoScreen(
             }
             Spacer(Modifier.height(32.dp))
             RegisterStoreField(
+                state.storeNameTextFieldState,
                 stringResource(Res.string.register_store_name),
                 state.storeName,
                 stringResource(Res.string.register_store_name_hint)
@@ -213,6 +216,7 @@ internal fun RegisterStoreBasicInfoScreen(
             }
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
+                state.addressTextFieldState,
                 stringResource(Res.string.register_store_address),
                 state.address,
                 stringResource(Res.string.register_store_address_hint),
@@ -240,6 +244,7 @@ internal fun RegisterStoreBasicInfoScreen(
 
 @Composable
 private fun RegisterStoreAddressSearchDialog(
+    textFieldState: TextFieldState,
     results: ImmutableList<RegisterStoreAddress>,
     hasSearchResult: Boolean,
     isSearching: Boolean,
@@ -248,21 +253,19 @@ private fun RegisterStoreAddressSearchDialog(
     onSelect: (RegisterStoreAddress) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var keyword by remember { mutableStateOf("") }
-    val search = { onSearch(keyword) }
+    val search = { onSearch(textFieldState.text.toString()) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(Res.string.register_store_address_search), style = KoinTheme.typography.medium18) },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 KoinUnderlineTextField(
-                    value = keyword,
-                    onValueChange = { keyword = it },
+                    state = textFieldState,
                     hint = stringResource(Res.string.register_store_address_search_hint),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     onKeyboardAction = KeyboardActionHandler { search() },
                     suffix = {
-                        TextButton(onClick = search, enabled = keyword.isNotBlank() && !isSearching) {
+                        TextButton(onClick = search, enabled = textFieldState.text.isNotBlank() && !isSearching) {
                             Text(stringResource(Res.string.register_store_address_search_button))
                         }
                     }
@@ -494,6 +497,7 @@ internal fun RegisterStoreDetailInfoScreen(
             KoinProgressIndicator(3, 4)
             Spacer(Modifier.height(48.dp))
             RegisterStoreField(
+                state.phoneNumberTextFieldState,
                 stringResource(Res.string.register_store_phone),
                 state.phoneNumber,
                 stringResource(Res.string.register_store_phone_hint),
@@ -504,6 +508,7 @@ internal fun RegisterStoreDetailInfoScreen(
             )
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
+                state.deliveryFeeTextFieldState,
                 stringResource(Res.string.register_store_delivery_fee),
                 state.deliveryFee,
                 stringResource(Res.string.register_store_delivery_fee_hint),
@@ -519,6 +524,7 @@ internal fun RegisterStoreDetailInfoScreen(
             ) { onDeliveryFeeChange(it) }
             Spacer(Modifier.height(24.dp))
             RegisterStoreField(
+                state.otherInfoTextFieldState,
                 stringResource(Res.string.register_store_other_information),
                 state.otherInfo,
                 stringResource(Res.string.register_store_other_information_hint)
@@ -664,6 +670,7 @@ private fun Int.toTwoDigitString(): String = toString().padStart(2, '0')
 
 @Composable
 private fun RegisterStoreField(
+    state: TextFieldState,
     title: String,
     value: String,
     hint: String,
@@ -677,8 +684,7 @@ private fun RegisterStoreField(
     Text(title, style = KoinTheme.typography.medium16)
     Spacer(Modifier.height(8.dp))
     KoinUnderlineTextField(
-        value = value,
-        onValueChange = onValueChange,
+        state = state,
         hint = hint,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         maxLength = maxLength,

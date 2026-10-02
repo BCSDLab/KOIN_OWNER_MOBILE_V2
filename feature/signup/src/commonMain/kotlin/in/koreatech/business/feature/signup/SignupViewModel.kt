@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.signup
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -84,10 +85,10 @@ class SignupViewModel(
     }
 
     fun updatePhoneNumber(value: String) = blockingIntent {
+        state.phoneNumberTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit).take(11))
+        state.verificationCodeTextFieldState.setTextAndPlaceCursorAtEnd("")
         reduce {
             state.copy(
-                phoneNumber = value.filter(Char::isDigit).take(11),
-                verificationCode = "",
                 isVerificationCodeSent = false,
                 phoneNumberVerificationState = PhoneNumberVerificationState.None,
                 verificationCodeState = VerificationCodeState.None,
@@ -98,9 +99,9 @@ class SignupViewModel(
     }
 
     fun updateVerificationCode(value: String) = blockingIntent {
+        state.verificationCodeTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit).take(6))
         reduce {
             state.copy(
-                verificationCode = value.filter(Char::isDigit).take(6),
                 verificationCodeState = VerificationCodeState.None,
                 verificationToken = null,
                 error = null
@@ -108,27 +109,34 @@ class SignupViewModel(
         }
     }
 
-    fun updateName(value: String) = blockingIntent { reduce { state.copy(name = value, error = null) } }
+    fun updateName(value: String) = blockingIntent {
+        state.nameTextFieldState.setTextAndPlaceCursorAtEnd(value)
+        reduce { state.copy(error = null) }
+    }
 
-    fun updatePassword(value: String) = blockingIntent { reduce { state.copy(password = value, error = null) } }
+    fun updatePassword(value: String) = blockingIntent {
+        state.passwordTextFieldState.setTextAndPlaceCursorAtEnd(value)
+        reduce { state.copy(error = null) }
+    }
 
     fun updatePasswordConfirmation(value: String) = blockingIntent {
-        reduce { state.copy(passwordConfirmation = value, error = null) }
+        state.passwordConfirmationTextFieldState.setTextAndPlaceCursorAtEnd(value)
+        reduce { state.copy(error = null) }
     }
 
     fun updateBusinessNumber(value: String) = blockingIntent {
+        state.businessNumberTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit).take(10))
         reduce {
             state.copy(
-                businessNumber = value.filter(Char::isDigit).take(10),
                 error = null
             )
         }
     }
 
     fun updateStoreName(value: String) = blockingIntent {
+        state.storeNameTextFieldState.setTextAndPlaceCursorAtEnd(value)
         reduce {
             state.copy(
-                storeName = value,
                 selectedStoreId = null,
                 error = null
             )
@@ -136,9 +144,9 @@ class SignupViewModel(
     }
 
     fun updateStorePhoneNumber(value: String) = blockingIntent {
+        state.storePhoneNumberTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit).take(11))
         reduce {
             state.copy(
-                storePhoneNumber = value.filter(Char::isDigit).take(11),
                 selectedStoreId = null,
                 error = null
             )
@@ -148,7 +156,8 @@ class SignupViewModel(
     fun updateStoreSearchQuery(value: String) {
         storeSearchJob?.cancel()
         storeSearchJob = intent {
-            reduce { state.copy(storeSearchQuery = value, selectedStoreId = null, error = null) }
+            state.storeSearchQueryTextFieldState.setTextAndPlaceCursorAtEnd(value)
+            reduce { state.copy(selectedStoreId = null, error = null) }
             delay(STORE_SEARCH_DEBOUNCE_MILLIS)
             searchStores(value)
         }
@@ -189,10 +198,10 @@ class SignupViewModel(
 
     fun applySelectedStore() = intent {
         val store = state.storeSearchResults.firstOrNull { it.id == state.selectedStoreId } ?: return@intent
+        state.storeNameTextFieldState.setTextAndPlaceCursorAtEnd(store.name)
+        state.storePhoneNumberTextFieldState.setTextAndPlaceCursorAtEnd(store.phone.filter(Char::isDigit).take(11))
         reduce {
             state.copy(
-                storeName = store.name,
-                storePhoneNumber = store.phone.filter(Char::isDigit).take(11),
                 error = null
             )
         }

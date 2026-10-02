@@ -69,8 +69,7 @@ internal fun SignUpBusinessNumberScreen(
                 Text(text = stringResource(Res.string.sign_up_business_input), style = KoinTheme.typography.medium16)
                 Spacer(modifier = Modifier.height(16.dp))
                 KoinUnderlineTextField(
-                    value = state.businessNumber,
-                    onValueChange = onBusinessNumberChange,
+                    state = state.businessNumberTextFieldState,
                     hint = stringResource(Res.string.sign_up_business_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                     maxLength = 10,

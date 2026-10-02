@@ -15,6 +15,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -48,6 +50,7 @@ import `in`.koreatech.business.core.designsystem.generated.resources.sign_up_ver
 import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 import `in`.koreatech.business.core.util.KRPhoneNumberOutputTransformation
 import `in`.koreatech.business.feature.signup.SignupState
+import kotlinx.coroutines.flow.drop
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -62,6 +65,12 @@ internal fun SignUpVerificationScreen(
     navigateToNextScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    LaunchedEffect(state.phoneNumberTextFieldState) {
+        snapshotFlow { state.phoneNumber }.drop(1).collect(onPhoneNumberChange)
+    }
+    LaunchedEffect(state.verificationCodeTextFieldState) {
+        snapshotFlow { state.verificationCode }.drop(1).collect(onVerificationCodeChange)
+    }
     Scaffold(
         modifier = modifier.imePadding(),
         topBar = {
@@ -100,8 +109,7 @@ internal fun SignUpVerificationScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 KoinUnderlineTextField(
-                    value = state.name,
-                    onValueChange = onNameChange,
+                    state = state.nameTextFieldState,
                     hint = stringResource(Res.string.sign_up_name_hint),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                 )
@@ -112,7 +120,7 @@ internal fun SignUpVerificationScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 KoinTextFieldWithButton(
-                    value = state.phoneNumber,
+                    state = state.phoneNumberTextFieldState,
                     hint = stringResource(Res.string.sign_up_phone_hint),
                     buttonText = if (state.isVerificationCodeSent) {
                         stringResource(Res.string.sign_up_verification_resend)
@@ -120,7 +128,6 @@ internal fun SignUpVerificationScreen(
                         stringResource(Res.string.sign_up_verification_send)
                     },
                     keyboardType = KeyboardType.Number,
-                    onValueChange = onPhoneNumberChange,
                     onButtonClick = onSendVerificationCode,
                     maxLength = 11,
                     buttonEnabled = state.phoneNumber.isNotBlank() &&
@@ -158,11 +165,10 @@ internal fun SignUpVerificationScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
                 KoinTextFieldWithButton(
-                    value = state.verificationCode,
+                    state = state.verificationCodeTextFieldState,
                     hint = stringResource(Res.string.sign_up_verification_hint),
                     buttonText = stringResource(Res.string.common_confirm),
                     keyboardType = KeyboardType.Number,
-                    onValueChange = onVerificationCodeChange,
                     onButtonClick = onVerifyCode,
                     maxLength = 6,
                     buttonEnabled = state.isVerificationCodeSent &&

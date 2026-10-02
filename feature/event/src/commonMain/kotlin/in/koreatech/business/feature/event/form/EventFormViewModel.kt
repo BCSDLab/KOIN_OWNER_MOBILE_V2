@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.event.form
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import `in`.koreatech.business.domain.model.upload.PreSignedUrlDomain
@@ -52,11 +53,13 @@ class EventFormViewModel internal constructor(
     }
 
     fun updateTitle(value: String) = blockingIntent {
-        reduce { state.copy(title = value.take(MAX_TITLE_LENGTH), error = null) }
+        state.titleTextFieldState.setTextAndPlaceCursorAtEnd(value.take(MAX_TITLE_LENGTH))
+        reduce { state.copy(error = null) }
     }
 
     fun updateContent(value: String) = blockingIntent {
-        reduce { state.copy(content = value.take(MAX_CONTENT_LENGTH), error = null) }
+        state.contentTextFieldState.setTextAndPlaceCursorAtEnd(value.take(MAX_CONTENT_LENGTH))
+        reduce { state.copy(error = null) }
     }
 
     fun updateStartDate(value: String) = blockingIntent {

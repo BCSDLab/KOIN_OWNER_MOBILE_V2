@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -68,6 +69,8 @@ fun SignInScreen(
     }
 
     SignInScreenImpl(
+        phoneNumberTextFieldState = state.phoneNumberTextFieldState,
+        passwordTextFieldState = state.passwordTextFieldState,
         loginId = state.phoneNumber,
         password = state.password,
         isError = state.error != null,
@@ -82,6 +85,8 @@ fun SignInScreen(
 
 @Composable
 fun SignInScreenImpl(
+    phoneNumberTextFieldState: TextFieldState,
+    passwordTextFieldState: TextFieldState,
     loginId: String,
     password: String,
     isError: Boolean,
@@ -128,8 +133,7 @@ fun SignInScreenImpl(
                 Spacer(Modifier.height(50.dp))
 
                 KoinUnderlineTextField(
-                    value = loginId,
-                    onValueChange = setLoginId,
+                    state = phoneNumberTextFieldState,
                     hint = stringResource(Res.string.sign_in_id_hint),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Phone
@@ -154,8 +158,7 @@ fun SignInScreenImpl(
                 Spacer(Modifier.height(24.dp))
 
                 KoinPasswordTextField(
-                    value = password,
-                    onValueChange = setPassword,
+                    state = passwordTextFieldState,
                     hint = stringResource(Res.string.sign_in_password_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     modifier = Modifier.fillMaxWidth()

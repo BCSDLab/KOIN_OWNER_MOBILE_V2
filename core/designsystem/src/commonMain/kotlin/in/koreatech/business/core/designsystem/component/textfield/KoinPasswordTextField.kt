@@ -3,6 +3,7 @@ package `in`.koreatech.business.core.designsystem.component.textfield
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,8 +21,7 @@ import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun KoinPasswordTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    state: TextFieldState,
     hint: String,
     modifier: Modifier = Modifier,
     maxLength: Int = Int.MAX_VALUE,
@@ -39,8 +39,7 @@ fun KoinPasswordTextField(
         }
     }
     KoinUnderlineTextField(
-        value = value,
-        onValueChange = onValueChange,
+        state = state,
         modifier = modifier,
         hint = hint,
         maxLength = maxLength,

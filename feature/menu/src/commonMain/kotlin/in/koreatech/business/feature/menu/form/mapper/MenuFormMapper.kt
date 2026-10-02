@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.menu.form.mapper
 
+import androidx.compose.foundation.text.input.TextFieldState
 import `in`.koreatech.business.domain.model.store.OwnerMenuCategoryOption
 import `in`.koreatech.business.domain.model.store.OwnerMenuDetail
 import `in`.koreatech.business.domain.model.store.OwnerMenuForm
@@ -24,17 +25,20 @@ internal fun MenuFormState.withMenuDetail(
 ) = copy(
     categories = categories.map { it.toMenuFormCategory() }.toImmutableList(),
     selectedCategoryIds = detail.categoryIds.toImmutableSet(),
-    name = detail.name,
-    description = detail.description,
+    nameTextFieldState = TextFieldState(detail.name),
+    descriptionTextFieldState = TextFieldState(detail.description),
     isSinglePrice = detail.prices.singleOrNull()?.let { it.option == null } ?: false,
-    singlePrice = detail.prices
-        .singleOrNull()
-        ?.price
-        ?.toString()
-        .orEmpty(),
+    singlePriceTextFieldState = TextFieldState(
+        detail.prices.singleOrNull()?.price?.toString().orEmpty()
+    ),
     optionPrices = detail.prices
         .takeIf { prices -> prices.any { it.option != null } }
-        ?.map { EditableMenuPrice(it.option.orEmpty(), it.price.toString()) }
+        ?.map {
+            EditableMenuPrice(
+                optionTextFieldState = TextFieldState(it.option.orEmpty()),
+                priceTextFieldState = TextFieldState(it.price.toString())
+            )
+        }
         ?.toImmutableList()
         ?: persistentListOf(EditableMenuPrice()),
     imageUrls = detail.imageUrls.toImmutableList(),

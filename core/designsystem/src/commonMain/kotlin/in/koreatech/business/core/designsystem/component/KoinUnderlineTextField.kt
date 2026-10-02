@@ -18,18 +18,13 @@ import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldDecorator
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.maxLength
-import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.text.input.then
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -39,8 +34,7 @@ import `in`.koreatech.business.core.designsystem.theme.KoinTheme
 
 @Composable
 fun KoinUnderlineTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    state: TextFieldState,
     modifier: Modifier = Modifier,
     placeholder: String = "",
     hint: String? = null,
@@ -55,24 +49,8 @@ fun KoinUnderlineTextField(
     title: (@Composable () -> Unit)? = null,
     suffix: (@Composable RowScope.() -> Unit)? = null
 ) {
-    val textFieldState = rememberTextFieldState(value)
-    val currentValue by rememberUpdatedState(value)
-    val currentOnValueChange by rememberUpdatedState(onValueChange)
     val inputTransformation = remember(maxLength, keyboardOptions.keyboardType) {
         inputTransformation(maxLength, keyboardOptions.keyboardType)
-    }
-
-    LaunchedEffect(textFieldState) {
-        snapshotFlow { textFieldState.text.toString() }.collect { text ->
-            if (text != currentValue) {
-                currentOnValueChange(text)
-            }
-        }
-    }
-    LaunchedEffect(value) {
-        if (textFieldState.text.toString() != value) {
-            textFieldState.setTextAndPlaceCursorAtEnd(value)
-        }
     }
 
     Column(modifier = modifier) {
@@ -90,7 +68,7 @@ fun KoinUnderlineTextField(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(modifier = Modifier.weight(1f)) {
-                        if (textFieldState.text.isEmpty()) {
+                        if (state.text.isEmpty()) {
                             Text(
                                 hint ?: placeholder,
                                 style = textStyle,
@@ -105,7 +83,7 @@ fun KoinUnderlineTextField(
             }
         }
         BasicTextField(
-            state = textFieldState,
+            state = state,
             modifier = Modifier.fillMaxWidth(),
             textStyle = textStyle.copy(color = KoinTheme.colors.neutral800),
             keyboardOptions = keyboardOptions,

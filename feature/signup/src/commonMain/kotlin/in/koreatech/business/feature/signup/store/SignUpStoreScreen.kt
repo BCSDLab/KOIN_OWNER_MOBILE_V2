@@ -73,8 +73,7 @@ internal fun SignUpStoreScreen(
                 Text(text = stringResource(Res.string.sign_up_store_input), style = KoinTheme.typography.medium16)
                 Spacer(modifier = Modifier.height(16.dp))
                 KoinUnderlineTextField(
-                    value = state.storeName,
-                    onValueChange = onStoreNameChange,
+                    state = state.storeNameTextFieldState,
                     hint = stringResource(Res.string.sign_up_store_name_hint)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -92,8 +91,7 @@ internal fun SignUpStoreScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
                 KoinUnderlineTextField(
-                    value = state.storePhoneNumber,
-                    onValueChange = onStorePhoneNumberChange,
+                    state = state.storePhoneNumberTextFieldState,
                     hint = stringResource(Res.string.sign_up_store_phone_hint),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     maxLength = 11,

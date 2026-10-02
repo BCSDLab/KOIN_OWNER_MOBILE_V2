@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.menu.form
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import `in`.koreatech.business.domain.model.upload.PreSignedUrlDomain
@@ -50,11 +51,13 @@ class MenuFormViewModel internal constructor(
     }
 
     fun updateName(value: String) = blockingIntent {
-        reduce { state.copy(name = value.take(25), error = null) }
+        state.nameTextFieldState.setTextAndPlaceCursorAtEnd(value.take(25))
+        reduce { state.copy(error = null) }
     }
 
     fun updateDescription(value: String) = blockingIntent {
-        reduce { state.copy(description = value.take(80), error = null) }
+        state.descriptionTextFieldState.setTextAndPlaceCursorAtEnd(value.take(80))
+        reduce { state.copy(error = null) }
     }
 
     fun toggleCategory(id: Int) = blockingIntent {
@@ -67,7 +70,8 @@ class MenuFormViewModel internal constructor(
     }
 
     fun updateSinglePrice(value: String) = blockingIntent {
-        reduce { state.copy(singlePrice = value.filter(Char::isDigit), error = null) }
+        state.singlePriceTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit))
+        reduce { state.copy(error = null) }
     }
 
     fun addOption() = blockingIntent {
@@ -87,19 +91,12 @@ class MenuFormViewModel internal constructor(
         option: String? = null,
         price: String? = null
     ) = blockingIntent {
+        option?.let { state.optionPrices[index].optionTextFieldState.setTextAndPlaceCursorAtEnd(it.take(50)) }
+        price?.let { state.optionPrices[index].priceTextFieldState.setTextAndPlaceCursorAtEnd(it.filter(Char::isDigit)) }
         reduce {
             state.copy(
                 optionPrices = state.optionPrices
-                    .mapIndexed { i, value ->
-                        if (i == index) {
-                            value.copy(
-                                option = option?.take(50) ?: value.option,
-                                price = price?.filter(Char::isDigit) ?: value.price
-                            )
-                        } else {
-                            value
-                        }
-                    }.toImmutableList(),
+                    .toImmutableList(),
                 error = null
             )
         }

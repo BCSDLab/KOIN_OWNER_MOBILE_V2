@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.signin.password
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -25,9 +26,9 @@ class PasswordResetViewModel(
 
     fun updatePhoneNumber(value: String) = blockingIntent {
         reduce {
+            state.phoneNumberTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit).take(11))
+            state.codeTextFieldState.setTextAndPlaceCursorAtEnd("")
             state.copy(
-                phoneNumber = value.filter(Char::isDigit).take(11),
-                code = "",
                 isCodeSent = false,
                 error = null
             )
@@ -35,15 +36,18 @@ class PasswordResetViewModel(
     }
 
     fun updateCode(value: String) = blockingIntent {
-        reduce { state.copy(code = value.filter(Char::isDigit).take(6), error = null) }
+        state.codeTextFieldState.setTextAndPlaceCursorAtEnd(value.filter(Char::isDigit).take(6))
+        reduce { state.copy(error = null) }
     }
 
     fun updatePassword(value: String) = blockingIntent {
-        reduce { state.copy(password = value.take(18), error = null) }
+        state.passwordTextFieldState.setTextAndPlaceCursorAtEnd(value.take(18))
+        reduce { state.copy(error = null) }
     }
 
     fun updatePasswordConfirmation(value: String) = blockingIntent {
-        reduce { state.copy(passwordConfirmation = value.take(18), error = null) }
+        state.passwordConfirmationTextFieldState.setTextAndPlaceCursorAtEnd(value.take(18))
+        reduce { state.copy(error = null) }
     }
 
     fun sendCode() = intent {

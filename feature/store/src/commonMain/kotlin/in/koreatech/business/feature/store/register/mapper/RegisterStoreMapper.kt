@@ -1,5 +1,6 @@
 package `in`.koreatech.business.feature.store.register.mapper
 
+import androidx.compose.foundation.text.input.TextFieldState
 import `in`.koreatech.business.domain.model.store.OperatingTime
 import `in`.koreatech.business.domain.model.store.OwnerShop
 import `in`.koreatech.business.domain.model.store.OwnerShopForm
@@ -15,12 +16,12 @@ internal fun OwnerShop.toRegisterStoreState(categories: List<ShopCategory>): Reg
     shopId = id,
     categories = categories.map { it.toRegisterStoreCategory() }.toImmutableList(),
     selectedCategoryId = categoryIds.firstOrNull(),
-    storeName = name,
-    address = address.orEmpty(),
-    phoneNumber = phone.orEmpty().filter(Char::isDigit),
-    deliveryFee = deliveryPrice.toString(),
+    storeNameTextFieldState = TextFieldState(name),
+    addressTextFieldState = TextFieldState(address.orEmpty()),
+    phoneNumberTextFieldState = TextFieldState(phone.orEmpty().filter(Char::isDigit)),
+    deliveryFeeTextFieldState = TextFieldState(deliveryPrice.toString()),
     operatingTimes = toRegisterStoreOperatingTimes(),
-    otherInfo = description.orEmpty(),
+    otherInfoTextFieldState = TextFieldState(description.orEmpty()),
     isDeliveryAvailable = isDeliveryAvailable,
     isCardAvailable = isCardAvailable,
     isBankTransferAvailable = isBankTransferAvailable,

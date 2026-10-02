@@ -455,9 +455,8 @@ private fun MenuCategoryDialogs(
             },
             text = {
                 KoinUnderlineTextField(
+                    state = state.categoryNameTextFieldState,
                     title = { Text(stringResource(Res.string.menu_category_name), style = KoinTheme.typography.medium15) },
-                    value = state.categoryName,
-                    onValueChange = onNameChange,
                     placeholder = stringResource(Res.string.menu_category_name_hint)
                 )
             },
