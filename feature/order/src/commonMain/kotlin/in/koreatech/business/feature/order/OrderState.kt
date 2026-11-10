@@ -3,7 +3,9 @@ package `in`.koreatech.business.feature.order
 import `in`.koreatech.business.domain.model.order.OwnerOrderCategory
 import `in`.koreatech.business.feature.order.model.OrderUiModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 data class OrderState(
     val shopId: Int? = null,
@@ -13,5 +15,8 @@ data class OrderState(
     val orders: ImmutableList<OrderUiModel> = persistentListOf(),
     val isLoading: Boolean = true,
     val hasError: Boolean = false,
-    val service: OrderServiceState = OrderServiceState()
+    val service: OrderServiceState = OrderServiceState(),
+    val submittedShopIds: ImmutableSet<Int> = persistentSetOf(),
+    val submittingShopIds: ImmutableSet<Int> = persistentSetOf(),
+    val shopGeneration: Int = 0
 )

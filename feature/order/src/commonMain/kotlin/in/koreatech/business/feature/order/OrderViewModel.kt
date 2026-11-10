@@ -22,8 +22,10 @@ import `in`.koreatech.business.feature.order.model.toOrderUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import org.orbitmvi.orbit.OrbitContainerHost
 import org.orbitmvi.orbit.viewmodel.orbitContainer
 
@@ -38,10 +40,6 @@ class OrderViewModel(
     private val uploadImageUseCase: UploadImageUseCase,
     private val requestOrderServiceUseCase: RequestOrderServiceUseCase
 ) : ViewModel(), OrbitContainerHost<OrderState, OrderState, Nothing> {
-    private val submittedShopIds = mutableSetOf<Int>()
-    private val submittingShopIds = mutableSetOf<Int>()
-    private var shopGeneration = 0
-
     override val container = orbitContainer<OrderState, Nothing>(OrderState()) {
         observeShop()
     }
@@ -51,31 +49,42 @@ class OrderViewModel(
     }
 
     private suspend fun loadShop(result: Result<OwnerShop?>) = subIntent {
-        val generation = if (result.isFailure || result.getOrNull()?.id != state.shopId) ++shopGeneration else shopGeneration
-        result.onFailure {
-            reduce { OrderState(isLoading = false, hasError = true) }
-            return@subIntent
-        }
         val shop = result.getOrNull()
+        var generation = 0
         reduce {
-            if (state.shopId == shop?.id) {
-                state.copy(isLoading = true, hasError = false)
-            } else {
-                OrderState(shopId = shop?.id, shopName = shop?.name)
+            generation = state.shopGeneration + if (result.isFailure || shop?.id != state.shopId) 1 else 0
+            when {
+                result.isFailure -> OrderState(
+                    isLoading = false,
+                    hasError = true,
+                    submittedShopIds = state.submittedShopIds,
+                    submittingShopIds = state.submittingShopIds,
+                    shopGeneration = generation
+                )
+                state.shopId == shop?.id -> state.copy(isLoading = true, hasError = false, shopGeneration = generation)
+                else -> OrderState(
+                    shopId = shop?.id,
+                    shopName = shop?.name,
+                    submittedShopIds = state.submittedShopIds,
+                    submittingShopIds = state.submittingShopIds,
+                    shopGeneration = generation
+                )
             }
         }
+        if (result.isFailure) return@subIntent
         val orderableShopId = getOrderableShopsUseCase().getOrElse {
-            if (generation == shopGeneration) reduce { state.copy(isLoading = false, hasError = true) }
+            reduce { if (generation == state.shopGeneration) state.copy(isLoading = false, hasError = true) else state }
             return@subIntent
         }.firstOrNull { it.shopId == shop?.id }?.id
-        if (generation != shopGeneration) return@subIntent
+        if (generation != state.shopGeneration) return@subIntent
         reduce {
+            if (generation != state.shopGeneration) return@reduce state
             state.copy(
                 shopName = shop?.name,
                 orderableShopId = orderableShopId,
                 service = state.service.copy(
-                    isSubmitted = shop?.id in submittedShopIds,
-                    isSubmitting = shop?.id in submittingShopIds
+                    isSubmitted = shop?.id in state.submittedShopIds,
+                    isSubmitting = shop?.id in state.submittingShopIds
                 )
             )
         }
@@ -99,10 +108,10 @@ class OrderViewModel(
 
     private suspend fun loadServiceMenus() = subIntent {
         val shopId = state.shopId ?: return@subIntent
-        val generation = shopGeneration
+        val generation = state.shopGeneration
         reduce { state.copy(service = state.service.copy(isLoadingMenus = true, hasMenuError = false)) }
         val result = getOwnerMenusUseCase(shopId).first()
-        if (generation != shopGeneration) return@subIntent
+        if (generation != state.shopGeneration) return@subIntent
         result.onSuccess { categories ->
             val menus = categories.asSequence()
                 .flatMap { it.menus }
@@ -111,6 +120,7 @@ class OrderViewModel(
                 .map { it.toOrderServiceMenuUiModel() }
                 .toImmutableList()
             reduce {
+                if (generation != state.shopGeneration) return@reduce state
                 state.copy(
                     service = state.service.copy(
                         menus = menus,
@@ -120,7 +130,9 @@ class OrderViewModel(
                 )
             }
         }.onFailure {
-            reduce { state.copy(service = state.service.copy(isLoadingMenus = false, hasMenuError = true)) }
+            reduce {
+                if (generation == state.shopGeneration) state.copy(service = state.service.copy(isLoadingMenus = false, hasMenuError = true)) else state
+            }
         }
     }
 
@@ -166,13 +178,14 @@ class OrderViewModel(
     fun uploadServiceDocument(document: OrderServiceDocument, name: String, contentType: String, bytes: ByteArray) = intent {
         val shopId = state.shopId ?: return@intent
         if (state.service.isSubmitting || document in state.service.uploadingDocuments) return@intent
-        val generation = shopGeneration
+        val generation = state.shopGeneration
         reduce {
             state.copy(service = state.service.copy(uploadingDocuments = (state.service.uploadingDocuments + document).toImmutableSet(), hasUploadError = false))
         }
         val result = uploadImageUseCase(PreSignedUrlDomain.OWNERS, bytes.size.toLong(), contentType, name, bytes)
-        if (generation != shopGeneration || state.shopId != shopId) return@intent
+        if (generation != state.shopGeneration || state.shopId != shopId) return@intent
         reduce {
+            if (generation != state.shopGeneration || state.shopId != shopId) return@reduce state
             val service = state.service.copy(
                 uploadingDocuments = (state.service.uploadingDocuments - document).toImmutableSet(),
                 hasUploadError = result.isFailure
@@ -193,11 +206,25 @@ class OrderViewModel(
     }
 
     fun submitOrderService() = intent {
-        val shopId = state.shopId ?: return@intent
-        val service = state.service
-        if (!service.canSubmit || state.orderableShopId != null || shopId in submittingShopIds) return@intent
-        submittingShopIds.add(shopId)
-        reduce { state.copy(service = service.copy(isSubmitting = true, hasSubmitError = false, submitErrorMessage = null)) }
+        var requestState: OrderState? = null
+        reduce {
+            requestState = null
+            val shopId = state.shopId
+            if (shopId == null || !state.service.canSubmit || state.orderableShopId != null ||
+                shopId in state.submittingShopIds || shopId in state.submittedShopIds
+            ) {
+                state
+            } else {
+                requestState = state
+                state.copy(
+                    submittingShopIds = (state.submittingShopIds + shopId).toImmutableSet(),
+                    service = state.service.copy(isSubmitting = true, hasSubmitError = false, submitErrorMessage = null)
+                )
+            }
+        }
+        val initialState = requestState ?: return@intent
+        val shopId = requireNotNull(initialState.shopId)
+        val service = initialState.service
         val application = OrderServiceApplication(
             minimumOrderAmount = service.minimumOrderAmount.toInt(),
             isTakeout = service.isTakeout,
@@ -212,22 +239,33 @@ class OrderViewModel(
             accountHolder = service.accountHolder.trim(),
             menuIds = service.selectedMenuIds.toList()
         )
-        val result = try {
-            requestOrderServiceUseCase(shopId, application)
+        var result: Result<Unit>? = null
+        try {
+            result = requestOrderServiceUseCase(shopId, application)
         } finally {
-            submittingShopIds.remove(shopId)
-        }
-        if (result.isSuccess) submittedShopIds.add(shopId)
-        if (state.shopId != shopId) return@intent
-        reduce {
-            state.copy(
-                service = state.service.copy(
-                    isSubmitting = false,
-                    isSubmitted = result.isSuccess,
-                    hasSubmitError = result.isFailure,
-                    submitErrorMessage = (result.exceptionOrNull() as? ApiException)?.message
-                )
-            )
+            withContext(NonCancellable) {
+                reduce {
+                    val submittedShopIds = if (result?.isSuccess == true) {
+                        (state.submittedShopIds + shopId).toImmutableSet()
+                    } else {
+                        state.submittedShopIds
+                    }
+                    state.copy(
+                        submittedShopIds = submittedShopIds,
+                        submittingShopIds = (state.submittingShopIds - shopId).toImmutableSet(),
+                        service = if (state.shopId == shopId) {
+                            state.service.copy(
+                                isSubmitting = false,
+                                isSubmitted = shopId in submittedShopIds,
+                                hasSubmitError = result?.isFailure == true,
+                                submitErrorMessage = (result?.exceptionOrNull() as? ApiException)?.message
+                            )
+                        } else {
+                            state.service
+                        }
+                    )
+                }
+            }
         }
     }
 
@@ -236,12 +274,19 @@ class OrderViewModel(
             reduce { state.copy(orders = persistentListOf(), isLoading = false, hasError = false) }
             return@subIntent
         }
-        val generation = shopGeneration
+        val generation = state.shopGeneration
         reduce { state.copy(isLoading = true, hasError = false) }
         val result = getOrdersUseCase(orderableShopId, category)
-        if (generation != shopGeneration || category != state.category) return@subIntent
+        if (generation != state.shopGeneration || category != state.category) return@subIntent
         result.onSuccess {
-            reduce { state.copy(orders = it.map { order -> order.toOrderUiModel() }.toImmutableList(), isLoading = false) }
-        }.onFailure { reduce { state.copy(isLoading = false, hasError = true) } }
+            reduce {
+                if (generation != state.shopGeneration || category != state.category) return@reduce state
+                state.copy(orders = it.map { order -> order.toOrderUiModel() }.toImmutableList(), isLoading = false)
+            }
+        }.onFailure {
+            reduce {
+                if (generation == state.shopGeneration && category == state.category) state.copy(isLoading = false, hasError = true) else state
+            }
+        }
     }
 }
