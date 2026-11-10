@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.metro)
     alias(libs.plugins.aboutLibraries)
+    alias(libs.plugins.googleServices)
+    alias(libs.plugins.firebaseCrashlytics)
 }
 
 aboutLibraries {
@@ -39,6 +41,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.filekit.dialogs)
     implementation(libs.metrox.viewmodel.compose)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
