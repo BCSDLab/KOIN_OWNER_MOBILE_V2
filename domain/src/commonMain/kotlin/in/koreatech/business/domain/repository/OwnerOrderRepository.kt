@@ -1,5 +1,6 @@
 package `in`.koreatech.business.domain.repository
 
+import `in`.koreatech.business.domain.model.order.OrderServiceApplication
 import `in`.koreatech.business.domain.model.order.OwnerOrder
 import `in`.koreatech.business.domain.model.order.OwnerOrderCategory
 import `in`.koreatech.business.domain.model.order.OwnerOrderDetail
@@ -11,4 +12,6 @@ interface OwnerOrderRepository {
     suspend fun getOrders(orderableShopId: Int, category: OwnerOrderCategory): Result<List<OwnerOrder>>
 
     suspend fun getOrder(orderableShopId: Int, orderId: Int): Result<OwnerOrderDetail>
+
+    suspend fun requestOrderService(shopId: Int, application: OrderServiceApplication): Result<Unit>
 }

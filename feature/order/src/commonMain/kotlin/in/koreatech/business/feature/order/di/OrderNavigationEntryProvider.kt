@@ -10,6 +10,7 @@ import `in`.koreatech.business.core.navigation.MainNavigator
 import `in`.koreatech.business.core.navigation.Screen
 import `in`.koreatech.business.feature.order.OrderDetailScreen
 import `in`.koreatech.business.feature.order.OrderScreen
+import `in`.koreatech.business.feature.order.OrderServiceScreen
 
 @Inject
 @ContributesIntoSet(AppScope::class)
@@ -19,8 +20,12 @@ class OrderNavigationEntryProvider : MainNavigationEntryProvider {
             OrderScreen(
                 onOrderClick = { orderableShopId, orderId ->
                     navigator.navigate(Screen.OrderDetail(orderableShopId, orderId))
-                }
+                },
+                onRequestOrderService = { navigator.navigate(Screen.OrderServiceRequest) }
             )
+        }
+        entry<Screen.OrderServiceRequest> {
+            OrderServiceScreen(onBack = navigator.navigateBack)
         }
         entry<Screen.OrderDetail> { key ->
             OrderDetailScreen(key.orderableShopId, key.orderId, navigator.navigateBack)

@@ -58,6 +58,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun OrderScreen(
     onOrderClick: (Int, Int) -> Unit,
+    onRequestOrderService: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: OrderViewModel = metroViewModel()
 ) {
@@ -87,7 +88,10 @@ fun OrderScreen(
             when {
                 state.isLoading -> OrderLoadingContent()
                 state.hasError -> KoinErrorContent(stringResource(Res.string.order_load_error), viewModel::retry)
-                state.orderableShopId == null -> KoinEmptyContent(stringResource(Res.string.order_shop_unavailable))
+                state.orderableShopId == null && state.shopId != null -> OrderServiceIntroContent(
+                    onStart = onRequestOrderService
+                )
+                state.shopId == null -> KoinEmptyContent(stringResource(Res.string.order_shop_unavailable))
                 else -> LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(bottom = 24.dp),

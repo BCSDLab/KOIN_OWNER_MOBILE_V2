@@ -5,8 +5,10 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import `in`.koreatech.business.core.di.AppScope
 import `in`.koreatech.business.data.mapper.toDomain
+import `in`.koreatech.business.data.mapper.toOrderServiceRequest
 import `in`.koreatech.business.data.source.remote.OwnerOrderRemoteDataSource
 import `in`.koreatech.business.data.util.suspendRunCatching
+import `in`.koreatech.business.domain.model.order.OrderServiceApplication
 import `in`.koreatech.business.domain.model.order.OwnerOrder
 import `in`.koreatech.business.domain.model.order.OwnerOrderCategory
 import `in`.koreatech.business.domain.model.order.OwnerOrderDetail
@@ -26,4 +28,9 @@ class OwnerOrderRepositoryImpl(private val remoteDataSource: OwnerOrderRemoteDat
 
     override suspend fun getOrder(orderableShopId: Int, orderId: Int): Result<OwnerOrderDetail> =
         suspendRunCatching { remoteDataSource.getOrder(orderableShopId, orderId).toDomain() }
+
+    override suspend fun requestOrderService(shopId: Int, application: OrderServiceApplication): Result<Unit> =
+        suspendRunCatching {
+            remoteDataSource.createOrderServiceRequest(shopId, application.toOrderServiceRequest())
+        }
 }
