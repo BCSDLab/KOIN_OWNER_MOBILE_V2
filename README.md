@@ -72,3 +72,5 @@ Android Studio에서 `androidApp` 실행 구성을 선택하거나 다음 명령
 ### iOS
 
 `iosApp/iosApp.xcodeproj`를 Xcode로 연 뒤 원하는 시뮬레이터 또는 기기에서 실행합니다.
+
+CI의 TestFlight 배포는 `bundle exec fastlane ios deploy_stage` 또는 `bundle exec fastlane ios deploy`로 실행합니다. 수동 서명은 `iosApp` 타깃의 `Release` 설정에만 적용하며, Swift Package 의존성에 앱의 서명 인증서·프로비저닝 프로파일이 전파되지 않도록 전역 `xcodebuild` 서명 인자를 사용하지 않습니다.

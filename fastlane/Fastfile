@@ -82,15 +82,24 @@ platform :ios do
     team_id = ios_config("TEAM_ID")
     app_identifier = ios_config("PRODUCT_BUNDLE_IDENTIFIER")
     provisioning_profile = required_env("IOS_PROVISIONING_PROFILE_NAME")
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "iosApp/iosApp.xcodeproj",
+      targets: ["iosApp"],
+      build_configurations: ["Release"],
+      team_id: team_id,
+      code_sign_identity: "Apple Distribution",
+      profile_name: provisioning_profile
+    )
     build_app(
       project: "iosApp/iosApp.xcodeproj",
       scheme: "iosApp",
       configuration: "Release",
       export_method: "app-store",
       export_team_id: team_id,
-      codesigning_identity: "Apple Distribution",
       export_options: {
         signingStyle: "manual",
+        signingCertificate: "Apple Distribution",
         provisioningProfiles: {
           app_identifier => provisioning_profile
         }
@@ -100,9 +109,7 @@ platform :ios do
         "PRODUCT_BUNDLE_IDENTIFIER=#{app_identifier}",
         "MARKETING_VERSION=#{version_name}",
         "CURRENT_PROJECT_VERSION=#{version_code}",
-        "BUILD_KONFIG_FLAVOR=#{buildkonfig_flavor}",
-        "CODE_SIGN_STYLE=Manual",
-        "PROVISIONING_PROFILE_SPECIFIER='#{provisioning_profile}'"
+        "BUILD_KONFIG_FLAVOR=#{buildkonfig_flavor}"
       ].join(" ")
     )
   end
