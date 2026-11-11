@@ -3,6 +3,7 @@ package `in`.koreatech.business.data.source.remote
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import `in`.koreatech.business.core.di.AppScope
+import `in`.koreatech.business.data.request.order.OrderServiceRequest
 import `in`.koreatech.business.data.response.order.OwnerOrderDetailResponse
 import `in`.koreatech.business.data.response.order.OwnerOrderableShopsResponse
 import `in`.koreatech.business.data.response.order.OwnerOrdersResponse
@@ -11,6 +12,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 
 @Inject
 @SingleIn(AppScope::class)
@@ -22,4 +25,8 @@ class OwnerOrderRemoteDataSource(private val httpClient: HttpClient) {
 
     suspend fun getOrder(orderableShopId: Int, orderId: Int): OwnerOrderDetailResponse =
         httpClient.get("owner/order/shop/$orderableShopId/orders/$orderId").body()
+
+    suspend fun createOrderServiceRequest(shopId: Int, request: OrderServiceRequest) {
+        httpClient.post("owner/shops/$shopId/order-service-requests") { setBody(request) }
+    }
 }
