@@ -14,6 +14,8 @@ plugins {
     alias(libs.plugins.buildkonfig) apply false
     alias(libs.plugins.aboutLibraries) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.googleServices) apply false
+    alias(libs.plugins.firebaseCrashlytics) apply false
 }
 
 subprojects {
